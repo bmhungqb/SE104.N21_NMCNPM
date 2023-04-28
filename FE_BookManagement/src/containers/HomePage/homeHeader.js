@@ -22,36 +22,36 @@ class HomeHeader extends Component {
         return (
             <React.Fragment>
                 <div className='home-header-container'>
-                    <div className='home-header-content'>
-                        <div className='left-content'>
-                            <div className="input-group mb-3 top-50 start-50 translate-middle">
-                                <input type="text" className="form-control search-box" placeholder="Search for anything here.." />
-                                <button className="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
-                            </div>
+                    <div className='left-content'>
+                        <div className="input-group mb-3 top-50 start-50 translate-middle">
+                            <input type="text" className="form-control search-box" placeholder="Search for anything here.." />
+                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
                         </div>
-                        <div className='right-content'>
-                            <div className='language'>
-                                <FontAwesomeIcon size="lg" className='icon-language' icon={faLanguage} />
-                                <select className="form-select form-select-language" aria-label="Default select example">
-                                    <option value="2" selected>English</option>
-                                    <option value="1">Viet Nam</option>
-                                </select>
-                                {/* <div className={language === LANGUAGES.VI ? 'language-vi active' : "language-vi"}><span onClick={() => this.changeLanguage(LANGUAGES.VI)} > VN</span></div>
-                                <div className={language === LANGUAGES.EN ? 'language-en active' : "language-en"}><span onClick={() => this.changeLanguage(LANGUAGES.EN)} > EN</span></div> */}
+                    </div>
+                    <div className='right-content'>
+                        <div className='language'>
+                            <FontAwesomeIcon size="lg" className='icon-language' icon={faLanguage} />
+                            <select className="form-select form-select-language" aria-label="Default select example">
+                                <option value="2" selected>English</option>
+                                <option value="1">Viet Nam</option>
+                            </select>
+                            {/* <div className={language === LANGUAGES.VI ? 'language-vi active' : "language-vi"}><span onClick={() => this.changeLanguage(LANGUAGES.VI)} > VN</span></div>
+                            <div className={language === LANGUAGES.EN ? 'language-en active' : "language-en"}><span onClick={() => this.changeLanguage(LANGUAGES.EN)} > EN</span></div> */}
+                        </div>
+                        <div className='time'>
+                            <div className='up-content'>
+                                <span>
+                                    <FontAwesomeIcon icon={faSun} />
+                                </span>
+                                <p className='align-middle text'>Good Morning</p>
                             </div>
-                            <div className='time'>
-                                <div className='up-content'>
-                                    <FontAwesomeIcon icon={faSun} style={{ "--fa-primary-color": "#ebd80a", "--fa-secondary-color": "#ebd80a", "--fa-secondary-opacity": "0.7", }} />
-                                    <p>Good Morning</p>
-                                </div>
-                                <div className='down-content'>
-                                    <p>12 May 2023</p>
-                                    <p>24:00:00</p>
-                                </div>
+                            <div className='down-content'>
+                                <p className='align-middle left-text'>12 May 2023</p>
+                                <p className='align-middle right-text'>24:00:00</p>
                             </div>
                         </div>
                     </div>
-                </div >
+                </div>
             </React.Fragment >
         );
     }
