@@ -1,0 +1,66 @@
+.data-day-container {
+    height: 280px;
+
+    .data-day-header {
+        display: flex;
+        justify-content: space-between;
+        height: 100px;
+        align-items: center;
+        background-color: beige;
+
+        .content-left {
+            height: 100%;
+            margin-left: 40px;
+
+            .text-up {
+                font-size: 24px;
+                font-weight: 700;
+                margin-bottom: 0px;
+                margin-top: 15px;
+            }
+
+            .text-down {
+                font-size: 14px;
+                font-weight: 400;
+            }
+        }
+
+        .content-right {
+            height: 100%;
+            margin-right: 40px;
+            width: 192px !important;
+            height: 46px !important;
+        }
+    }
+
+    .data-day-content {
+        background-color: bisque;
+        height: 180px;
+        display: flex;
+        justify-content: center;
+
+        .visualize-data {
+            background-color: blueviolet;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px;
+            gap: 30px;
+
+            position: absolute;
+            width: 992px;
+            height: 138px;
+
+            .box-data {
+                height: 138px;
+                width: 324px;
+                background-color: aqua;
+                display: flex;
+                flex-direction: column;
+            }
+        }
+
+
+    }
+}

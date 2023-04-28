@@ -22,7 +22,6 @@ import Doctor from '../routes/Doctor';
 import verifyEmail from './Patient/VerifyEmail';
 import DetailSpecialty from './Patient/Specialty/DetailSpecialty';
 import DetailClinic from './Patient/Clinic/DetailClinic';
-import SlideBar from './HomePage/slideBar';
 class App extends Component {
 
     handlePersistorState = () => {
