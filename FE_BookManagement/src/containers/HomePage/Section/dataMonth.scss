@@ -1,0 +1,73 @@
+.data-month-container {
+    display: flex;
+    justify-content: flex-end;
+
+    .content-left {
+        width: 50%;
+
+        .chart-data {
+            width: 100%;
+            height: 100%;
+            margin-left: 35px;
+        }
+    }
+
+    .content-right {
+        width: 50%;
+        display: flex;
+        flex-direction: column;
+        margin-left: 100px;
+
+        .box {
+            display: flex;
+            flex-direction: column;
+
+            width: 456px;
+            height: 140px;
+            background-color: aqua;
+            border: 1px solid red;
+
+            .content-up {
+                display: flex;
+                border-bottom: 1px solid red;
+                align-items: center;
+                padding-top: 12px;
+                padding-bottom: 12px;
+
+                p {
+                    margin: 0px !important;
+                    width: 100%;
+                }
+
+                .datepicker {
+                    height: 100%;
+                    border: none !important;
+                    align-items: center;
+                    background-color: transparent;
+                    font-size: 15px;
+                }
+
+                .react-datepicker-wrapper {
+                    width: 30% !important;
+
+                }
+            }
+
+            .content-down {
+                display: flex;
+
+                .number {
+                    font-size: 20px;
+                    font-weight: 700;
+                }
+            }
+        }
+
+        .box-up {
+            margin-top: 35px;
+            margin-bottom: 20px;
+        }
+
+        .box-down {}
+    }
+}

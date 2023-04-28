@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import SideBar from './sideBar.js';
 import DataDay from './Section/dataDay.js';
+import DataMonth from './Section/dataMonth.js';
 class HomePage extends Component {
     render() {
         return (
@@ -14,6 +15,7 @@ class HomePage extends Component {
                 <div id="page-content-wrapper">
                     <HomeHeader />
                     <DataDay />
+                    <DataMonth />
                 </div>
             </div>
         );
