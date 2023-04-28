@@ -1,12 +1,12 @@
 .data-day-container {
     height: 280px;
+    background-color: #e6eaee;
 
     .data-day-header {
         display: flex;
         justify-content: space-between;
         height: 100px;
         align-items: center;
-        background-color: beige;
 
         .content-left {
             height: 100%;
@@ -34,13 +34,11 @@
     }
 
     .data-day-content {
-        background-color: bisque;
         height: 180px;
         display: flex;
         justify-content: center;
 
         .visualize-data {
-            background-color: blueviolet;
             display: flex;
             flex-direction: row;
             justify-content: space-between;
@@ -55,12 +53,47 @@
             .box-data {
                 height: 138px;
                 width: 324px;
-                background-color: aqua;
+                background-color: #ffff;
                 display: flex;
                 flex-direction: column;
+                border-radius: 15px;
+                box-shadow: rgba(0, 0, 0, 0.19) 0px 10px 20px, rgba(0, 0, 0, 0.23) 0px 6px 6px;
+
+                .content-up {
+                    display: flex;
+                    justify-content: space-around;
+                    align-items: center;
+
+                    .icon-left {
+                        font-size: 25px !important;
+                    }
+
+                    .text-data {
+                        font-size: 45px;
+                        font-weight: 400;
+                        margin-bottom: 0px !important;
+                    }
+
+                    .percent {
+                        display: flex;
+                        align-items: center !important;
+
+                        .icon-right {
+                            margin-right: 8px;
+                        }
+
+                        p {
+                            margin-bottom: 0px;
+                        }
+                    }
+                }
+
+                p {
+                    text-align: center;
+                    margin-top: 5px;
+                    font-size: 18px;
+                }
             }
         }
-
-
     }
 }

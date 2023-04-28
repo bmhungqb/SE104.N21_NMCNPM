@@ -9,7 +9,9 @@ import 'bootstrap';
 
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-
+import { faMoneyCheckDollar } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
+import { faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
 class DataDay extends Component {
 
     changeLanguage = (language) => {
@@ -37,17 +39,35 @@ class DataDay extends Component {
                         <div className='visualize-data'>
                             <div className='box-data data-sold-money'>
                                 <div className='content-up'>
-                                    <FontAwesomeIcon icon={faAlternateMoneyCheck} style={{ color: "#dbea10", }} />
-                                    <p>30,000</p>
+                                    <FontAwesomeIcon className='icon-left' icon={faMoneyCheckDollar} size='lg' />
+                                    <p className='text-data'>30,000</p>
+                                    <span className='percent'>
+                                        <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
+                                        <p className='text-percent'>12%</p>
+                                    </span>
                                 </div>
                                 <p>Today's sold books</p>
                             </div>
                             <div className='box-data data-purchase-book'>
-                                <div className='content-up'></div>
+                                <div className='content-up'>
+                                    <FontAwesomeIcon className='icon-left' icon={faMoneyCheckDollar} size='lg' />
+                                    <p className='text-data'>30,000</p>
+                                    <span className='percent'>
+                                        <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
+                                        <p className='text-percent'>12%</p>
+                                    </span>
+                                </div>
                                 <p>Today's purchased books</p>
                             </div>
                             <div className='box-data data-customer'>
-                                <div className='content-up'></div>
+                                <div className='content-up'>
+                                    <FontAwesomeIcon className='icon-left' icon={faMoneyCheckDollar} size='lg' />
+                                    <p className='text-data'>30,000</p>
+                                    <span className='percent'>
+                                        <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
+                                        <p className='text-percent'>12%</p>
+                                    </span>
+                                </div>
                                 <p>Today's customers</p>
                             </div>
                         </div>
