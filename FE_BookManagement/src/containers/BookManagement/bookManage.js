@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
 import ModalBook from './ModalBook';
+import TableBookManage from './TableBookManage';
 class BookManage extends Component {
     constructor(props) {
         super(props)
@@ -40,15 +41,15 @@ class BookManage extends Component {
                     <Header />
                     <div className='book-manage-container'>
                         <div className='book-manage-header'>
-                            <p>Book Management</p>
-                            <p>Book information of the store</p>
+                            <p className='title-header'>Book Management</p>
+                            <p className='infor-header'>Book information of the store</p>
                         </div>
                         <div className='book-manage-content'>
                             <div className='action'>
-                                <div class="input-group">
-                                    <input placeholder='Enter search' type="text" class="form-control" aria-label="Text input with dropdown button" />
+                                <div class="input-group form-outline w-25">
+                                    <input placeholder='Enter search' type="text" className="form-control h-100" />
                                     <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Search by</button>
+                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
                                         <div class="dropdown-menu">
                                             <a class="dropdown-item" href="#">By ID</a>
                                             <a class="dropdown-item" href="#">By Author</a>
@@ -56,15 +57,17 @@ class BookManage extends Component {
                                         </div>
                                     </div>
                                 </div>
-
-                                <div className='mx-1'>
+                                <div className='mx-1 button-add'>
                                     <button
-                                        className='btn btn-primary px-3'
+                                        className='btn px-3'
                                         onClick={() => this.handleAddNewUser()}
-                                    ><i className="fa fa-plus"></i> Add new User</button>
+                                    ><i className="fa fa-plus"></i> Add New Book</button>
                                 </div>
                             </div>
-                            <div className='datatable'></div>
+                            <div className='datatable'>
+                                <TableBookManage />
+                            </div>
+
                         </div>
                         <div className='book-manage-footer'></div>
                     </div>

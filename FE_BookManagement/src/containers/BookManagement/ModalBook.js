@@ -25,13 +25,12 @@ class ModalBook extends Component {
     render() {
         return (
             <Modal
-                // isOpen={this.props.isOpen}
-                isOpen={true}
+                isOpen={this.props.isOpen}
                 toggle={() => { this.toggle() }}
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Create a new user</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Book Information</ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'>
@@ -54,9 +53,14 @@ class ModalBook extends Component {
                         </div>
                         <div className='input-container '>
                             <label>Genre</label>
-                            <input
-                                type='text'
-                            />
+                            <select className='form-select'>
+                                <option >Action and Adventure</option>
+                                <option>Classics</option>
+                                <option>Detective and Mystery</option>
+                                <option>Fantasy</option>
+                                <option>Historical Fiction</option>
+                                <option>Horror</option>
+                            </select>
                         </div>
                         <div className='input-container'>
                             <label>Author</label>
@@ -82,20 +86,17 @@ class ModalBook extends Component {
                                 type='text'
                             />
                         </div>
-                        <div className='input-container max-width-input max-height-input'>
+                        <div className='input-container max-width-input'>
                             <label>Description</label>
-                            <input
-                                type='text'
-                            />
+                            <div class="form-outline">
+                                <textarea class="form-control" id="textAreaExample2" rows="5"></textarea>
+                            </div>
                         </div>
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button
-                        color="primary"
-                        className='px-3'
-                    >Add new</Button>
-                    <Button color="secondary" className='px-3' onClick={() => { this.toggle() }}>Close</Button>
+                    <Button className='px-5 border-0 bg-danger' >Clear</Button>
+                    <Button className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Save</Button>
                 </ModalFooter>
             </Modal >
         )
