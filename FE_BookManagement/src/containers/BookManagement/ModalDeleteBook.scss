@@ -1,0 +1,28 @@
+.modal-delete-container {
+    .modal-content {
+        margin-top: 180px;
+
+        .modal-header {
+            justify-content: center !important;
+
+            .modal-title {
+                font-size: 20px;
+                font-weight: 700;
+            }
+
+            button,
+            .close {
+                display: none !important;
+            }
+        }
+
+        .modal-footer {
+            justify-content: space-around !important;
+            height: 120px;
+
+            button {
+                padding: 10px 50px !important;
+            }
+        }
+    }
+}

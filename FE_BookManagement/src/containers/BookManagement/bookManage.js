@@ -7,17 +7,16 @@ import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
 import ModalBook from './ModalBook';
 import TableBookManage from './TableBookManage';
+import ModalEditBook from './ModalEditBook';
+import ModalDeleteBook from './ModalDeleteBook';
 class BookManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isOpenModalUser: false
+            isOpenModalUser: false,
+            isOpenModalEditBook: false,
+            isOpenModalDeleteBook: false,
         }
-    }
-    toggleFromParent = () => {
-        this.setState({
-            isOpenModalUser: !this.state.isOpenModalUser,
-        })
     }
     handleAddNewUser = () => {
         this.setState({
@@ -29,6 +28,16 @@ class BookManage extends Component {
             isOpenModalUser: !this.state.isOpenModalUser,
         })
     }
+    toggleBookEditModal = () => {
+        this.setState({
+            isOpenModalEditBook: !this.state.isOpenModalEditBook,
+        })
+    }
+    toggleBookDeleteModal = () => {
+        this.setState({
+            isOpenModalDeleteBook: !this.state.isOpenModalDeleteBook,
+        })
+    }
     render() {
         return (
             <div className="d-flex" id="wrapper">
@@ -36,6 +45,20 @@ class BookManage extends Component {
                     isOpen={this.state.isOpenModalUser}
                     toggleFromParent={this.toggleUserModal}
                 />
+                {
+                    this.state.isOpenModalEditBook &&
+                    <ModalEditBook
+                        isOpen={this.state.isOpenModalEditBook}
+                        toggleFromParent={this.toggleBookEditModal}
+                    />
+                }
+                {
+                    this.state.isOpenModalDeleteBook &&
+                    <ModalDeleteBook
+                        isOpen={this.state.isOpenModalDeleteBook}
+                        toggleFromParent={this.toggleBookDeleteModal}
+                    />
+                }
                 <SideBar />
                 <div id="page-content-wrapper">
                     <Header />
@@ -65,7 +88,10 @@ class BookManage extends Component {
                                 </div>
                             </div>
                             <div className='datatable'>
-                                <TableBookManage />
+                                <TableBookManage
+                                    toggleFromParent={this.toggleBookEditModal}
+                                    toggleBookDeleteModal={this.toggleBookDeleteModal}
+                                />
                             </div>
 
                         </div>

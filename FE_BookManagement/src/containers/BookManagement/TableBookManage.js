@@ -42,7 +42,9 @@ class TableBookManage extends Component {
                 selector: row => row.year,
             },
             {
-                cell: () => <button>
+                cell: () => <button
+                    onClick={() => { this.handleEditBook() }}
+                >
                     <FontAwesomeIcon className='icon-right' icon={faPenToSquare} />
                 </button>,
                 ignoreRowClick: true,
@@ -50,7 +52,9 @@ class TableBookManage extends Component {
                 button: true,
             },
             {
-                cell: () => <button>
+                cell: () => <button
+                    onClick={() => { this.handleDeleteBook() }}
+                >
                     <FontAwesomeIcon className='icon-right' icon={faTrash} />
                 </button>,
                 ignoreRowClick: true,
@@ -430,6 +434,12 @@ class TableBookManage extends Component {
         }
     }
 
+    handleEditBook = () => {
+        this.props.toggleFromParent();
+    }
+    handleDeleteBook = () => {
+        this.props.toggleBookDeleteModal();
+    }
     caseInsensitiveSort = (rowA, rowB) => {
         var a = rowA.title.toLowerCase();
         var b = rowB.title.toLowerCase();
