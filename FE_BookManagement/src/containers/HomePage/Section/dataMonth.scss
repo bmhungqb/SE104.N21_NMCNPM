@@ -24,19 +24,21 @@
 
             width: 456px;
             height: 140px;
-            background-color: aqua;
-            border: 1px solid red;
+            border: 1px solid rgba(29, 36, 46, 0.3);
+            border-radius: 4px;
 
             .content-up {
                 display: flex;
-                border-bottom: 1px solid red;
+                border-bottom: 1px solid rgba(29, 36, 46, 0.3);
                 align-items: center;
                 padding-top: 12px;
                 padding-bottom: 12px;
 
                 p {
-                    margin: 0px !important;
-                    width: 100%;
+                    font-size: 16px;
+                    font-weight: 600;
+                    margin: 0 0 0 30px !important;
+                    width: 65%;
                 }
 
                 .datepicker {
@@ -45,6 +47,8 @@
                     align-items: center;
                     background-color: transparent;
                     font-size: 15px;
+                    width: 110px;
+                    margin-left: 20px;
                 }
 
                 .react-datepicker-wrapper {
@@ -55,10 +59,27 @@
 
             .content-down {
                 display: flex;
+                justify-content: space-around;
+
+                .left {
+                    width: 50%;
+                    margin-left: 30px;
+                }
+
+                .right {
+                    width: 50%;
+                }
 
                 .number {
                     font-size: 20px;
                     font-weight: 700;
+                    margin-top: 15px;
+                    margin-bottom: 4px;
+                }
+
+                .text {
+                    font-size: 14px;
+                    font-weight: 500;
                 }
             }
         }
@@ -68,6 +89,35 @@
             margin-bottom: 20px;
         }
 
-        .box-down {}
+        .box-down {
+            .content-up {
+                p {
+                    width: 30%;
+                }
+
+                span {
+                    margin-left: 65px;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+
+                    p {
+                        width: 100%;
+                        font-size: 15px;
+                        font-weight: 400;
+                    }
+
+                    .icon-right {
+                        margin-left: 4px;
+                    }
+                }
+            }
+
+            .content-down {
+                .left {}
+
+                .right {}
+            }
+        }
     }
 }

@@ -8,6 +8,7 @@ import { withRouter } from 'react-router';
 import 'bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
+import { faAnglesRight } from '@fortawesome/free-solid-svg-icons';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -112,9 +113,10 @@ class DataMonth extends Component {
                         </div>
                         <div className='box box-down'>
                             <div className='content-up'>
-                                <p>Quick Report</p>
+                                <p>Customers</p>
                                 <span>
                                     <p>Go to Customers Page</p>
+                                    <FontAwesomeIcon className='icon-right' icon={faAnglesRight} />
                                 </span>
                             </div>
                             <div className='content-down'>
