@@ -1,0 +1,47 @@
+.modal-book-container {
+    margin-top: 60px;
+
+    .model-content {
+        margin-top: 60px;
+    }
+
+    .modal-header {
+        button {
+            background-color: transparent;
+            border: none;
+            outline: none;
+            color: white;
+            font-size: 27px;
+
+        }
+    }
+
+    .modal-book-body {
+        display: flex;
+        gap: 15px;
+        flex-wrap: wrap;
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            width: 45%;
+
+            &.max-width-input {
+                width: 100%;
+            }
+
+            &.max-height-input {
+                height: 60px;
+            }
+
+            input {
+                border-radius: 3px;
+                height: 30px;
+                border: 1px solid grey;
+                outline: none;
+                padding: 0 10px;
+            }
+        }
+    }
+
+}

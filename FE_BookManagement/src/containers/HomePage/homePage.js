@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import HomeHeader from './homeHeader.js';
+import Header from '../Header/Header.js';
 import './homePage.scss'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
-import SideBar from './sideBar.js';
+import SideBar from '../SideBar/sideBar.js';
 import DataDay from './Section/dataDay.js';
 import DataMonth from './Section/dataMonth.js';
 class HomePage extends Component {
@@ -13,7 +13,7 @@ class HomePage extends Component {
             <div className="d-flex" id="wrapper">
                 <SideBar />
                 <div id="page-content-wrapper">
-                    <HomeHeader />
+                    <Header />
                     <DataDay />
                     <DataMonth />
                 </div>

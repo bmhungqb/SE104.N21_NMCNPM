@@ -1,53 +1,69 @@
-@import "../../styles/common.scss";
-
-.header-container {
-    z-index: 99;
+.home-header-container {
+    height: 60px;
+    width: 100%;
+    position: sticky;
+    top: 0;
+    background-color: #F7FAFD;
+    z-index: 2;
     display: flex;
-    justify-content: space-between;
-    background-color: $colormain;
-    color: $common-text-color;
-    height: 40px;
-    position: relative;
 
-    .btn-logout {
-        color: $common-text-color;
-        line-height: 40px;
-        height: 40px;
-        padding: 0 10px;
+    .left-content {
+        width: 50%;
 
-        &:hover {
-            background-color: darken($colormain, 5);
-        }
-
-        i {
-            font-size: $base-size + 1px;
+        .input-group {
+            .search-box {
+                height: 38px;
+                margin-left: 42px;
+                position: relative;
+            }
         }
     }
 
-    .languages {
-        .welcome {
-            margin-right: 10px;
-        }
+    .right-content {
+        width: 50%;
+        height: 60px;
+        display: flex;
+        justify-content: space-around;
 
-        .language-en {
-            margin-right: 5px;
-            margin-left: 10px;
-            cursor: pointer;
-            opacity: 0.8;
+        .language {
 
-            &.active {
-                opacity: 1;
-                color: #07f6e0;
+            display: flex;
+            align-items: center;
+
+            .form-select-language {
+                width: 100px;
+                border: none;
+                background-color: transparent;
             }
         }
 
-        .language-vi {
-            cursor: pointer;
-            opacity: 0.8;
+        .time {
+            align-items: center;
 
-            &.active {
-                opacity: 1;
-                color: orange;
+            .up-content {
+                height: 50%;
+                display: flex;
+                text-align: center !important;
+                justify-content: flex-end;
+                // align-items: center;
+
+                .text {
+                    margin-left: 10px;
+                    align-items: center;
+                }
+            }
+
+            .down-content {
+                height: 50%;
+                display: flex;
+
+                .left-text {
+                    margin-right: 10px;
+                }
+
+                .right-text {
+                    margin-left: 10px;
+                }
             }
         }
     }

@@ -15,13 +15,12 @@ import Login from './Auth/Login';
 import System from '../routes/System';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
+// new
 import HomePage from './HomePage/homePage.js'
+import BookManage from './BookManagement/bookManage.js';
+// 
 import CustomScrollbars from '../components/CustomScrollbars'
-import DetailDoctor from './Patient/Doctor/DetailDoctor';
 import Doctor from '../routes/Doctor';
-import verifyEmail from './Patient/VerifyEmail';
-import DetailSpecialty from './Patient/Specialty/DetailSpecialty';
-import DetailClinic from './Patient/Clinic/DetailClinic';
 class App extends Component {
 
     handlePersistorState = () => {
@@ -50,15 +49,12 @@ class App extends Component {
                         <div className="content-container">
                             <CustomScrollbars style={{ height: '100vh' }}>
                                 <Switch>
-                                    <Route path={path.HOME} exact component={(Home)} />
+                                    {/* <Route path={path.HOME} exact component={(Home)} />
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
-                                    <Route path={'/doctor/'} component={userIsAuthenticated(Doctor)} />
+                                    <Route path={'/doctor/'} component={userIsAuthenticated(Doctor)} /> */}
                                     <Route path={path.HOMEPAGE} component={(HomePage)} />
-                                    <Route path={path.DETAIL_DOCTOR} component={(DetailDoctor)} />
-                                    <Route path={path.DETAIL_SPECIALTY} component={(DetailSpecialty)} />
-                                    <Route path={path.DETAIL_CLINIC} component={(DetailClinic)} />
-                                    <Route path={path.VERIFY_EMAIL_BOOKING} component={(verifyEmail)} />
+                                    <Route path={path.BOOK_MANAGEMENT} component={(BookManage)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>

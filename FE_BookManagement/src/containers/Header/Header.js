@@ -1,71 +1,58 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-
-import * as actions from "../../store/actions";
-import Navigator from '../../components/Navigator';
-import { adminMenu, doctorMenu } from './menuApp';
-import './Header.scss';
-import { LANGUAGES, USER_ROLE } from "../../utils";
-import { changeLanguageApp } from '../../store/actions';
+import './Header.scss'
 import { FormattedMessage } from 'react-intl';
-import _ from 'lodash'
-class Header extends Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            menuApp: []
-        }
-    }
-    handleChangeLanguage = (language) => {
-        this.props.handleChangeLanguageAppRedux(language)
-    }
+import { LANGUAGES } from '../../utils'
+import { changeLanguageApp } from '../../store/actions/appActions';
+import { withRouter } from 'react-router';
+import { Modal } from 'bootstrap';
+import 'bootstrap';
 
-    componentDidMount() {
-        let { userInfo } = this.props;
-        let menu = [];
-        if (userInfo && !_.isEmpty(userInfo)) {
-            let role = userInfo.roleId
-            if (role === USER_ROLE.ADMIN) {
-                menu = adminMenu
-            }
-            if (role === USER_ROLE.DOCTOR) {
-                menu = doctorMenu
-            }
-        }
-        this.setState({
-            menuApp: menu
-        })
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faLanguage } from "@fortawesome/free-solid-svg-icons";
+import { faSun } from "@fortawesome/free-solid-svg-icons";
+
+class Header extends Component {
+
+    changeLanguage = (language) => {
+        this.props.changeLanguageAppRedux(language)
     }
     render() {
-        const { processLogout, language, userInfo } = this.props;
+        let language = this.props.language;
         return (
-            <div className="header-container">
-                {/* thanh navigator */}
-                <div className="header-tabs-container">
-                    <Navigator menus={this.state.menuApp} />
-                </div>
-
-                <div className='languages'>
-                    <span className='welcome'><FormattedMessage id="homeheader.welcome" />
-                        {userInfo && userInfo.firstName ? userInfo.firstName : ""}
-                    </span>
-                    <span className={language === LANGUAGES.VI ? "language-vi active" : "language-vi"}
-                        onClick={() => this.handleChangeLanguage(LANGUAGES.VI)}
-                    >
-                        VN
-                    </span>
-                    <span className={language === LANGUAGES.EN ? "language-en active" : "language-en"}
-                        onClick={() => this.handleChangeLanguage(LANGUAGES.EN)}
-                    >
-                        EN
-                    </span>
-
-                    {/* nút logout */}
-                    <div className="btn btn-logout" onClick={processLogout} title="Log out">
-                        <i className="fas fa-sign-out-alt"></i>
+            <React.Fragment>
+                <div className='home-header-container'>
+                    <div className='left-content'>
+                        <div className="input-group mb-3 top-50 start-50 translate-middle">
+                            <input type="text" className="form-control search-box" placeholder="Search for anything here.." />
+                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+                        </div>
+                    </div>
+                    <div className='right-content'>
+                        <div className='language'>
+                            <FontAwesomeIcon size="lg" className='icon-language' icon={faLanguage} />
+                            <select className="form-select form-select-language" aria-label="Default select example">
+                                <option value="2" selected>English</option>
+                                <option value="1">Viet Nam</option>
+                            </select>
+                            {/* <div className={language === LANGUAGES.VI ? 'language-vi active' : "language-vi"}><span onClick={() => this.changeLanguage(LANGUAGES.VI)} > VN</span></div>
+                            <div className={language === LANGUAGES.EN ? 'language-en active' : "language-en"}><span onClick={() => this.changeLanguage(LANGUAGES.EN)} > EN</span></div> */}
+                        </div>
+                        <div className='time'>
+                            <div className='up-content'>
+                                <span>
+                                    <FontAwesomeIcon icon={faSun} />
+                                </span>
+                                <p className='align-middle text'>Good Morning</p>
+                            </div>
+                            <div className='down-content'>
+                                <p className='align-middle left-text'>12 May 2023</p>
+                                <p className='align-middle right-text'>24:00:00</p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
+            </React.Fragment >
         );
     }
 
@@ -74,16 +61,15 @@ class Header extends Component {
 const mapStateToProps = state => {
     return {
         isLoggedIn: state.user.isLoggedIn,
-        userInfo: state.user.userInfo,
         language: state.app.language,
+        userInfo: state.user.userInfo,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        processLogout: () => dispatch(actions.processLogout()),
-        handleChangeLanguageAppRedux: (language) => dispatch(actions.changeLanguageApp(language)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default withRouter(connect(mapStateToProps, mapDispatchToProps)(Header));

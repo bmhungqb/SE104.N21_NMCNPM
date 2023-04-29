@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import { connect } from "react-redux";
 import { Redirect, Route, Switch } from 'react-router-dom';
 import ManageSchedule from '../containers/System/Doctor/ManageSchedule';
-import Header from '../containers/Header/Header';
+// import Header from '../containers/Header/Header';
 import ManagePatient from '../containers/System/Doctor/ManagePatient';
 class Doctor extends Component {
     render() {
         const { isLoggedIn } = this.props;
         return (
             <React.Fragment>
-                {isLoggedIn && <Header />}
+                {/* {isLoggedIn && <Header />} */}
                 < div className="Doctor-container" >
                     <div className="Doctor-list">
                         <Switch>
