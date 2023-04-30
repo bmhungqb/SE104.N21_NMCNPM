@@ -19,6 +19,7 @@ import { CustomToastCloseButton } from '../components/CustomToast';
 import HomePage from './HomePage/homePage.js'
 import BookManage from './BookManagement/bookManage.js';
 import BookPurchase from './BookManagement/Subsection_BookPurchase/BookPurchase';
+import CustomerManage from './CustomerManagement/CustomerManage';
 // 
 import CustomScrollbars from '../components/CustomScrollbars'
 import Doctor from '../routes/Doctor';
@@ -57,6 +58,7 @@ class App extends Component {
                                     <Route path={path.HOMEPAGE} component={(HomePage)} />
                                     <Route path={path.BOOK_MANAGEMENT} component={(BookManage)} />
                                     <Route path={path.BOOK_PURCHASE} component={(BookPurchase)} />
+                                    <Route path={path.CUSTOMER_MANAGEMENT} component={(CustomerManage)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>

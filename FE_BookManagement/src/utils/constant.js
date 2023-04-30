@@ -3,6 +3,7 @@ export const path = {
     HOMEPAGE: '/home',
     BOOK_MANAGEMENT: '/book-management',
     BOOK_PURCHASE: '/book-purchase',
+    CUSTOMER_MANAGEMENT: '/customer-management',
     LOGIN: '/login',
     LOG_OUT: '/logout',
     SYSTEM: '/system',

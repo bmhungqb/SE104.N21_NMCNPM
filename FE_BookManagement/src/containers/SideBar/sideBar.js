@@ -15,7 +15,7 @@ class SideBar extends Component {
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-management">Book Management</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-purchase">Book Purchase</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-rental">Book Rental</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Custumer Management</a>
+                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/customer-management">Customer Management</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Supplier Management</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Users</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Discount code</a>
