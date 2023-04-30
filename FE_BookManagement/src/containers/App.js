@@ -21,6 +21,7 @@ import BookManage from './BookManagement/bookManage.js';
 import BookPurchase from './BookManagement/Subsection_BookPurchase/BookPurchase';
 import CustomerManage from './CustomerManagement/CustomerManage';
 import SupplierManage from './SupplierManagement/SupplierManage';
+import UserManage from './Users/UserManage';
 // 
 import CustomScrollbars from '../components/CustomScrollbars'
 import Doctor from '../routes/Doctor';
@@ -53,14 +54,16 @@ class App extends Component {
                             <CustomScrollbars style={{ height: '100vh' }}>
                                 <Switch>
                                     {/* <Route path={path.HOME} exact component={(Home)} />
-                                    <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
+                                    // 
                                     <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
                                     <Route path={'/doctor/'} component={userIsAuthenticated(Doctor)} /> */}
+                                    <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.HOMEPAGE} component={(HomePage)} />
                                     <Route path={path.BOOK_MANAGEMENT} component={(BookManage)} />
                                     <Route path={path.BOOK_PURCHASE} component={(BookPurchase)} />
                                     <Route path={path.CUSTOMER_MANAGEMENT} component={(CustomerManage)} />
                                     <Route path={path.SUPPLIER_MANAGEMENT} component={(SupplierManage)} />
+                                    <Route path={path.USER_MANAGEMENT} component={(UserManage)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>
