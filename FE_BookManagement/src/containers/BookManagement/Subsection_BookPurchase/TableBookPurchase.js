@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import "./TableBookManage.scss";
+import "./TableBookPurchase.scss";
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
-class TableBookManage extends Component {
+class TableBookPurchase extends Component {
 
     constructor(props) {
         super(props);
@@ -489,4 +489,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableBookManage);
+export default connect(mapStateToProps, mapDispatchToProps)(TableBookPurchase);

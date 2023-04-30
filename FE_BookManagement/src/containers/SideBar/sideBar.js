@@ -13,6 +13,8 @@ class SideBar extends Component {
                     <div class="list-group list-group-flush">
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/home">Home</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-management">Book Management</a>
+                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-purchase">Book Purchase</a>
+                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-rental">Book Rental</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Custumer Management</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Supplier Management</a>
                         <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Users</a>
