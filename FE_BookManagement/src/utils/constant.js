@@ -4,6 +4,7 @@ export const path = {
     BOOK_MANAGEMENT: '/book-management',
     BOOK_PURCHASE: '/book-purchase',
     CUSTOMER_MANAGEMENT: '/customer-management',
+    SUPPLIER_MANAGEMENT: '/supplier-management',
     LOGIN: '/login',
     LOG_OUT: '/logout',
     SYSTEM: '/system',
