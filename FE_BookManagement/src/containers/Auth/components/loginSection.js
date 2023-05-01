@@ -36,20 +36,20 @@ class LoginSection extends Component {
                                     <label className='font-weight-bold'>Password</label>
                                     <input type="password" className="form-control form-control-lg" placeholder="Password" />
                                 </div>
-                                <div className='remember-forget d-flex justify-content-between'>
-                                    <div className="form-check pl-0">
+                                <div className='remember-forget d-flex justify-content-between mb-2 align-items-center'>
+                                    <div className="form-check pl-0 d-flex">
                                         <input type="checkbox" />
-                                        <label className="form-check-label">Remember me</label>
+                                        <label className="form-check-label ml-2">Remember me</label>
                                     </div>
-                                    <p>Forgot password?</p>
+                                    <p className='font-weight-bold'>Forgot password?</p>
                                 </div>
                                 <button type="submit" className="btn-submit btn btn-lg btn-outline-primary w-100">Submit</button>
                             </form>
                         </div>
                     </div>
-                    <div className='login-footer'>
-                        <p>Not regestered yet?</p>
-                        <a>Create a new account</a>
+                    <div className='login-footer d-flex mt-4'>
+                        <p className='font-weight-bold'>Not regestered yet?</p>
+                        <a className='ml-2'>Create a new account</a>
                     </div>
                 </div>
             </Fragment>
