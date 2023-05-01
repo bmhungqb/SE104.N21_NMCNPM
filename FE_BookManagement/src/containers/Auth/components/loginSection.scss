@@ -1,0 +1,32 @@
+.login-container {
+    .login-header {
+        margin-bottom: 28px;
+
+        .title {
+            text-align: left !important;
+        }
+
+        .description {}
+    }
+
+    .login-content {
+        .login-with-google {
+            button {
+                border-radius: 20px;
+
+                p {
+                    margin: 0;
+                }
+            }
+        }
+
+        .login-user-pass {
+            .btn-submit {
+                height: 60px;
+                border-radius: 15px;
+            }
+        }
+    }
+
+    .login-footer {}
+}

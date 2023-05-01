@@ -1,13 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import { push } from "connected-react-router";
-
 // import * as actions from "../store/actions";
 import * as actions from "../../store/actions";
 import './Login.scss';
 import { FormattedMessage } from 'react-intl';
 import { handleLoginApi } from '../../services/userService';
 import e from 'cors';
+import LoginSection from './components/loginSection';
+import SignupSection from './components/signupSection';
 class Login extends Component {
     constructor(props) {
         super(props);
@@ -65,58 +66,17 @@ class Login extends Component {
         }
     }
     render() {
-        // JSX
-
         return (
-            <div className='login-background'>
-                <div className="login-container">
-                    <div className='login-content row'>
-                        <div className='col-12 login-text'>Login</div>
-                        <div className='col-12 form-group login-input'>
-                            <label>Username</label>
-                            <input
-                                type="text"
-                                className='form-control'
-                                placeholder='Enter your username'
-                                value={this.state.username}
-                                onChange={(e) => { this.handleOnchangeUsername(e) }}
-                            />
-                        </div>
-                        <div className='col-12 form-group login-input'>
-                            <label>Password</label>
-                            <div className='custom-input-password'>
-                                <input
-                                    className='form-control'
-                                    type={this.state.isShowPassword ? "text" : "password"}
-                                    placeholder='Enter your password'
-                                    value={this.state.password}
-                                    onChange={(e) => { this.handleOnchangePassword(e) }}
-                                    onKeyDown={(e) => { this.handleKeyDown(e) }}
-                                />
-                                <span
-                                    onClick={() => { this.handleShowHidePassword() }}>
-                                    <i className={this.state.isShowPassword ? "fas fa-eye" : "fas fa-eye-slash"}></i></span>
-                            </div>
-                        </div>
-                        <div className='col-12' style={{ color: 'red' }}>
-                            {this.state.errMessage}
-                        </div>
-                        <div className='col-12'>
-                            <button className='btn-login' onClick={() => { this.handleLogin() }}>Login</button>
-                        </div>
-                        <div className='col-12'>
-                            <span className='forgot-password'>Forgot your password?</span>
-                        </div>
-                        <div className='col-12 text-center'>
-                            <span className='login-text-other'>Or Login with:</span>
-                        </div>
-                        <div className='col-12 login-social'>
-                            <i className="fab fa-google-plus-g google"></i>
-                            <i className="fab fa-facebook-f facebook"></i>
-                        </div>
+            <Fragment>
+                <div className='login-page-container d-flex'>
+                    <div className='login-signup'>
+                        <LoginSection />
+                    </div>
+                    <div className='image'>
+
                     </div>
                 </div>
-            </div >
+            </Fragment>
         )
     }
 }

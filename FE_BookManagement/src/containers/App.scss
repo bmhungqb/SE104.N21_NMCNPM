@@ -1,1 +1,5 @@
 @import "../styles/common.scss";
+
+.iframe {
+    pointer-events: none !important;
+}
