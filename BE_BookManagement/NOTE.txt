@@ -1,0 +1,4 @@
+Backend
+    Route(Webroute) => Controllers(function) => Services()
+FrontEnd:
+    file .js=> Services(const, connect database which use axios , declare router to BE, pass data) 
