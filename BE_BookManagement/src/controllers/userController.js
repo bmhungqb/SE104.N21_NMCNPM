@@ -1,10 +1,9 @@
 import userService from '../services/userService'
 
 let handleLogin = async (req, res) => {
-    console.log(req.body)
+    console.log(req.body);
     let username = req.body.username
-    let password = res.body.password
-    console.log("password: ", password)
+    let password = req.body.password
     if (!username || !password) {
         return res.status(500).json({
             errCode: 1,
