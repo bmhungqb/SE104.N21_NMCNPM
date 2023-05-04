@@ -10,21 +10,23 @@
     }
 
     .login-content {
-        .login-with-google {
-            button {
-                border-radius: 20px;
+        // .login-with-google {
+        //     button {
+        //         border-radius: 20px;
 
-                p {
-                    margin: 0;
-                }
-            }
-        }
+        //         p {
+        //             margin: 0;
+        //         }
+        //     }
+        // }
 
         .login-user-pass {
             .btn-submit {
                 height: 50px;
                 border-radius: 15px;
             }
+
+            .form-input {}
         }
     }
 
