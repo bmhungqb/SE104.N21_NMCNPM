@@ -29,11 +29,17 @@
 
             display: flex;
             align-items: center;
+            margin-left: 110px;
 
             .form-select-language {
-                width: 100px;
+                width: 105px;
                 border: none;
                 background-color: transparent;
+                cursor: pointer;
+
+                &:focus {
+                    box-shadow: none;
+                }
             }
         }
 
@@ -41,6 +47,7 @@
             align-items: center;
 
             .up-content {
+                align-items: center;
                 height: 50%;
                 display: flex;
                 text-align: center !important;

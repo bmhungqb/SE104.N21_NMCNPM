@@ -12,7 +12,6 @@ import { path } from '../utils'
 
 import Home from '../routes/Home';
 import Login from './Auth/Login';
-import System from '../routes/System';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
 // new
@@ -24,7 +23,6 @@ import SupplierManage from './SupplierManagement/SupplierManage';
 import UserManage from './Users/UserManage';
 // 
 import CustomScrollbars from '../components/CustomScrollbars'
-import Doctor from '../routes/Doctor';
 class App extends Component {
 
     handlePersistorState = () => {

@@ -5,49 +5,115 @@ import { FormattedMessage } from 'react-intl';
 import { LANGUAGES } from '../../utils'
 import { changeLanguageApp } from '../../store/actions/appActions';
 import { withRouter } from 'react-router';
-import { Modal } from 'bootstrap';
 import 'bootstrap';
-
+import { injectIntl, intlShape } from 'react-intl';
+import { Modal } from 'bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
-import { faSun } from "@fortawesome/free-solid-svg-icons";
+import { faSun, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { event } from 'jquery';
+import e from 'cors';
 
 class Header extends Component {
-
-    changeLanguage = (language) => {
-        this.props.changeLanguageAppRedux(language)
+    constructor(props) {
+        super(props);
+        this.state = {
+            time: new Date(),
+            sessionEN: '',
+            sessionVI: ''
+        }
+    }
+    refreshClock = () => {
+        this.setState({
+            time: new Date()
+        })
+    }
+    componentDidMount() {
+        this.timerId = setInterval(() => this.refreshClock(), 1000);
+        if (this.state.time.getHours() < 12) {
+            this.setState({
+                sessionEN: " Morning",
+                sessionVI: " Buổi sáng"
+            })
+        } else if (this.state.time.getHours() < 18) {
+            this.setState({
+                sessionEN: " Afternoon",
+                sessionVI: "Buổi chiều"
+            })
+        } else {
+            this.setState({
+                sessionEN: " Evening",
+                sessionVI: " Buổi tối"
+            })
+        }
+    }
+    componentWillUnmount() {
+        clearInterval(this.timerId);
+    }
+    changeLanguage = (e) => {
+        if (e.target.value === "en") {
+            this.props.changeLanguageAppRedux(LANGUAGES.EN)
+        }
+        else {
+            this.props.changeLanguageAppRedux(LANGUAGES.VI)
+        }
     }
     render() {
+        const { time, sessionEN, sessionVI } = this.state;
         let language = this.props.language;
+        let placeholder = FormattedMessage.id
         return (
             <React.Fragment>
                 <div className='home-header-container'>
                     <div className='left-content'>
                         <div className="input-group mb-3 top-50 start-50 translate-middle">
-                            <input type="text" className="form-control search-box" placeholder="Search for anything here.." />
-                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">Button</button>
+                            <FormattedMessage id='header.placeholder-search'>
+                                {(msg) => (
+                                    <input
+                                        type="text"
+                                        className="form-control search-box"
+                                        placeholder={msg}
+                                    />
+                                )}
+                            </FormattedMessage>
+                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">
+                                <FontAwesomeIcon icon={faMagnifyingGlass} />
+                            </button>
                         </div>
                     </div>
                     <div className='right-content'>
                         <div className='language'>
                             <FontAwesomeIcon size="lg" className='icon-language' icon={faLanguage} />
-                            <select className="form-select form-select-language" aria-label="Default select example">
-                                <option value="2" selected>English</option>
-                                <option value="1">Viet Nam</option>
+                            <select
+                                className="form-select form-select-language"
+                                value={language}
+                                onChange={(e) => this.changeLanguage(e)}
+                            >
+                                <option
+                                    value="en">English
+                                </option>
+                                <option
+                                    value="vi">Việt Nam
+                                </option>
                             </select>
-                            {/* <div className={language === LANGUAGES.VI ? 'language-vi active' : "language-vi"}><span onClick={() => this.changeLanguage(LANGUAGES.VI)} > VN</span></div>
-                            <div className={language === LANGUAGES.EN ? 'language-en active' : "language-en"}><span onClick={() => this.changeLanguage(LANGUAGES.EN)} > EN</span></div> */}
                         </div>
                         <div className='time'>
                             <div className='up-content'>
                                 <span>
                                     <FontAwesomeIcon icon={faSun} />
                                 </span>
-                                <p className='align-middle text'>Good Morning</p>
+                                <p className='align-middle text mt-3'>
+                                    <FormattedMessage id='header.session' />
+                                    {language == LANGUAGES.VI ? sessionVI : sessionEN}
+                                </p>
                             </div>
                             <div className='down-content'>
-                                <p className='align-middle left-text'>12 May 2023</p>
-                                <p className='align-middle right-text'>24:00:00</p>
+                                <p className='align-middle left-text'>
+                                    {time.toDateString()}
+                                </p>
+                                <p className='align-middle right-text'>
+                                    {time.toLocaleTimeString()}
+                                </p>
                             </div>
                         </div>
                     </div>

@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
+import { push } from 'connected-react-router';
+import * as actions from '../../../store/actions'
 import './loginSection.scss'
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { icon, faa } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 import { event } from 'jquery';
 import e from 'cors';
+import { FormattedMessage } from 'react-intl';
+import { handleLoginApi } from '../../../services/userService';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons';
 class LoginSection extends Component {
     constructor(props) {
         super(props)
@@ -14,6 +17,31 @@ class LoginSection extends Component {
             password: "",
             isShowPassword: false,
             errMessage: ""
+        }
+    }
+    handleLogin = async () => {
+        this.setState({
+            errMessage: ''
+        })
+        try {
+            let data = await handleLoginApi(this.state.username, this.state.password);
+            if (data && data.errCode !== 0) {
+                this.setState({
+                    errMessage: data.message
+                })
+            }
+            if (data && data.errCode === 0) {
+                this.props.userLoginSuccess(data.user)
+            }
+        }
+        catch (error) {
+            if (error.response) {
+                if (error.response.data) {
+                    this.setState({
+                        errMessage: error.response.data.message
+                    })
+                }
+            }
         }
     }
     handleOnchangeUsername = (event) => {
@@ -36,31 +64,7 @@ class LoginSection extends Component {
             isShowPassword: !this.state.isShowPassword
         })
     }
-    handleLogin = async () => {
-        this.setState({
-            errMessage: ''
-        })
-        try {
-            let data = handleLoginAPI(this.state.username, this.state.password);
-            if (data && data.errCode !== 0) {
-                this.setState({
-                    errMessage: data.message
-                })
-            }
-            if (data && data.errCode === 0) {
-                this.props.userLoginSuccess(data.user)
-            }
-        }
-        catch (error) {
-            if (error.response) {
-                if (error.response.data) {
-                    this.setState({
-                        errMessage: error.response.data.message
-                    })
-                }
-            }
-        }
-    }
+
     render() {
         return (
             <Fragment>
@@ -81,7 +85,7 @@ class LoginSection extends Component {
                                 <div className="form-group mt-3">
                                     <label className='font-weight-bold'>Username</label>
                                     <input
-                                        type="email"
+                                        type="text"
                                         className="form-input form-control form-control-lg"
                                         placeholder="Enter your username"
                                         value={this.state.username}
@@ -124,7 +128,7 @@ class LoginSection extends Component {
                                     {this.state.errMessage}
                                 </div>
                                 <button
-                                    type="submit"
+                                    type='button'
                                     className="btn-submit btn btn-lg btn-outline-primary w-100 mt-3"
                                     onClick={() => { this.handleLogin() }}
                                 >
@@ -145,12 +149,14 @@ class LoginSection extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        navigate: (path) => dispatch(push(path)),
+        userLoginSuccess: (userInfo) => dispatch(actions.userLoginSuccess(userInfo))
     };
 };
 

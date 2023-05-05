@@ -88,8 +88,8 @@ class ModalOrder extends Component {
                         </div>
                         <div className='input-container max-width-input'>
                             <label>Description</label>
-                            <div class="form-outline">
-                                <textarea class="form-control" id="textAreaExample2" rows="5"></textarea>
+                            <div className="form-outline">
+                                <textarea className="form-control" id="textAreaExample2" rows="5"></textarea>
                             </div>
                         </div>
                     </div>

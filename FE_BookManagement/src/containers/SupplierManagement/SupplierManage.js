@@ -68,12 +68,12 @@ class SupplierManage extends Component {
                             <div className='action'>
                                 <div class="input-group form-outline w-25">
                                     <input placeholder='Enter search' type="text" className="form-control h-100" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">By ID</a>
-                                            <a class="dropdown-item" href="#">By Author</a>
-                                            <a class="dropdown-item" href="#">By Title</a>
+                                    <div className="input-group-append">
+                                        <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
+                                        <div className="dropdown-menu">
+                                            <a className="dropdown-item" href="#">By ID</a>
+                                            <a className="dropdown-item" href="#">By Author</a>
+                                            <a className="dropdown-item" href="#">By Title</a>
                                         </div>
                                     </div>
                                 </div>

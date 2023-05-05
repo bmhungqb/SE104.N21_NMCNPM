@@ -6,24 +6,24 @@ class SideBar extends Component {
     render() {
         return (
             <React.Fragment>
-                <div class="border-end bg-white" id="sidebar-wrapper">
-                    <div class="sidebar-heading border-bottom bg-light">
+                <div className="border-end bg-white" id="sidebar-wrapper">
+                    <div className="sidebar-heading border-bottom bg-light">
 
                     </div>
-                    <div class="list-group list-group-flush">
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/home">Home</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-management">Book Management</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-purchase">Book Purchase</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/book-rental">Book Rental</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/customer-management">Customer Management</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/supplier-management">Supplier Management</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/user-management">Users</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Discount code</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Conversation</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Notifications</a>
+                    <div className="list-group list-group-flush">
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="/home">Home</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="/book-management">Book Management</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="/book-purchase">Book Purchase</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="/book-rental">Book Rental</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="/customer-management">Customer Management</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="/supplier-management">Supplier Management</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="/user-management">Users</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Discount code</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Conversation</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Notifications</a>
                         {/* line here */}
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Get Technical Help</a>
-                        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Settings</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Get Technical Help</a>
+                        <a className="list-group-item list-group-item-action list-group-item-light p-3" href="#!">Settings</a>
                     </div>
                 </div>
             </React.Fragment>
