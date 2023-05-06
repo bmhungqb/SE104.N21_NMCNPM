@@ -51,17 +51,13 @@ class App extends Component {
                         <div className="content-container">
                             <CustomScrollbars style={{ height: '100vh' }}>
                                 <Switch>
-                                    {/* <Route path={path.HOME} exact component={(Home)} />
-                                    // 
-                                    <Route path={path.SYSTEM} component={userIsAuthenticated(System)} />
-                                    <Route path={'/doctor/'} component={userIsAuthenticated(Doctor)} /> */}
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
-                                    <Route path={path.HOMEPAGE} component={(HomePage)} />
-                                    <Route path={path.BOOK_MANAGEMENT} component={(BookManage)} />
-                                    <Route path={path.BOOK_PURCHASE} component={(BookPurchase)} />
-                                    <Route path={path.CUSTOMER_MANAGEMENT} component={(CustomerManage)} />
-                                    <Route path={path.SUPPLIER_MANAGEMENT} component={(SupplierManage)} />
-                                    <Route path={path.USER_MANAGEMENT} component={(UserManage)} />
+                                    <Route path={path.HOMEPAGE} component={userIsAuthenticated(HomePage)} />
+                                    <Route path={path.BOOK_MANAGEMENT} component={userIsAuthenticated(BookManage)} />
+                                    <Route path={path.BOOK_PURCHASE} component={userIsAuthenticated(BookPurchase)} />
+                                    <Route path={path.CUSTOMER_MANAGEMENT} component={userIsAuthenticated(CustomerManage)} />
+                                    <Route path={path.SUPPLIER_MANAGEMENT} component={userIsAuthenticated(SupplierManage)} />
+                                    <Route path={path.USER_MANAGEMENT} component={userIsAuthenticated(UserManage)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>

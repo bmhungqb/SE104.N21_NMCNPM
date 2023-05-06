@@ -1,20 +1,21 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom/cjs/react-router-dom.min';
 import { connect } from 'react-redux';
+import * as actions from '../../store/actions/index'
 import { FormattedMessage } from 'react-intl';
 import "./sideBar.scss"
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { faEllipsisVertical, faEllipsisV, faElevator } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faRightFromBracket, faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 class SideBar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isActive: false
         }
     }
     render() {
+        const { processLogout, language, userInfo } = this.props;
         return (
             <React.Fragment>
                 <div className="border-end bg-white" id="sidebar-wrapper">
@@ -43,12 +44,16 @@ class SideBar extends Component {
                             <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                 <NavLink
                                     className="dropdown-item"
-                                    to="/profile">
+                                    to='/profile'>
+                                    <FontAwesomeIcon icon={faCircleUser} />
                                     My Profile
                                 </NavLink>
                                 <NavLink
                                     className="dropdown-item"
-                                    to="/logout">
+                                    to="/login"
+                                    onClick={processLogout}
+                                >
+                                    <FontAwesomeIcon icon={faRightFromBracket} />
                                     Logout
                                 </NavLink>
                             </div>
@@ -66,7 +71,7 @@ class SideBar extends Component {
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/conversation">Conversation</NavLink>
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/notifications">Notifications</NavLink>
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/technical-help">Get Technical Help</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/s">Settings</NavLink>
+                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/setting">Settings</NavLink>
                     </div>
                 </div>
             </React.Fragment >
@@ -78,12 +83,14 @@ class SideBar extends Component {
 const mapStateToProps = state => {
     return {
         isLoggedIn: state.user.isLoggedIn,
-        language: state.app.language
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        processLogout: () => dispatch(actions.processLogout()),
+        handleChangeLanguageAppRedux: (language) => dispatch(actions.changeLanguageApp(language)),
     };
 };
 

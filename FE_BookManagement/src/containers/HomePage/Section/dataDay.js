@@ -27,12 +27,17 @@ class DataDay extends Component {
                             <p className='text-up'>Home</p>
                             <p className='text-down'>A quick data overview of the store</p>
                         </div>
-                        <div className='content-right'>
-                            <select className='form-select form-select-lg mt-1'>
-                                <option selected>Download Report</option>
-                                <option>Day</option>
-                                <option>Month</option>
-                            </select>
+                        <div className='btn-group content-right'>
+                            <div class="dropdown mt-1 ">
+                                <button class="btn btn-primary btn-lg dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                    Download Report
+                                </button>
+                                <div class="dropdown-menu " aria-labelledby="dropdownMenuButton">
+                                    <a class="dropdown-item" href="#">Excel</a>
+                                    <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="#">PDF</a>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div className='data-day-content'>

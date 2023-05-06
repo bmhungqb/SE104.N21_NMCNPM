@@ -8,7 +8,11 @@ import { withRouter } from 'react-router';
 import 'bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { faAnglesRight } from '@fortawesome/free-solid-svg-icons';
+import { faAnglesRight, faPlus } from '@fortawesome/free-solid-svg-icons';
+import "flatpickr/dist/themes/material_green.css";
+import Flatpickr from "react-flatpickr";
+import ModalInvetory from '../Modal/ModalInvetory';
+import ModalDebt from '../Modal/ModalDebt';
 import {
     Chart as ChartJS,
     CategoryScale,
@@ -21,21 +25,53 @@ import {
 } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 import { Line } from 'react-chartjs-2';
-import DatePicker from "react-datepicker";
-import "react-datepicker/dist/react-datepicker.css";
 class DataMonth extends Component {
     constructor(props) {
         super(props);
+        this.state = {
+            date: new Date(),
+            isOpenModalInventory: false,
+            isOpenModalDebt: false
+        };
+    }
+    handlebtnDebt = () => {
+        this.setState({
+            isOpenModalDebt: true
+        })
+    }
+    toggleDebtModal = () => {
+        this.setState({
+            isOpenModalDebt: !this.state.isOpenModalDebt,
+        })
+    }
+    handlebtnInventory = () => {
+        this.setState({
+            isOpenModalInventory: true
+        })
+    }
+    toggleInventoryModal = () => {
+        this.setState({
+            isOpenModalInventory: !this.state.isOpenModalInventory,
+        })
     }
     changeLanguage = (language) => {
         this.props.changeLanguageAppRedux(language)
     }
+
     render() {
-        var startDate = new Date();
-        let language = this.props.language;
+        const { date } = this.state;
+        let { language } = this.props.language;
         return (
             <React.Fragment>
                 <div className='data-month-container'>
+                    <ModalInvetory
+                        isOpen={this.state.isOpenModalInventory}
+                        toggleFromParent={this.toggleInventoryModal}
+                    />
+                    <ModalDebt
+                        isOpen={this.state.isOpenModalDebt}
+                        toggleFromParent={this.toggleDebtModal}
+                    />
                     <div className='content-left'>
                         <div className="chart-data">
                             <Line
@@ -97,37 +133,48 @@ class DataMonth extends Component {
                     <div className='content-right'>
                         <div className='box box-up'>
                             <div className='content-up'>
-                                <p>Quick Report</p>
-                                <DatePicker className='datepicker' selected={startDate} />
+                                <p>Inventory Report</p>
+                                <Flatpickr
+                                    data-disabled-time
+                                    value={date}
+                                    onChange={([date]) => {
+                                        this.setState({ date });
+                                    }}
+                                    options={{ maxDate: new Date() }}
+                                />
                             </div>
                             <div className='content-down'>
-                                <div className='left'>
-                                    <p className='number'>70,856</p>
-                                    <p className='text'>Qty of Books Sold</p>
-                                </div>
-                                <div className='right'>
-                                    <p className='number'>5,288</p>
-                                    <p className='text'>Invoices Generated</p>
-                                </div>
+                                <button
+                                    type="button"
+                                    className="h-50 w-25 btn btn-lg btn-primary"
+                                    onClick={() => this.handlebtnInventory()}
+                                >
+                                    <FontAwesomeIcon icon={faPlus} />
+                                    Report
+                                </button>
                             </div>
                         </div>
                         <div className='box box-down'>
                             <div className='content-up'>
-                                <p>Customers</p>
-                                <span>
-                                    <p>Go to Customers Page</p>
-                                    <FontAwesomeIcon className='icon-right' icon={faAnglesRight} />
-                                </span>
+                                <p>Debt Report</p>
+                                <Flatpickr
+                                    data-disabled-time
+                                    value={date}
+                                    onChange={([date]) => {
+                                        this.setState({ date });
+                                    }}
+                                    options={{ maxDate: new Date() }}
+                                />
                             </div>
                             <div className='content-down'>
-                                <div className='left'>
-                                    <p className='number'>845</p>
-                                    <p className='text'>Total n.o of Customers</p>
-                                </div>
-                                <div className='right'>
-                                    <p className='number'>Adalimumab</p>
-                                    <p className='text'>Frequently bought Item</p>
-                                </div>
+                                <button
+                                    type="button"
+                                    className="h-50 w-25 btn btn-primary btn-lg"
+                                    onClick={() => this.handlebtnDebt()}
+                                >
+                                    <FontAwesomeIcon icon={faPlus} />
+                                    Report
+                                </button>
                             </div>
                         </div>
                     </div>

@@ -38,7 +38,7 @@ class Header extends Component {
         } else if (this.state.time.getHours() < 18) {
             this.setState({
                 sessionEN: " Afternoon",
-                sessionVI: "Buổi chiều"
+                sessionVI: " Buổi chiều"
             })
         } else {
             this.setState({
