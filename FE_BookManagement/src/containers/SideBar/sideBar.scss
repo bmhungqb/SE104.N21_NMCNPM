@@ -12526,3 +12526,8 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
         margin-left: -15rem;
     }
 }
+
+.list-group-item-light.list-group-item-action.active {
+    background-color: #009099;
+    border: none;
+}
