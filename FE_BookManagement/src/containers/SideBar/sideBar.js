@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import "./sideBar.scss"
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { NavLink } from 'react-router-dom';
+import { faEllipsisVertical, faEllipsisV, faElevator } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 class SideBar extends Component {
     constructor(props) {
         super(props)
@@ -16,7 +18,41 @@ class SideBar extends Component {
         return (
             <React.Fragment>
                 <div className="border-end bg-white" id="sidebar-wrapper">
-                    <div className="sidebar-heading border-bottom bg-light">
+                    <div className="sidebar-heading bg-light">
+                        <div className='logo'></div>
+                        <p className='title'>BookHolic Management</p>
+                    </div>
+                    <div className='sidebar-infor'>
+                        <div className='avatar'></div>
+                        <div className='infor-user'>
+                            <p className='name'>Rubikk</p>
+                            <p className='role'>Admin</p>
+                        </div>
+                        <div class="dropdown dropleft">
+                            <button
+                                class="btn"
+                                type="button"
+                                id="dropdownMenuButton"
+                                data-toggle="dropdown"
+                                aria-haspopup="true"
+                                aria-expanded="false"
+                            // style={ }
+                            >
+                                <FontAwesomeIcon icon={faEllipsisVertical} fontSize={'20px'} />
+                            </button>
+                            <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <NavLink
+                                    className="dropdown-item"
+                                    to="/profile">
+                                    My Profile
+                                </NavLink>
+                                <NavLink
+                                    className="dropdown-item"
+                                    to="/logout">
+                                    Logout
+                                </NavLink>
+                            </div>
+                        </div>
                     </div>
                     <div className="list-group list-group-flush">
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/home'>Home</NavLink>
