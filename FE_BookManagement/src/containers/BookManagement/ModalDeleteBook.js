@@ -8,17 +8,14 @@ class ModalDeleteBook extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: '',
-            firstName: '',
-            lastName: '',
-            address: ''
         }
     }
     componentDidMount() {
 
     }
-
+    handleDeleteBook = () => {
+        this.props.deleteBook();
+    }
     toggle = () => {
         this.props.toggleFromParent();
     }
@@ -33,7 +30,7 @@ class ModalDeleteBook extends Component {
                 <ModalHeader
                 >Do you want to delete this book?</ModalHeader>
                 <ModalFooter>
-                    <Button className='px-5  border-0 bg-danger' >Yes</Button>
+                    <Button className='px-5  border-0 bg-danger' onClick={() => this.handleDeleteBook()}>Yes</Button>
                     <Button className='px-5  border-0 bg-primary' onClick={() => { this.toggle() }}>No</Button>
                 </ModalFooter>
             </Modal >

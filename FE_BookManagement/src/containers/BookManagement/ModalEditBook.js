@@ -11,7 +11,8 @@ class ModalEditBook extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantity: 1,
+            id: undefined,
+            quantity: undefined,
             bookTitle: '',
             genre: '',
             author: '',
@@ -20,20 +21,21 @@ class ModalEditBook extends Component {
             costPrice: '',
             errMessage: ""
         }
-        this.listenToEmitter();
     }
-    listenToEmitter() {
-        emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
+    componentDidMount() {
+        let bookInfor = this.props.bookEdit
+        if (bookInfor && !_.isEmpty(bookInfor)) {
             this.setState({
-                quantity: 1,
-                bookTitle: '',
-                genre: '',
-                author: '',
-                publisher: '',
-                sellingPrice: '',
-                costPrice: ''
+                id: bookInfor.id,
+                quantity: bookInfor.quantity,
+                bookTitle: bookInfor.bookTitle,
+                genre: bookInfor.genre,
+                author: bookInfor.authorName,
+                publisher: bookInfor.publisherName,
+                sellingPrice: bookInfor.sellingPrice,
+                costPrice: bookInfor.costPrice,
             })
-        })
+        }
     }
     handleOnchangeInput = (event, id) => {
         let copyState = { ...this.state }
@@ -62,16 +64,12 @@ class ModalEditBook extends Component {
         }
         return isValid
     }
-    handleAddNewBook = () => {
+    handleSaveBook = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
-            this.props.createNewBook(this.state)
+            this.props.editBook(this.state)
         }
     }
-    componentDidMount() {
-
-    }
-
     toggle = () => {
         this.props.toggleFromParent();
     }
@@ -171,8 +169,8 @@ class ModalEditBook extends Component {
                     <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
                         className='px-5 border-0 bg-primary'
-                        onClick={() => this.handleAddNewBook()}
-                    >Add</Button>
+                        onClick={() => this.handleSaveBook()}
+                    >Save</Button>
                 </ModalFooter>
             </Modal >
         )

@@ -2,7 +2,6 @@ const express = require('express');
 const path = require('path');
 
 const app = express();
-
 const buildDir = path.join(__dirname, '../build');
 console.log('Using files in ' + buildDir);
 
@@ -20,7 +19,9 @@ if (logRequests) {
 }
 
 // Serve the static files from the React app
-app.use(subDir, express.static(buildDir));
+app.use(
+    subDir, express.static(buildDir)
+);
 // Handles any requests that don't match the ones above
 app.get('*', (req, res) => {
     if (logRequests) {

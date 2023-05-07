@@ -6,7 +6,9 @@ import "slick-carousel/slick/slick-theme.css";
 import { emitter } from '../../utils/emitter';
 import {
     createNewBookService,
-    getAllBooks
+    getAllBooks,
+    editBookService,
+    deleteBookService
 } from '../../services/bookService'
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
@@ -18,6 +20,8 @@ class BookManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            bookDeleteId: undefined,
+            bookEdit: {},
             arrBooks: [],
             isOpenModalUser: false,
             isOpenModalEditBook: false,
@@ -35,7 +39,7 @@ class BookManage extends Component {
             })
         }
     }
-    handleAddNewUser = () => {
+    handleAddNewBook = () => {
         this.setState({
             isOpenModalUser: true,
         })
@@ -71,6 +75,46 @@ class BookManage extends Component {
             console.log(e);
         }
     }
+    getBookEdit = (book) => {
+        this.setState({
+            bookEdit: book
+        })
+    }
+    getBookDelete = (bookId) => {
+        this.setState({
+            bookDeleteId: bookId
+        })
+    }
+    deleteBook = async () => {
+        try {
+            let res = await deleteBookService(this.state.bookDeleteId);
+            if (res && res.errCode === 0) {
+                this.setState({
+                    isOpenModalDeleteBook: false
+                })
+                await this.getAllBooksFromReact()
+            } else {
+                alert(res.errMessage)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    editBook = async (book) => {
+        try {
+            let res = await editBookService(book);
+            if (res && res.errCode === 0) {
+                this.setState({
+                    isOpenModalEditBook: false
+                })
+                await this.getAllBooksFromReact()
+            } else {
+                alert(res.errMessage)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
     render() {
         return (
             <div className="d-flex" id="wrapper">
@@ -84,7 +128,8 @@ class BookManage extends Component {
                     <ModalEditBook
                         isOpen={this.state.isOpenModalEditBook}
                         toggleFromParent={this.toggleBookEditModal}
-                        editBook={this.doEditBook}
+                        editBook={this.editBook}
+                        bookEdit={this.state.bookEdit}
                     />
                 }
                 {
@@ -92,6 +137,7 @@ class BookManage extends Component {
                     <ModalDeleteBook
                         isOpen={this.state.isOpenModalDeleteBook}
                         toggleFromParent={this.toggleBookDeleteModal}
+                        deleteBook={this.deleteBook}
                     />
                 }
                 <SideBar />
@@ -118,7 +164,7 @@ class BookManage extends Component {
                                 <div className='mx-1 button-add'>
                                     <button
                                         className='btn px-3'
-                                        onClick={() => this.handleAddNewUser()}
+                                        onClick={() => this.handleAddNewBook()}
                                     ><i className="fa fa-plus"></i> Add New Book</button>
                                 </div>
                             </div>
@@ -127,6 +173,8 @@ class BookManage extends Component {
                                     toggleFromParent={this.toggleBookEditModal}
                                     toggleBookDeleteModal={this.toggleBookDeleteModal}
                                     arrBooks={this.state.arrBooks}
+                                    getBookEdit={(bookInfor) => this.getBookEdit(bookInfor)}
+                                    getBookDelete={(bookId) => this.getBookDelete(bookId)}
                                 />
                             </div>
 

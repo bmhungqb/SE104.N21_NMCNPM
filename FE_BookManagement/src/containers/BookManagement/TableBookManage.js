@@ -12,7 +12,6 @@ class TableBookManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            bookEdit: {},
             columns: [{
                 name: "BookID",
                 selector: 'id',
@@ -57,6 +56,7 @@ class TableBookManage extends Component {
                     <button
                         className='border-0 bg-transparent'
                         onClick={() => { this.handleDeleteBook(row) }}
+                        data-tag="allowRowEvents"
                     >
                         <FontAwesomeIcon
                             className='icon-right text-danger'
@@ -79,12 +79,11 @@ class TableBookManage extends Component {
     }
 
     handleEditBook = (row) => {
-        this.setState({
-            bookEdit: row
-        })
+        this.props.getBookEdit(row)
         this.props.toggleFromParent();
     }
-    handleDeleteBook = () => {
+    handleDeleteBook = (row) => {
+        this.props.getBookDelete(row.id)
         this.props.toggleBookDeleteModal();
     }
     caseInsensitiveSort = (rowA, rowB) => {
