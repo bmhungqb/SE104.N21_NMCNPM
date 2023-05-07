@@ -30,7 +30,10 @@
         .input-container {
             display: flex;
             flex-direction: column;
-            width: 45%;
+
+            .select-genre {
+                display: flex;
+            }
 
             &.max-width-input {
                 width: 100%;

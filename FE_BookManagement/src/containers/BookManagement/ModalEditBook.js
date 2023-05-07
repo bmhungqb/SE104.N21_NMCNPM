@@ -3,16 +3,69 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalEditBook.scss"
+import { emitter } from '../../utils/emitter';
+import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 class ModalEditBook extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: '',
-            firstName: '',
-            lastName: '',
-            address: ''
+            quantity: 1,
+            bookTitle: '',
+            genre: '',
+            author: '',
+            publisher: '',
+            sellingPrice: '',
+            costPrice: '',
+            errMessage: ""
+        }
+        this.listenToEmitter();
+    }
+    listenToEmitter() {
+        emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
+            this.setState({
+                quantity: 1,
+                bookTitle: '',
+                genre: '',
+                author: '',
+                publisher: '',
+                sellingPrice: '',
+                costPrice: ''
+            })
+        })
+    }
+    handleOnchangeInput = (event, id) => {
+        let copyState = { ...this.state }
+        copyState[id] = event.target.value;
+        this.setState({
+            ...copyState
+        })
+    }
+    checkValidateInput = () => {
+        let isValid = true;
+        let arrInput = [
+            'quantity',
+            'bookTitle',
+            'genre',
+            'author',
+            'publisher',
+            'sellingPrice',
+            'costPrice'
+        ];
+        for (let i = 0; i < arrInput.length; i++) {
+            if (!this.state[arrInput[i]]) {
+                isValid = false;
+                alert("Missing parameter " + arrInput[i]);
+                break;
+            }
+        }
+        return isValid
+    }
+    handleAddNewBook = () => {
+        let isValid = this.checkValidateInput();
+        if (isValid) {
+            this.props.createNewBook(this.state)
         }
     }
     componentDidMount() {
@@ -33,70 +86,93 @@ class ModalEditBook extends Component {
                 <ModalHeader toggle={() => { this.toggle() }}>Book Information</ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
-                        <div className='input-container'>
+                        {/* <div className='input-container'>
                             <label>Book ID</label>
                             <input
                                 type='text'
+                                value={this.state.bookId}
+                                onChange={(e) => this.handleOnchangeInput(e, 'bookId')}
                             />
-                        </div>
+                        </div> */}
                         <div className='input-container'>
                             <label>Quantity</label>
                             <input
                                 type='text'
+                                value={this.state.quantity}
+                                onChange={(e) => this.handleOnchangeInput(e, 'quantity')}
                             />
                         </div>
                         <div className='input-container '>
                             <label>Book Title</label>
                             <input
                                 type='text'
+                                value={this.state.bookTitle}
+                                onChange={(e) => this.handleOnchangeInput(e, 'bookTitle')}
                             />
                         </div>
                         <div className='input-container '>
                             <label>Genre</label>
-                            <select className='form-select'>
-                                <option >Action and Adventure</option>
-                                <option>Classics</option>
-                                <option>Detective and Mystery</option>
-                                <option>Fantasy</option>
-                                <option>Historical Fiction</option>
-                                <option>Horror</option>
-                            </select>
+                            <div className='select-genre'>
+                                <select
+                                    className='form-select'
+                                    value={this.state.genre}
+                                    onChange={(e) => this.handleOnchangeInput(e, 'genre')}
+                                >
+                                    <option value={'Action and Adventure'}>Action and Adventure</option>
+                                    <option value={"Classics"}>Classics</option>
+                                    <option value={"Detective and Mystery"}>Detective and Mystery</option>
+                                    <option value={"Fantasy"}>Fantasy</option>
+                                </select>
+                                <button class="btn btn-primary" type="button">
+                                    <FontAwesomeIcon icon={faPlus} />
+                                </button>
+                                <input
+                                    className='d-none'
+                                    value={this.state.genre}
+                                    onChange={(e) => this.handleOnchangeInput(e, 'genre')}
+                                />
+                            </div>
                         </div>
                         <div className='input-container'>
                             <label>Author</label>
                             <input
                                 type='text'
+                                value={this.state.author}
+                                onChange={(e) => this.handleOnchangeInput(e, 'author')}
                             />
                         </div>
                         <div className='input-container'>
                             <label>Publisher</label>
                             <input
                                 type='text'
+                                value={this.state.publisher}
+                                onChange={(e) => this.handleOnchangeInput(e, 'publisher')}
                             />
                         </div>
                         <div className='input-container '>
                             <label>Selling Price</label>
                             <input
                                 type='text'
+                                value={this.state.sellingPrice}
+                                onChange={(e) => this.handleOnchangeInput(e, 'sellingPrice')}
                             />
                         </div>
                         <div className='input-container'>
                             <label>Cost Price</label>
                             <input
                                 type='text'
+                                value={this.state.costPrice}
+                                onChange={(e) => this.handleOnchangeInput(e, 'costPrice')}
                             />
-                        </div>
-                        <div className='input-container max-width-input'>
-                            <label>Description</label>
-                            <div class="form-outline">
-                                <textarea class="form-control" id="textAreaExample2" rows="5"></textarea>
-                            </div>
                         </div>
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button className='px-5 border-0 bg-danger' >Clear</Button>
-                    <Button className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Save</Button>
+                    <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                    <Button
+                        className='px-5 border-0 bg-primary'
+                        onClick={() => this.handleAddNewBook()}
+                    >Add</Button>
                 </ModalFooter>
             </Modal >
         )

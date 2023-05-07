@@ -3,6 +3,11 @@ import { connect } from 'react-redux';
 import './bookManage.scss'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import { emitter } from '../../utils/emitter';
+import {
+    createNewBookService,
+    getAllBooks
+} from '../../services/bookService'
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
 import ModalBook from './ModalBook';
@@ -13,9 +18,21 @@ class BookManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            arrBooks: [],
             isOpenModalUser: false,
             isOpenModalEditBook: false,
             isOpenModalDeleteBook: false,
+        }
+    }
+    async componentDidMount() {
+        await this.getAllBooksFromReact();
+    }
+    getAllBooksFromReact = async () => {
+        let response = await getAllBooks('ALL');
+        if (response && response.errCode === 0) {
+            this.setState({
+                arrBooks: response.books
+            })
         }
     }
     handleAddNewUser = () => {
@@ -38,18 +55,36 @@ class BookManage extends Component {
             isOpenModalDeleteBook: !this.state.isOpenModalDeleteBook,
         })
     }
+    createNewBook = async (data) => {
+        try {
+            let response = await createNewBookService(data);
+            if (response && response.errCode !== 0) {
+                alert(response.errMessage)
+            } else {
+                await this.getAllBooksFromReact();
+                this.setState({
+                    isOpenModalUser: false
+                })
+                emitter.emit('EVENT_CLEAR_MODAL_DATA')
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
     render() {
         return (
             <div className="d-flex" id="wrapper">
                 <ModalBook
                     isOpen={this.state.isOpenModalUser}
                     toggleFromParent={this.toggleUserModal}
+                    createNewBook={this.createNewBook}
                 />
                 {
                     this.state.isOpenModalEditBook &&
                     <ModalEditBook
                         isOpen={this.state.isOpenModalEditBook}
                         toggleFromParent={this.toggleBookEditModal}
+                        editBook={this.doEditBook}
                     />
                 }
                 {
@@ -91,6 +126,7 @@ class BookManage extends Component {
                                 <TableBookManage
                                     toggleFromParent={this.toggleBookEditModal}
                                     toggleBookDeleteModal={this.toggleBookDeleteModal}
+                                    arrBooks={this.state.arrBooks}
                                 />
                             </div>
 

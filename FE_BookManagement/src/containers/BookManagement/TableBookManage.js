@@ -6,425 +6,69 @@ import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { data } from 'jquery';
 class TableBookManage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            bookEdit: {},
             columns: [{
-                name: "Title",
-                selector: row => row.title,
+                name: "BookID",
+                selector: 'id',
                 sortable: true,
                 sortFunction: this.caseInsensitiveSort,
             },
             {
-                name: "Year",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year2",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year3",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year4",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year5",
-                selector: row => row.year,
+                name: "BookTitle",
+                selector: 'bookTitle',
             },
             {
-                cell: () => <button
-                    onClick={() => { this.handleEditBook() }}
-                >
-                    <FontAwesomeIcon className='icon-right' icon={faPenToSquare} />
-                </button>,
+                name: "Author",
+                selector: "authorName",
+            },
+            {
+                name: "Genre",
+                selector: "genre",
+            },
+            {
+                name: "Quantity",
+                selector: "quantity",
+            },
+            {
+                cell:
+                    (row) =>
+                        < button
+                            className='border-0 bg-transparent'
+                            onClick={() => { this.handleEditBook(row) }}
+                            data-tag="allowRowEvents"
+                        >
+                            <FontAwesomeIcon
+                                className='icon-right text-primary'
+                                icon={faPenToSquare}
+                            />
+                        </button >,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
             },
             {
-                cell: () => <button
-                    onClick={() => { this.handleDeleteBook() }}
-                >
-                    <FontAwesomeIcon className='icon-right' icon={faTrash} />
-                </button>,
+                cell: (row) =>
+                    <button
+                        className='border-0 bg-transparent'
+                        onClick={() => { this.handleDeleteBook(row) }}
+                    >
+                        <FontAwesomeIcon
+                            className='icon-right text-danger'
+                            icon={faTrash}
+                        />
+                    </button>,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
             }
             ],
-            data: [{
-
-                id: 1,
-                title: "buh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buinh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 3,
-                title: "buimanh ng",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 4,
-                title: "buimanung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 5,
-                title: "buimanh h",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 6,
-                title: "imanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "h hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            }
-
-            ],
+            dataTableBook: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
                 rangeSeparatorText: 'de',
@@ -434,7 +78,10 @@ class TableBookManage extends Component {
         }
     }
 
-    handleEditBook = () => {
+    handleEditBook = (row) => {
+        this.setState({
+            bookEdit: row
+        })
         this.props.toggleFromParent();
     }
     handleDeleteBook = () => {
@@ -455,18 +102,28 @@ class TableBookManage extends Component {
         return 0;
     };
     componentDidMount() {
-
     }
 
     toggle = () => {
         this.props.toggleFromParent();
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.arrBooks != this.props.arrBooks) {
+            let arr = []
+            this.props.arrBooks.map((item, index) => {
+                arr.push(item)
+            })
+            this.setState({
+                dataTableBook: arr
+            })
+        }
     }
     render() {
         return (
             <Fragment>
                 <DataTable
                     columns={this.state.columns}
-                    data={this.state.data}
+                    data={this.state.dataTableBook}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
                     fixedHeader
