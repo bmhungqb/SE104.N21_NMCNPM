@@ -6,72 +6,74 @@ import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { data } from 'jquery';
 class TableCustomerManage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            dataTableCustomer: [],
             columns: [{
-                name: "Title",
-                selector: row => row.title,
+                name: "Customer ID",
+                selector: 'id',
                 sortable: true,
                 sortFunction: this.caseInsensitiveSort,
             },
             {
-                name: "Year",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year2",
-            }
-                ,
-            {
-                name: "Year3",
-            }
-                ,
-            {
-                name: "Year4",
-            }
-                ,
-            {
-                name: "Year5",
+                name: "First Name",
+                selector: 'firstName',
             },
             {
-                cell: () => <button
-                    onClick={() => { this.handleEditBook() }}
-                >
-                    <FontAwesomeIcon className='icon-right' icon={faPenToSquare} />
-                </button>,
+                name: "Last Name",
+                selector: "lastName",
+            },
+            {
+                name: "Address",
+                selector: "address",
+            },
+            {
+                name: "Phone Number",
+                selector: "phoneNumber",
+            },
+            {
+                name: "State",
+                selector: "customerState",
+            },
+            {
+                cell:
+                    (row) =>
+                        < button
+                            className='border-0 bg-transparent'
+                            onClick={() => { this.handleEditCustomer(row) }}
+                            data-tag="allowRowEvents"
+                        >
+                            <FontAwesomeIcon
+                                className='icon-right text-primary'
+                                icon={faPenToSquare}
+                            />
+                        </button >,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
             },
             {
-                cell: () => <button
-                    onClick={() => { this.handleDeleteBook() }}
-                >
-                    <FontAwesomeIcon className='icon-right' icon={faTrash} />
-                </button>,
+                cell: (row) =>
+                    <button
+                        className='border-0 bg-transparent'
+                        onClick={() => { this.handleDeleteCustomer(row) }}
+                        data-tag="allowRowEvents"
+                    >
+                        <FontAwesomeIcon
+                            className='icon-right text-danger'
+                            icon={faTrash}
+                        />
+                    </button>,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
             }
             ],
-            data: [
-                {
-                    id: 1,
-                    i: "huhu",
-                },
-                // {
-                //     id: 2,
-                //     title: "buinh hung",
-                //     year: '2003',
-                //     year1: '2003',
-                //     year2: '2003',
-                // },
-
-            ],
+            dataTableBook: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
                 rangeSeparatorText: 'de',
@@ -81,11 +83,13 @@ class TableCustomerManage extends Component {
         }
     }
 
-    handleEditBook = () => {
-        this.props.toggleFromParent();
+    handleEditCustomer = (row) => {
+        this.props.getCustomerEdit(row)
+        this.props.toggleCustomerEditModal();
     }
-    handleDeleteBook = () => {
-        this.props.toggleBookDeleteModal();
+    handleDeleteCustomer = (row) => {
+        this.props.getCustomerDelete(row.id)
+        this.props.toggleCustomerDeleteModal();
     }
     caseInsensitiveSort = (rowA, rowB) => {
         var a = rowA.title.toLowerCase();
@@ -102,22 +106,28 @@ class TableCustomerManage extends Component {
         return 0;
     };
     componentDidMount() {
-
     }
-
-    toggle = () => {
-        this.props.toggleFromParent();
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.arrCustomers != this.props.arrCustomers) {
+            let arr = []
+            this.props.arrCustomers.map((item, index) => {
+                arr.push(item)
+            })
+            this.setState({
+                dataTableCustomer: arr
+            })
+        }
     }
     render() {
         return (
             <Fragment>
                 <DataTable
                     columns={this.state.columns}
-                    data={this.state.data}
+                    data={this.state.dataTableCustomer}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
                     fixedHeader
-                    fixedHeaderScrollHeight="457px"
+                    fixedHeaderScrollHeight="435px"
                 />
             </Fragment>
 

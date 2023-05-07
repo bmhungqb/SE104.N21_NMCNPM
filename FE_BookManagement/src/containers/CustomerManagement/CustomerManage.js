@@ -5,27 +5,67 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
-import TableCustomerManage from './TableCustomerManage';
+import {
+    createNewCustomerService,
+    getAllCustomers,
+    editCustomerService,
+    deleteCustomerService
+} from '../../../src/services/customerService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import ModalCustomer from './ModalCustomer';
+import TableCustomerManage from './TableCustomerManage';
+import ModalEditCustomer from './ModalEditCustomer';
+import ModalDeleteCustomer from './ModalDeleteCustomer';
 class CustomerManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isOpenModal: false,
+            customerDeleteId: undefined,
+            customerEdit: {},
+            arrCustomers: [],
+            isOpenModalCustomer: false,
             isOpenModalEditCustomer: false,
             isOpenModalDeleteCustomer: false,
         }
     }
-    handleAddNewUser = () => {
+    async componentDidMount() {
+        await this.getAllCustomersFromReact();
+    }
+    getAllCustomersFromReact = async () => {
+        let response = await getAllCustomers('ALL');
+        if (response && response.errCode === 0) {
+            console.log(response.customers)
+            this.setState({
+                arrCustomers: response.customers
+            })
+        }
+    }
+    handleAddCustomer = () => {
         this.setState({
-            isOpenModalUser: true,
+            isOpenModalCustomer: true,
         })
     }
-    toggleUserModal = () => {
+    createNewCustomer = async (data) => {
+        try {
+            let response = await createNewCustomerService(data);
+            if (response && response.errCode !== 0) {
+                alert(response.errMessage)
+            } else {
+                await this.getAllCustomersFromReact();
+                this.setState({
+                    isOpenModalCustomer: false
+                })
+                emitter.emit('EVENT_CLEAR_MODAL_DATA')
+            }
+        } catch (e) {
+            console.log(e);
+        }
+    }
+    toggleCustomerModal = () => {
         this.setState({
-            isOpenModalUser: !this.state.isOpenModalUser,
+            isOpenModalCustomer: !this.state.isOpenModalCustomer,
         })
     }
     toggleCustomerEditModal = () => {
@@ -38,18 +78,61 @@ class CustomerManage extends Component {
             isOpenModalDeleteCustomer: !this.state.isOpenModalDeleteCustomer,
         })
     }
+    getCustomerEdit = (customer) => {
+        this.setState({
+            customerEdit: customer
+        })
+    }
+    getCustomerDelete = (customerId) => {
+        this.setState({
+            customerDeleteId: customerId
+        })
+    }
+    editCustomer = async (customer) => {
+        try {
+            let res = await editCustomerService(customer);
+            if (res && res.errCode === 0) {
+                this.setState({
+                    isOpenModalEditCustomer: false
+                })
+                await this.getAllCustomersFromReact()
+            } else {
+                alert(res.errMessage)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
+    deleteCustomer = async () => {
+        try {
+            let res = await deleteCustomerService(this.state.customerDeleteId);
+            if (res && res.errCode === 0) {
+                this.setState({
+                    isOpenModalDeleteCustomer: false
+                })
+                await this.getAllCustomersFromReact()
+            } else {
+                alert(res.errMessage)
+            }
+        } catch (e) {
+            console.log(e)
+        }
+    }
     render() {
         return (
             <div className="d-flex" id="wrapper">
-                {/* <ModalCustomer
-                    isOpen={this.state.isOpenModalUser}
-                    toggleFromParent={this.toggleUserModal}
+                <ModalCustomer
+                    isOpen={this.state.isOpenModalCustomer}
+                    toggleFromParent={this.toggleCustomerModal}
+                    createNewCustomer={this.createNewCustomer}
                 />
                 {
                     this.state.isOpenModalEditCustomer &&
                     <ModalEditCustomer
                         isOpen={this.state.isOpenModalEditCustomer}
                         toggleFromParent={this.toggleCustomerEditModal}
+                        editCustomer={this.editCustomer}
+                        customerEdit={this.state.customerEdit}
                     />
                 }
                 {
@@ -57,8 +140,9 @@ class CustomerManage extends Component {
                     <ModalDeleteCustomer
                         isOpen={this.state.isOpenModalDeleteCustomer}
                         toggleFromParent={this.toggleCustomerDeleteModal}
+                        deleteCustomer={this.deleteCustomer}
                     />
-                } */}
+                }
                 <SideBar />
                 <div id="page-content-wrapper">
                     <Header />
@@ -87,25 +171,15 @@ class CustomerManage extends Component {
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
                                         Add Customer</button>
-                                    <button
-                                        className='mx-2 btn px-3 btn-primary'
-                                        onClick={() => this.handleEditCustomer()}
-                                    >
-                                        <FontAwesomeIcon icon={faPenToSquare} className='mx-1' />
-                                        Edit Details</button>
-                                    <button
-                                        className='mx-2 btn px-3 btn-danger'
-                                        onClick={() => this.handleDeleteCustomer()}
-                                    >
-                                        <FontAwesomeIcon icon={faTrash} className='mx-1' />
-                                        Delete
-                                    </button>
                                 </div>
                             </div>
                             <div className='datatable'>
                                 <TableCustomerManage
-                                // toggleFromParent={this.toggleCustomerEditModal}
-                                // toggleCustomerDeleteModal={this.toggleCustomerDeleteModal}
+                                    toggleCustomerEditModal={this.toggleCustomerEditModal}
+                                    toggleCustomerDeleteModal={this.toggleCustomerDeleteModal}
+                                    arrCustomers={this.state.arrCustomers}
+                                    getCustomerEdit={(customerInfor) => this.getCustomerEdit(customerInfor)}
+                                    getCustomerDelete={(customerId) => this.getCustomerDelete(customerId)}
                                 />
                             </div>
 

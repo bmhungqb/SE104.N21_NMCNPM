@@ -26,6 +26,7 @@ class ModalOrder extends Component {
         return (
             <Modal
                 isOpen={this.props.isOpen}
+                // isOpen={true}
                 toggle={() => { this.toggle() }}
                 className={'modal-book-container'}
                 size='lg'
@@ -34,63 +35,28 @@ class ModalOrder extends Component {
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'>
-                            <label>Book ID</label>
+                            <label>Name customer</label>
                             <input
                                 type='text'
                             />
                         </div>
                         <div className='input-container'>
-                            <label>Quantity</label>
+                            <label>Email</label>
                             <input
                                 type='text'
                             />
                         </div>
                         <div className='input-container '>
-                            <label>Book Title</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Genre</label>
-                            <select className='form-select'>
-                                <option >Action and Adventure</option>
-                                <option>Classics</option>
-                                <option>Detective and Mystery</option>
-                                <option>Fantasy</option>
-                                <option>Historical Fiction</option>
-                                <option>Horror</option>
-                            </select>
-                        </div>
-                        <div className='input-container'>
-                            <label>Author</label>
+                            <label>Phone Number</label>
                             <input
                                 type='text'
                             />
                         </div>
                         <div className='input-container'>
-                            <label>Publisher</label>
+                            <label>Address</label>
                             <input
                                 type='text'
                             />
-                        </div>
-                        <div className='input-container '>
-                            <label>Selling Price</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Cost Price</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container max-width-input'>
-                            <label>Description</label>
-                            <div className="form-outline">
-                                <textarea className="form-control" id="textAreaExample2" rows="5"></textarea>
-                            </div>
                         </div>
                     </div>
                 </ModalBody>
