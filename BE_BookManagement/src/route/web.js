@@ -3,6 +3,7 @@ import homeController from "../controllers/homeController";
 import userController from '../controllers/userController';
 import bookController from '../controllers/bookController';
 let router = express.Router();
+import cors from "cors"
 let initWebRoutes = (app) => {
     router.get('/', homeController.getHomePage);
 
@@ -11,6 +12,8 @@ let initWebRoutes = (app) => {
     // Book
     router.post("/api/create-new-book", bookController.handleCreateNewBook);
     router.get("/api/get-all-books", bookController.handleGetAllBooks);
+    router.put("/api/edit-book", bookController.handleEditBook);
+    router.delete("/api/delete-book", bookController.handleDeleteBook);
     return app.use("/", router);
 }
 
