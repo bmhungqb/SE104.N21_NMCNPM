@@ -66,7 +66,7 @@ class SideBar extends Component {
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">Book Rental</NavLink>
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">Customer Management</NavLink>
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/supplier-management">Supplier Management</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/user-management">Users</NavLink>
+                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/employee-management">Employee Management</NavLink>
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/customer-">Discount code</NavLink>
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/conversation">Conversation</NavLink>
                         <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/notifications">Notifications</NavLink>

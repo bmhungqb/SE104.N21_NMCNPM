@@ -5,16 +5,16 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
-import TableSupplierManage from './TableSupplierManage';
-import ModalSupplier from './ModalSupplier';
-import ModalEditSupplier from './ModalEditSupplier';
-import ModalDeleteSupplier from './ModalDeleteSupplier';
+import TableEmployeeManage from './TableEmployeeManage';
+import ModalEmployee from './ModalEmployee';
+import ModalEditEmployee from './ModalEditEmployee';
+import ModalDeleteEmployee from './ModalDeleteEmployee';
 import {
-    createNewSupplierService,
-    getAllSuppliers,
-    editSupplierService,
-    deleteSupplierService
-} from '../../../src/services/supplierService'
+    createNewEmployeeService,
+    getAllEmployees,
+    editEmployeeService,
+    deleteEmployeeService
+} from '../../../src/services/employeeService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';

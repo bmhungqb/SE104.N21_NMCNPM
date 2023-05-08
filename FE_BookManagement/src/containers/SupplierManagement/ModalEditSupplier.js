@@ -2,11 +2,11 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ModalEditCustomer.scss"
+import "./ModalEditEmployee.scss"
 import { emitter } from '../../utils/emitter';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-class ModalEditCustomer extends Component {
+class ModalEditEmployee extends Component {
 
     constructor(props) {
         super(props);
@@ -14,25 +14,35 @@ class ModalEditCustomer extends Component {
             id: undefined,
             firstName: "",
             lastName: "",
-            customerState: "",
-            sex: "",
+            gender: "",
+            role: "",
             phoneNumber: "",
-            address: "",
             email: "",
+            birthday: "",
+            userName: "",
+            password: "",
+            startWork: "",
+            address: "",
+            image: "",
         }
     }
     componentDidMount() {
-        let customerInfor = this.props.customerEdit
-        if (customerInfor && !_.isEmpty(customerInfor)) {
+        let employeeInfor = this.props.employeeEdit
+        if (employeeInfor && !_.isEmpty(employeeInfor)) {
             this.setState({
-                id: customerInfor.id,
-                firstName: customerInfor.firstName,
-                lastName: customerInfor.lastName,
-                customerState: customerInfor.customerState,
-                sex: customerInfor.sexName,
-                phoneNumber: customerInfor.phoneNumber,
-                address: customerInfor.address,
-                email: customerInfor.email,
+                id: employeeInfor.id,
+                firstName: employeeInfor.firstName,
+                lastName: employeeInfor.lastName,
+                gender: employeeInfor.gender,
+                role: employeeInfor.role,
+                phoneNumber: employeeInfor.phoneNumber,
+                email: employeeInfor.email,
+                birthday: employeeInfor.birthday,
+                userName: employeeInfor.userName,
+                password: employeeInfor.password,
+                startWork: employeeInfor.startWork,
+                address: employeeInfor.address,
+                image: employeeInfor.image,
             })
         }
     }
@@ -48,11 +58,16 @@ class ModalEditCustomer extends Component {
         let arrInput = [
             'firstName',
             'lastName',
-            'customerState',
-            'sex',
+            'gender',
+            'role',
             'phoneNumber',
-            'address',
             'email',
+            'birthday',
+            'userName',
+            'password',
+            'startWork',
+            'address',
+            'image',
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -63,10 +78,10 @@ class ModalEditCustomer extends Component {
         }
         return isValid
     }
-    handleSaveCustomer = () => {
+    handleSaveEmployee = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
-            this.props.editCustomer(this.state)
+            this.props.editEmployee(this.state)
         }
     }
     toggle = () => {
@@ -157,7 +172,7 @@ class ModalEditCustomer extends Component {
                     <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
                         className='px-5 border-0 bg-primary'
-                        onClick={() => this.handleSaveCustomer()}
+                        onClick={() => this.handleSaveEmployee()}
                     >Save</Button>
                 </ModalFooter>
             </Modal >
@@ -176,4 +191,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalEditCustomer);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalEditEmployee);

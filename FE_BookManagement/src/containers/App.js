@@ -20,7 +20,7 @@ import BookManage from './BookManagement/bookManage.js';
 import BookPurchase from './BookManagement/Subsection_BookPurchase/BookPurchase';
 import CustomerManage from './CustomerManagement/CustomerManage';
 import SupplierManage from './SupplierManagement/SupplierManage';
-import UserManage from './Users/UserManage';
+import EmployeeManage from './EmployeeMangement/EmployeeManage';
 // 
 import CustomScrollbars from '../components/CustomScrollbars'
 class App extends Component {
@@ -57,7 +57,7 @@ class App extends Component {
                                     <Route path={path.BOOK_PURCHASE} component={userIsAuthenticated(BookPurchase)} />
                                     <Route path={path.CUSTOMER_MANAGEMENT} component={userIsAuthenticated(CustomerManage)} />
                                     <Route path={path.SUPPLIER_MANAGEMENT} component={userIsAuthenticated(SupplierManage)} />
-                                    <Route path={path.USER_MANAGEMENT} component={userIsAuthenticated(UserManage)} />
+                                    <Route path={path.EMPLOYEE_MANAGEMENT} component={userIsAuthenticated(EmployeeManage)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>
