@@ -1,75 +1,75 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import './SupplierManage.scss'
+import './DiscountManage.scss'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
-import TableSupplierManage from './TableSupplierManage';
-import ModalSupplier from './ModalSupplier';
-import ModalEditSupplier from './ModalEditSupplier';
-import ModalDeleteSupplier from './ModalDeleteSupplier';
+import TableDiscountManage from './TableDiscountManage';
+import ModalDiscount from './ModalDiscount';
+import ModalEditDiscount from './ModalEditDiscount';
+import ModalDeleteDiscount from './ModalDeleteDiscount';
 import {
-    createNewSupplierService,
-    getAllSuppliers,
-    editSupplierService,
-    deleteSupplierService
-} from '../../../src/services/supplierService'
+    createNewDiscountService,
+    getAllDiscounts,
+    editDiscountService,
+    deleteDiscountService
+} from '../../services/discountService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-class SupplierManage extends Component {
+class DiscountManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            supplierDeleteId: undefined,
-            supplierEdit: {},
-            arrSuppliers: [],
-            isOpenModalSupplier: false,
-            isOpenModalEditSupplier: false,
-            isOpenModalDeleteSupplier: false,
+            discountDeleteId: undefined,
+            discountEdit: {},
+            arrDiscounts: [],
+            isOpenModalDiscount: false,
+            isOpenModalEditDiscount: false,
+            isOpenModalDeleteDiscount: false,
         }
     }
-    handleAddNewSupplier = () => {
+    handleAddNewDiscount = () => {
         this.setState({
-            isOpenModalSupplier: true,
+            isOpenModalDiscount: true,
         })
     }
-    toggleSupplierModal = () => {
+    toggleDiscountModal = () => {
         this.setState({
-            isOpenModalSupplier: !this.state.isOpenModalSupplier,
+            isOpenModalDiscount: !this.state.isOpenModalDiscount,
         })
     }
-    toggleSupplierEditModal = () => {
+    toggleDiscountEditModal = () => {
         this.setState({
-            isOpenModalEditSupplier: !this.state.isOpenModalEditSupplier,
+            isOpenModalEditDiscount: !this.state.isOpenModalEditDiscount,
         })
     }
-    toggleSupplierDeleteModal = () => {
+    toggleDiscountDeleteModal = () => {
         this.setState({
-            isOpenModalDeleteSupplier: !this.state.isOpenModalDeleteSupplier,
+            isOpenModalDeleteDiscount: !this.state.isOpenModalDeleteDiscount,
         })
     }
-    async componentDidMount() {
-        await this.getAllSuppliersFromReact();
-    }
-    getAllSuppliersFromReact = async () => {
-        let response = await getAllSuppliers('ALL');
+    getAllDiscountsFromReact = async () => {
+        let response = await getAllDiscounts('ALL');
         if (response && response.errCode === 0) {
             this.setState({
-                arrSuppliers: response.suppliers
+                arrDiscounts: response.discounts
             })
         }
     }
-    createNewSupplier = async (data) => {
+    async componentDidMount() {
+        await this.getAllDiscountsFromReact();
+    }
+    createNewDiscount = async (data) => {
         try {
-            let response = await createNewSupplierService(data);
+            let response = await createNewDiscountService(data);
             if (response && response.errCode !== 0) {
                 alert(response.errMessage)
             } else {
-                await this.getAllSuppliersFromReact();
+                await this.getAllDiscountsFromReact();
                 this.setState({
-                    isOpenModalSupplier: false
+                    isOpenModalDiscount: false
                 })
                 emitter.emit('EVENT_CLEAR_MODAL_DATA')
             }
@@ -77,14 +77,14 @@ class SupplierManage extends Component {
             console.log(e);
         }
     }
-    editSupplier = async (supplier) => {
+    editDiscount = async (discount) => {
         try {
-            let res = await editSupplierService(supplier);
+            let res = await editDiscountService(discount);
             if (res && res.errCode === 0) {
                 this.setState({
-                    isOpenModalEditSupplier: false
+                    isOpenModalEditDiscount: false
                 })
-                await this.getAllSuppliersFromReact()
+                await this.getAllDiscountsFromReact()
             } else {
                 alert(res.errMessage)
             }
@@ -92,24 +92,24 @@ class SupplierManage extends Component {
             console.log(e)
         }
     }
-    getSupplierEdit = (supplier) => {
+    getDiscountEdit = (discount) => {
         this.setState({
-            supplierEdit: supplier
+            discountEdit: discount
         })
     }
-    getSupplierDelete = (supplierId) => {
+    getDiscountDelete = (discountId) => {
         this.setState({
-            supplierDeleteId: supplierId
+            discountDeleteId: discountId
         })
     }
-    deleteSupplier = async () => {
+    deleteDiscount = async () => {
         try {
-            let res = await deleteSupplierService(this.state.supplierDeleteId);
+            let res = await deleteDiscountService(this.state.discountDeleteId);
             if (res && res.errCode === 0) {
                 this.setState({
-                    isOpenModalDeleteSupplier: false
+                    isOpenModalDeleteDiscount: false
                 })
-                await this.getAllSuppliersFromReact()
+                await this.getAllDiscountsFromReact()
             } else {
                 alert(res.errMessage)
             }
@@ -120,26 +120,26 @@ class SupplierManage extends Component {
     render() {
         return (
             <div className="d-flex" id="wrapper">
-                <ModalSupplier
-                    isOpen={this.state.isOpenModalSupplier}
-                    toggleFromParent={this.toggleSupplierModal}
-                    createNewSupplier={this.createNewSupplier}
+                <ModalDiscount
+                    isOpen={this.state.isOpenModalDiscount}
+                    toggleFromParent={this.toggleDiscountModal}
+                    createNewDiscount={this.createNewDiscount}
                 />
                 {
-                    this.state.isOpenModalEditSupplier &&
-                    <ModalEditSupplier
-                        isOpen={this.state.isOpenModalEditSupplier}
-                        toggleFromParent={this.toggleSupplierEditModal}
-                        supplierEdit={this.state.supplierEdit}
-                        editSupplier={this.editSupplier}
+                    this.state.isOpenModalEditDiscount &&
+                    <ModalEditDiscount
+                        isOpen={this.state.isOpenModalEditDiscount}
+                        toggleFromParent={this.toggleDiscountEditModal}
+                        discountEdit={this.state.discountEdit}
+                        editDiscount={this.editDiscount}
                     />
                 }
                 {
-                    this.state.isOpenModalDeleteSupplier &&
-                    <ModalDeleteSupplier
-                        isOpen={this.state.isOpenModalDeleteSupplier}
-                        toggleFromParent={this.toggleSupplierDeleteModal}
-                        deleteSupplier={this.deleteSupplier}
+                    this.state.isOpenModalDeleteDiscount &&
+                    <ModalDeleteDiscount
+                        isOpen={this.state.isOpenModalDeleteDiscount}
+                        toggleFromParent={this.toggleDiscountDeleteModal}
+                        deleteDiscount={this.deleteDiscount}
                     />
                 }
                 <SideBar />
@@ -147,7 +147,7 @@ class SupplierManage extends Component {
                     <Header />
                     <div className='user-manage-container'>
                         <div className='user-manage-header'>
-                            <p className='title-header'>Employees</p>
+                            <p className='title-header'>Discounts</p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='user-manage-content'>
@@ -166,19 +166,19 @@ class SupplierManage extends Component {
                                 <div className='button-control'>
                                     <button
                                         className='mx-2 btn px-3 btn-info'
-                                        onClick={() => this.handleAddNewSupplier()}
+                                        onClick={() => this.handleAddNewDiscount()}
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
-                                        Add Supplier</button>
+                                        Add Discount</button>
                                 </div>
                             </div>
                             <div className='datatable'>
-                                <TableSupplierManage
-                                    toggleSupplierEditModal={this.toggleSupplierEditModal}
-                                    toggleSupplierDeleteModal={this.toggleSupplierDeleteModal}
-                                    arrSuppliers={this.state.arrSuppliers}
-                                    getSupplierEdit={(supplierInfor) => this.getSupplierEdit(supplierInfor)}
-                                    getSupplierDelete={(supplierId) => this.getSupplierDelete(supplierId)}
+                                <TableDiscountManage
+                                    toggleDiscountEditModal={this.toggleDiscountEditModal}
+                                    toggleDiscountDeleteModal={this.toggleDiscountDeleteModal}
+                                    arrDiscounts={this.state.arrDiscounts}
+                                    getDiscountEdit={(discountInfor) => this.getDiscountEdit(discountInfor)}
+                                    getDiscountDelete={(discountId) => this.getDiscountDelete(discountId)}
                                 />
                             </div>
 
@@ -202,4 +202,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(SupplierManage);
+export default connect(mapStateToProps, mapDispatchToProps)(DiscountManage);

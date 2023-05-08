@@ -6,6 +6,7 @@ export const path = {
     CUSTOMER_MANAGEMENT: '/customer-management',
     SUPPLIER_MANAGEMENT: '/supplier-management',
     EMPLOYEE_MANAGEMENT: '/employee-management',
+    DISCOUNT_MANAGEMENT: '/discount-management',
     LOGIN: '/login',
     LOG_OUT: '/logout',
     SYSTEM: '/system',

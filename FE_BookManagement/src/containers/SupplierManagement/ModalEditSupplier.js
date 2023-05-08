@@ -2,47 +2,31 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ModalEditEmployee.scss"
+import "./ModalEditSupplier.scss"
 import { emitter } from '../../utils/emitter';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-class ModalEditEmployee extends Component {
-
+class ModalEditSupplier extends Component {
     constructor(props) {
         super(props);
         this.state = {
             id: undefined,
-            firstName: "",
-            lastName: "",
-            gender: "",
-            role: "",
+            name: "",
             phoneNumber: "",
             email: "",
-            birthday: "",
-            userName: "",
-            password: "",
-            startWork: "",
             address: "",
-            image: "",
+            errMessage: ""
         }
     }
     componentDidMount() {
-        let employeeInfor = this.props.employeeEdit
-        if (employeeInfor && !_.isEmpty(employeeInfor)) {
+        let supplierInfor = this.props.supplierEdit
+        if (supplierInfor && !_.isEmpty(supplierInfor)) {
             this.setState({
-                id: employeeInfor.id,
-                firstName: employeeInfor.firstName,
-                lastName: employeeInfor.lastName,
-                gender: employeeInfor.gender,
-                role: employeeInfor.role,
-                phoneNumber: employeeInfor.phoneNumber,
-                email: employeeInfor.email,
-                birthday: employeeInfor.birthday,
-                userName: employeeInfor.userName,
-                password: employeeInfor.password,
-                startWork: employeeInfor.startWork,
-                address: employeeInfor.address,
-                image: employeeInfor.image,
+                id: supplierInfor.id,
+                name: supplierInfor.name,
+                phoneNumber: supplierInfor.phoneNumber,
+                email: supplierInfor.email,
+                address: supplierInfor.address,
             })
         }
     }
@@ -56,18 +40,10 @@ class ModalEditEmployee extends Component {
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
-            'firstName',
-            'lastName',
-            'gender',
-            'role',
+            'name',
             'phoneNumber',
             'email',
-            'birthday',
-            'userName',
-            'password',
-            'startWork',
             'address',
-            'image',
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -78,16 +54,17 @@ class ModalEditEmployee extends Component {
         }
         return isValid
     }
-    handleSaveEmployee = () => {
+    handleSaveSupplier = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
-            this.props.editEmployee(this.state)
+            this.props.editSupplier(this.state)
         }
     }
     toggle = () => {
         this.props.toggleFromParent();
     }
     render() {
+        console.log(this.props.supplierEdit)
         return (
             <Modal
                 isOpen={this.props.isOpen}
@@ -95,52 +72,16 @@ class ModalEditEmployee extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Edit customer information</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Edit supplier information</ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'>
-                            <label>First Name</label>
+                            <label>Name</label>
                             <input
                                 type='text'
-                                value={this.state.firstName}
-                                onChange={(e) => this.handleOnchangeInput(e, 'firstName')}
+                                value={this.state.name}
+                                onChange={(e) => this.handleOnchangeInput(e, 'name')}
                             />
-                        </div>
-                        <div className='input-container '>
-                            <label>Last Name</label>
-                            <input
-                                type='text'
-                                value={this.state.lastName}
-                                onChange={(e) => this.handleOnchangeInput(e, 'lastName')}
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Customer State</label>
-                            <div className='select-genre'>
-                                <select
-                                    className='form-select'
-                                    value={this.state.customerState}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'customerState')}
-                                >
-                                    <option value={"Normal"}>Normal</option>
-                                    <option value={'Vip'}>Vip</option>
-                                    <option value={"Gold"}>Gold</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className='input-container '>
-                            <label>Sex</label>
-                            <div className='select-genre'>
-                                <select
-                                    className='form-select'
-                                    value={this.state.sex}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'sex')}
-                                >
-                                    <option value={"Male"}>Male</option>
-                                    <option value={'Female'}>Female</option>
-                                    <option value={"Other"}>Other</option>
-                                </select>
-                            </div>
                         </div>
                         <div className='input-container'>
                             <label>Phone Number</label>
@@ -148,14 +89,6 @@ class ModalEditEmployee extends Component {
                                 type='text'
                                 value={this.state.phoneNumber}
                                 onChange={(e) => this.handleOnchangeInput(e, 'phoneNumber')}
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Address</label>
-                            <input
-                                type='text'
-                                value={this.state.address}
-                                onChange={(e) => this.handleOnchangeInput(e, 'address')}
                             />
                         </div>
                         <div className='input-container '>
@@ -166,13 +99,21 @@ class ModalEditEmployee extends Component {
                                 onChange={(e) => this.handleOnchangeInput(e, 'email')}
                             />
                         </div>
+                        <div className='input-container'>
+                            <label>Address</label>
+                            <input
+                                type='text'
+                                value={this.state.address}
+                                onChange={(e) => this.handleOnchangeInput(e, 'address')}
+                            />
+                        </div>
                     </div>
                 </ModalBody>
                 <ModalFooter>
                     <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
                         className='px-5 border-0 bg-primary'
-                        onClick={() => this.handleSaveEmployee()}
+                        onClick={() => this.handleSaveSupplier()}
                     >Save</Button>
                 </ModalFooter>
             </Modal >
@@ -191,4 +132,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalEditEmployee);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalEditSupplier);

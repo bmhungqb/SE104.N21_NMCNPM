@@ -2,18 +2,20 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ModalSupplier.scss"
+import "./ModalDiscount.scss"
 import { emitter } from '../../utils/emitter';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-class ModalSupplier extends Component {
+class ModalDiscount extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            state: "",
             name: "",
-            phoneNumber: "",
-            email: "",
-            address: "",
+            start: "",
+            end: "",
+            percentage: "",
+            quantity: "",
             errMessage: ""
         }
         this.listenToEmitter();
@@ -21,10 +23,12 @@ class ModalSupplier extends Component {
     listenToEmitter() {
         emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
             this.setState({
+                state: "",
                 name: "",
-                phoneNumber: "",
-                email: "",
-                address: "",
+                start: "",
+                end: "",
+                percentage: "",
+                quantity: "",
             })
         })
     }
@@ -38,10 +42,12 @@ class ModalSupplier extends Component {
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
+            'state',
             'name',
-            'phoneNumber',
-            'email',
-            'address',
+            'start',
+            'end',
+            'percentage',
+            'quantity',
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -52,10 +58,10 @@ class ModalSupplier extends Component {
         }
         return isValid
     }
-    handleAddNewSupplier = () => {
+    handleAddNewDiscount = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
-            this.props.createNewSupplier(this.state)
+            this.props.createNewDiscount(this.state)
         }
     }
     componentDidMount() {
@@ -73,9 +79,23 @@ class ModalSupplier extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Add new supplier</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Add new employee</ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
+                        <div className='input-container '>
+                            <label>State</label>
+                            <div className='select-genre'>
+                                <select
+                                    className='form-select'
+                                    value={this.state.state}
+                                    onChange={(e) => this.handleOnchangeInput(e, 'state')}
+                                >
+                                    <option value={'Active'}>Active</option>
+                                    <option value={"End"}>End</option>
+                                    <option value={"Other"}>Other</option>
+                                </select>
+                            </div>
+                        </div>
                         <div className='input-container'>
                             <label>Name</label>
                             <input
@@ -85,27 +105,35 @@ class ModalSupplier extends Component {
                             />
                         </div>
                         <div className='input-container'>
-                            <label>Phone Number</label>
+                            <label>Start</label>
                             <input
                                 type='text'
-                                value={this.state.phoneNumber}
-                                onChange={(e) => this.handleOnchangeInput(e, 'phoneNumber')}
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Email</label>
-                            <input
-                                type='text'
-                                value={this.state.email}
-                                onChange={(e) => this.handleOnchangeInput(e, 'email')}
+                                value={this.state.start}
+                                onChange={(e) => this.handleOnchangeInput(e, 'start')}
                             />
                         </div>
                         <div className='input-container'>
-                            <label>Address</label>
+                            <label>End</label>
                             <input
                                 type='text'
-                                value={this.state.address}
-                                onChange={(e) => this.handleOnchangeInput(e, 'address')}
+                                value={this.state.end}
+                                onChange={(e) => this.handleOnchangeInput(e, 'end')}
+                            />
+                        </div>
+                        <div className='input-container '>
+                            <label>Percentage</label>
+                            <input
+                                type='text'
+                                value={this.state.percentage}
+                                onChange={(e) => this.handleOnchangeInput(e, 'percentage')}
+                            />
+                        </div>
+                        <div className='input-container'>
+                            <label>Quantity</label>
+                            <input
+                                type='text'
+                                value={this.state.quantity}
+                                onChange={(e) => this.handleOnchangeInput(e, 'quantity')}
                             />
                         </div>
                     </div>
@@ -114,7 +142,7 @@ class ModalSupplier extends Component {
                     <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
                         className='px-5 border-0 bg-primary'
-                        onClick={() => this.handleAddNewSupplier()}
+                        onClick={() => this.handleAddNewDiscount()}
                     >Add</Button>
                 </ModalFooter>
             </Modal >
@@ -133,4 +161,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalSupplier);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalDiscount);

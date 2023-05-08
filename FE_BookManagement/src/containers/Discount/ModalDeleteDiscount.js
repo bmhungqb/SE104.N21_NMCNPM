@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ModalDeleteSupplier.scss"
-class ModalDeleteSupplier extends Component {
+import "./ModalDeleteDiscount.scss"
+class ModalDeleteDiscount extends Component {
 
     constructor(props) {
         super(props);
@@ -16,8 +16,8 @@ class ModalDeleteSupplier extends Component {
     toggle = () => {
         this.props.toggleFromParent();
     }
-    handleDeleteSupplier = () => {
-        this.props.deleteSupplier();
+    handleDeleteDiscount = () => {
+        this.props.deleteDiscount();
     }
     render() {
         return (
@@ -28,10 +28,10 @@ class ModalDeleteSupplier extends Component {
                 size='ms'
             >
                 <ModalHeader
-                >Do you want to delete this supplier?</ModalHeader>
+                >Do you want to delete this discount?</ModalHeader>
                 <ModalFooter>
                     <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}>No</Button>
-                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteSupplier()}>Yes</Button>
+                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteDiscount()}>Yes</Button>
                 </ModalFooter>
             </Modal >
         )
@@ -49,4 +49,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalDeleteSupplier);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalDeleteDiscount);

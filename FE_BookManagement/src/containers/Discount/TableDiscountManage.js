@@ -1,20 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import "./TableSupplierManage.scss";
+import "./TableDiscountManage.scss";
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { data } from 'jquery';
-class TableSupplierManage extends Component {
+class TableDiscountManage extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            dataTableSupplier: [],
+            dataTableDiscount: [],
             columns: [{
-                name: "Supplier ID",
+                name: "Discount ID",
                 selector: 'id',
                 sortable: true,
                 sortFunction: this.caseInsensitiveSort,
@@ -24,19 +24,23 @@ class TableSupplierManage extends Component {
                 selector: 'name',
             },
             {
-                name: "Email",
-                selector: "email",
+                name: "Start",
+                selector: "start",
             },
             {
-                name: "Phone Number",
-                selector: "phoneNumber",
+                name: "End",
+                selector: "end",
+            },
+            {
+                name: "State",
+                selector: "state",
             },
             {
                 cell:
                     (row) =>
                         < button
                             className='border-0 bg-transparent'
-                            onClick={() => { this.handleEditSupplier(row) }}
+                            onClick={() => { this.handleEditDiscount(row) }}
                             data-tag="allowRowEvents"
                         >
                             <FontAwesomeIcon
@@ -52,7 +56,7 @@ class TableSupplierManage extends Component {
                 cell: (row) =>
                     <button
                         className='border-0 bg-transparent'
-                        onClick={() => { this.handleDeleteSupplier(row) }}
+                        onClick={() => { this.handleDeleteDiscount(row) }}
                         data-tag="allowRowEvents"
                     >
                         <FontAwesomeIcon
@@ -65,6 +69,7 @@ class TableSupplierManage extends Component {
                 button: true,
             }
             ],
+            dataTableBook: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
                 rangeSeparatorText: 'de',
@@ -74,13 +79,13 @@ class TableSupplierManage extends Component {
         }
     }
 
-    handleEditSupplier = (row) => {
-        this.props.getSupplierEdit(row)
-        this.props.toggleSupplierEditModal();
+    handleEditDiscount = (row) => {
+        this.props.getDiscountEdit(row)
+        this.props.toggleDiscountEditModal();
     }
-    handleDeleteSupplier = (row) => {
-        this.props.getSupplierDelete(row.id)
-        this.props.toggleSupplierDeleteModal();
+    handleDeleteDiscount = (row) => {
+        this.props.getDiscountDelete(row.id)
+        this.props.toggleDiscountDeleteModal();
     }
     caseInsensitiveSort = (rowA, rowB) => {
         var a = rowA.title.toLowerCase();
@@ -99,13 +104,13 @@ class TableSupplierManage extends Component {
     componentDidMount() {
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.arrSuppliers != this.props.arrSuppliers) {
+        if (prevProps.arrDiscounts != this.props.arrDiscounts) {
             let arr = []
-            this.props.arrSuppliers.map((item, index) => {
+            this.props.arrDiscounts.map((item, index) => {
                 arr.push(item)
             })
             this.setState({
-                dataTableSupplier: arr
+                dataTableDiscount: arr
             })
         }
     }
@@ -114,7 +119,7 @@ class TableSupplierManage extends Component {
             <Fragment>
                 <DataTable
                     columns={this.state.columns}
-                    data={this.state.dataTableSupplier}
+                    data={this.state.dataTableDiscount}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
                     fixedHeader
@@ -137,4 +142,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableSupplierManage);
+export default connect(mapStateToProps, mapDispatchToProps)(TableDiscountManage);

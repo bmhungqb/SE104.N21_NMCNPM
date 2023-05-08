@@ -78,9 +78,9 @@ class EmployeeManage extends Component {
             console.log(e);
         }
     }
-    editEmployee = async (customer) => {
+    editEmployee = async (employee) => {
         try {
-            let res = await editEmployeeService(customer);
+            let res = await editEmployeeService(employee);
             if (res && res.errCode === 0) {
                 this.setState({
                     isOpenModalEditEmployee: false
@@ -131,7 +131,7 @@ class EmployeeManage extends Component {
                     <ModalEditEmployee
                         isOpen={this.state.isOpenModalEditEmployee}
                         toggleFromParent={this.toggleEmployeeEditModal}
-                        employeeEdit={this.employeeEdit}
+                        employeeEdit={this.state.employeeEdit}
                         editEmployee={this.editEmployee}
                     />
                 }
