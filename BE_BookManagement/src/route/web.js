@@ -3,6 +3,7 @@ import homeController from "../controllers/homeController";
 import userController from '../controllers/userController';
 import bookController from '../controllers/bookController';
 import customerController from '../controllers/customerController';
+import employeeController from '../controllers/employeeController';
 let router = express.Router();
 import cors from "cors"
 let initWebRoutes = (app) => {
@@ -20,6 +21,11 @@ let initWebRoutes = (app) => {
     router.post("/api/create-new-customer", customerController.handleCreateNewCustomer);
     router.put("/api/edit-customer", customerController.handleEditCustomer);
     router.delete("/api/delete-customer", customerController.handleDeleteCustomer);
+    // Employee
+    router.get("/api/get-all-employees", employeeController.handleGetAllEmployees);
+    router.post("/api/create-new-employee", employeeController.handleCreateNewEmployee);
+    router.put("/api/edit-employee", employeeController.handleEditEmployee);
+    router.delete("/api/delete-employee", employeeController.handleDeleteEmployee);
     return app.use("/", router);
 }
 
