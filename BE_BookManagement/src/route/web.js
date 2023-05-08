@@ -5,6 +5,7 @@ import bookController from '../controllers/bookController';
 import customerController from '../controllers/customerController';
 import employeeController from '../controllers/employeeController';
 import supplierController from '../controllers/supplierController';
+import discountController from '../controllers/discountController';
 let router = express.Router();
 import cors from "cors"
 let initWebRoutes = (app) => {
@@ -32,6 +33,11 @@ let initWebRoutes = (app) => {
     router.post("/api/create-new-supplier", supplierController.handleCreateNewSupplier);
     router.put("/api/edit-supplier", supplierController.handleEditSupplier);
     router.delete("/api/delete-supplier", supplierController.handleDeleteSupplier);
+    // Discount
+    router.get("/api/get-all-discounts", discountController.handleGetAllDiscounts);
+    router.post("/api/create-new-discount", discountController.handleCreateNewDiscount);
+    router.put("/api/edit-discount", discountController.handleEditDiscount);
+    router.delete("/api/delete-discount", discountController.handleDeleteDiscount);
     return app.use("/", router);
 }
 
