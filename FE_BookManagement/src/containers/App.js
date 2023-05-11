@@ -10,7 +10,6 @@ import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authenticati
 
 import { path } from '../utils'
 
-import Home from '../routes/Home';
 import Login from './Auth/Login';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
@@ -20,7 +19,7 @@ import BookManage from './BookManagement/bookManage.js';
 import BookPurchase from './BookManagement/Subsection_BookPurchase/BookPurchase';
 import CustomerManage from './CustomerManagement/CustomerManage';
 import SupplierManage from './SupplierManagement/SupplierManage';
-import EmployeeManage from './EmployeeMangement/EmployeeManage';
+import EmployeeManage from './EmployeeMangement/UserManage';
 import DiscountManage from './Discount/DiscountManage';
 // 
 import CustomScrollbars from '../components/CustomScrollbars'
@@ -52,6 +51,7 @@ class App extends Component {
                         <div className="content-container">
                             <CustomScrollbars style={{ height: '100vh' }}>
                                 <Switch>
+                                    <Route exact path={"/"} component={userIsAuthenticated(HomePage)} />
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.HOMEPAGE} component={userIsAuthenticated(HomePage)} />
                                     <Route path={path.BOOK_MANAGEMENT} component={userIsAuthenticated(BookManage)} />

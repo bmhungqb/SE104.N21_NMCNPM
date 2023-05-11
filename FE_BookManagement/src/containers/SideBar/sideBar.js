@@ -8,10 +8,20 @@ import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { NavLink } from 'react-router-dom';
 import { faEllipsisVertical, faRightFromBracket, faCircleUser } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { USER_ROLE } from '../../utils/constant';
 class SideBar extends Component {
     constructor(props) {
         super(props)
         this.state = {
+            role: "MANAGER",
+        }
+    }
+    componentDidMount() {
+        let { userInfo } = this.props;
+        if (userInfo && !_.isEmpty(userInfo)) {
+            this.setState({
+                role: userInfo.roleId,
+            })
         }
     }
     render() {
@@ -59,18 +69,49 @@ class SideBar extends Component {
                             </div>
                         </div>
                     </div>
-                    <div className="list-group list-group-flush">
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/home'>Home</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/book-management'>Book Management</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">Book Purchase</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">Book Rental</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">Customer Management</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/supplier-management">Supplier Management</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/employee-management">Employee Management</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/discount-management">Discount code</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/technical-help">Get Technical Help</NavLink>
-                        <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/setting">Settings</NavLink>
-                    </div>
+                    {this.state.role === USER_ROLE.MANAGER &&
+                        <div className="list-group list-group-flush">
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/home'>Home</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/book-management'>Book Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">Book Purchase</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">Book Rental</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">Customer Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/supplier-management">Supplier Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/employee-management">Employee Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/discount-management">Discount code</NavLink>
+                            {/* <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/technical-help">Get Technical Help</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/setting">Settings</NavLink> */}
+                        </div>
+                    }
+                    {this.state.role === USER_ROLE.EMPLOYEE &&
+                        <div className="list-group list-group-flush">
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/home'>Home</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/book-management'>Book Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">Book Purchase</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">Book Rental</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">Customer Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/supplier-management">Supplier Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/employee-management">Employee Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/discount-management">Discount code</NavLink>
+                            {/* <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/technical-help">Get Technical Help</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/setting">Settings</NavLink> */}
+                        </div>
+                    }
+                    {this.state.role === USER_ROLE.SUPPORTER &&
+                        <div className="list-group list-group-flush">
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/home'>Home</NavLink>
+                            {/* <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/book-management'>Book Management</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">Book Purchase</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">Book Rental</NavLink> */}
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">Customer Management</NavLink>
+                            {/* <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/supplier-management">Supplier Management</NavLink> */}
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/employee-management">Employee Management</NavLink>
+                            {/* <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/discount-management">Discount code</NavLink> */}
+                            {/* <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/technical-help">Get Technical Help</NavLink>
+                            <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to="/setting">Settings</NavLink> */}
+                        </div>
+                    }
+
                 </div>
             </React.Fragment >
         );

@@ -1,20 +1,20 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import './EmployeeManage.scss'
+import './UserManage.scss'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
-import TableEmployeeManage from './TableEmployeeManage';
-import ModalEmployee from './ModalEmployee';
-import ModalEditEmployee from './ModalEditEmployee';
-import ModalDeleteEmployee from './ModalDeleteEmployee';
+import TableUserManage from './TableUserManage';
+import ModalUser from './ModalUser';
+import ModalEditUser from './ModalEditUser';
+import ModalDeleteUser from './ModalDeleteUser';
 import {
     createNewEmployeeService,
     getAllEmployees,
     editEmployeeService,
     deleteEmployeeService
-} from '../../../src/services/employeeService'
+} from '../../services/employeeService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -121,14 +121,14 @@ class EmployeeManage extends Component {
     render() {
         return (
             <div className="d-flex" id="wrapper">
-                <ModalEmployee
+                <ModalUser
                     isOpen={this.state.isOpenModalEmployee}
                     toggleFromParent={this.toggleEmployeeModal}
                     createNewEmployee={this.createNewEmployee}
                 />
                 {
                     this.state.isOpenModalEditEmployee &&
-                    <ModalEditEmployee
+                    <ModalEditUser
                         isOpen={this.state.isOpenModalEditEmployee}
                         toggleFromParent={this.toggleEmployeeEditModal}
                         employeeEdit={this.state.employeeEdit}
@@ -137,7 +137,7 @@ class EmployeeManage extends Component {
                 }
                 {
                     this.state.isOpenModalDeleteEmployee &&
-                    <ModalDeleteEmployee
+                    <ModalDeleteUser
                         isOpen={this.state.isOpenModalDeleteEmployee}
                         toggleFromParent={this.toggleEmployeeDeleteModal}
                         deleteEmployee={this.deleteEmployee}
@@ -174,7 +174,7 @@ class EmployeeManage extends Component {
                                 </div>
                             </div>
                             <div className='datatable'>
-                                <TableEmployeeManage
+                                <TableUserManage
                                     toggleEmployeeEditModal={this.toggleEmployeeEditModal}
                                     toggleEmployeeDeleteModal={this.toggleEmployeeDeleteModal}
                                     arrEmployees={this.state.arrEmployees}

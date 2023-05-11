@@ -26,6 +26,7 @@ class BookManage extends Component {
             isOpenModalUser: false,
             isOpenModalEditBook: false,
             isOpenModalDeleteBook: false,
+            textSearch: "",
         }
     }
     async componentDidMount() {
@@ -104,9 +105,9 @@ class BookManage extends Component {
         try {
             let res = await editBookService(book);
             if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalEditBook: false
-                })
+                // this.setState({
+                //     isOpenModalEditBook: false
+                // })
                 await this.getAllBooksFromReact()
             } else {
                 alert(res.errMessage)
@@ -114,6 +115,11 @@ class BookManage extends Component {
         } catch (e) {
             console.log(e)
         }
+    }
+    handleOnchangeInputFilter = (e) => {
+        this.setState({
+            textSearch: e.target.value
+        })
     }
     render() {
         return (
@@ -151,7 +157,12 @@ class BookManage extends Component {
                         <div className='book-manage-content'>
                             <div className='action'>
                                 <div class="input-group form-outline w-25">
-                                    <input placeholder='Enter search' type="text" className="form-control h-100" />
+                                    <input
+                                        placeholder='Enter search'
+                                        type="text"
+                                        className="form-control h-100"
+                                        onChange={(e) => this.handleOnchangeInputFilter(e)}
+                                    />
                                     <div class="input-group-append">
                                         <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
                                         <div class="dropdown-menu">
@@ -175,6 +186,7 @@ class BookManage extends Component {
                                     arrBooks={this.state.arrBooks}
                                     getBookEdit={(bookInfor) => this.getBookEdit(bookInfor)}
                                     getBookDelete={(bookId) => this.getBookDelete(bookId)}
+                                    textSearch={this.state.textSearch}
                                 />
                             </div>
 

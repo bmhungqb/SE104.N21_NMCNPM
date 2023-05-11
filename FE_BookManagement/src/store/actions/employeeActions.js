@@ -1,30 +1,30 @@
 import actionTypes from './actionTypes';
 import {
-    createNewBookService
-} from '../../services/bookService'
+    createNewEmployeeService
+} from '../../services/employeeService'
 import { toast } from 'react-toastify';
 
-export const createNewBook = (data) => {
+export const createNewEmployee = (data) => {
     return async (dispatch, getState) => {
         try {
-            let res = await createNewBookService(data);
+            let res = await createNewEmployeeService(data);
             if (res && res.errCode === 0) {
-                toast.success("Create a new user succeed !")
-                dispatch(saveBookSuccess());
+                toast.success("Create a new employee succeed !")
+                dispatch(saveEmployeeSuccess());
             } else {
-                toast.error("Create a new user error !")
-                dispatch(saveBookFailed());
+                toast.error("Create a new employee error !")
+                dispatch(saveEmployeeFailed());
             }
         } catch (e) {
-            toast.error("Create a new user error !")
-            dispatch(saveBookFailed());
+            toast.error("Create a new employee error !")
+            dispatch(saveEmployeeFailed());
         }
     }
 }
 
-export const saveBookSuccess = () => ({
-    type: actionTypes.CREATE_BOOK_SUCCESS
+export const saveEmployeeSuccess = () => ({
+    type: actionTypes.CREATE_EMPLOYEE_SUCCESS
 })
-export const saveBookFailed = () => ({
-    type: actionTypes.CREATE_BOOK_FAILED
+export const saveEmployeeFailed = () => ({
+    type: actionTypes.CREATE_EMPLOYEE_FAILED
 })

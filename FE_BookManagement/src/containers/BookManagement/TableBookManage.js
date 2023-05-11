@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { data } from 'jquery';
+import { includes } from 'lodash';
 class TableBookManage extends Component {
 
     constructor(props) {
@@ -69,12 +70,16 @@ class TableBookManage extends Component {
             }
             ],
             dataTableBook: [],
+            dataSearch: [],
+            dataFull: [],
+            textSearch: "",
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
                 rangeSeparatorText: 'de',
                 selectAllRowsItem: true,
                 selectAllRowsItemText: 'Todos',
-            }
+            },
+
         }
     }
 
@@ -113,10 +118,26 @@ class TableBookManage extends Component {
                 arr.push(item)
             })
             this.setState({
+                dataFull: arr,
                 dataTableBook: arr
             })
         }
+        if (prevProps.textSearch != this.props.textSearch) {
+            if (this.props.textSearch === undefined) {
+                this.setState({
+                    dataTableBook: dataFull
+                })
+            }
+            else {
+                console.log(this.state.dataFull)
+                const arr = this.state.dataFull.filter(row => row["id"].toString().toLowerCase().includes(this.props.textSearch.toLowerCase()))
+                this.setState({
+                    dataTableBook: arr
+                })
+            }
+        }
     }
+
     render() {
         return (
             <Fragment>

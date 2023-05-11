@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import "./TableEmployeeManage.scss";
+import "./TableUserManage.scss";
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'

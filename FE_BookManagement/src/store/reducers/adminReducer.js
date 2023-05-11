@@ -16,7 +16,6 @@ const initialState = {
     topDoctors: [],
     allDoctors: [],
     allScheduleTime: [],
-
     allRequiredDoctorInfor: [],
 }
 
