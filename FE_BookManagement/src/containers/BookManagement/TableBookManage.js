@@ -8,6 +8,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { data } from 'jquery';
 import { includes } from 'lodash';
+import * as actions from "../../store/actions/index"
 class TableBookManage extends Component {
 
     constructor(props) {
@@ -69,10 +70,9 @@ class TableBookManage extends Component {
                 button: true,
             }
             ],
+            optionSearch: [],
             dataTableBook: [],
-            dataSearch: [],
             dataFull: [],
-            textSearch: "",
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
                 rangeSeparatorText: 'de',
@@ -84,7 +84,7 @@ class TableBookManage extends Component {
     }
 
     handleEditBook = (row) => {
-        this.props.getBookEdit(row)
+        this.props.getBookEdit(row.id)
         this.props.toggleFromParent();
     }
     handleDeleteBook = (row) => {
@@ -106,33 +106,34 @@ class TableBookManage extends Component {
         return 0;
     };
     componentDidMount() {
+        this.props.fetchAllBooks()
     }
 
     toggle = () => {
         this.props.toggleFromParent();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.arrBooks != this.props.arrBooks) {
+        if (prevProps.listBooks !== this.props.listBooks) {
             let arr = []
-            this.props.arrBooks.map((item, index) => {
+            this.props.listBooks.map((item, index) => {
                 arr.push(item)
             })
             this.setState({
-                dataFull: arr,
                 dataTableBook: arr
             })
         }
-        if (prevProps.textSearch != this.props.textSearch) {
-            if (this.props.textSearch === undefined) {
+        if (prevProps.optionSearch != this.props.optionSearch) {
+            if (this.props.optionSearch[0] === "") {
                 this.setState({
-                    dataTableBook: dataFull
+                    dataTableBook: this.props.listBooks,
+                    optionSearch: this.props.optionSearch
                 })
             }
             else {
-                console.log(this.state.dataFull)
-                const arr = this.state.dataFull.filter(row => row["id"].toString().toLowerCase().includes(this.props.textSearch.toLowerCase()))
+                const arr = this.props.listBooks.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
                 this.setState({
-                    dataTableBook: arr
+                    dataTableBook: arr,
+                    optionSearch: this.props.optionSearch
                 })
             }
         }
@@ -158,11 +159,13 @@ class TableBookManage extends Component {
 
 const mapStateToProps = state => {
     return {
+        listBooks: state.admin.listBooks
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        fetchAllBooks: () => dispatch(actions.fetchAllBooksStart())
     };
 };
 

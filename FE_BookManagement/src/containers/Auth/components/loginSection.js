@@ -25,6 +25,7 @@ class LoginSection extends Component {
         })
         try {
             let data = await handleLoginApi(this.state.username, this.state.password);
+            console.log(data.user)
             if (data && data.errCode !== 0) {
                 this.setState({
                     errMessage: data.message
@@ -74,12 +75,6 @@ class LoginSection extends Component {
                         <p className='description'>See your growth and get support!</p>
                     </div>
                     <div className='login-content'>
-                        {/* Login with google */}
-                        {/* <div className='login-with-google'>
-                            <button type='button' className='btn btn-lg btn-outline-primary w-100 mb-1'>
-                                <p>Sign in with Google</p>
-                            </button>
-                        </div> */}
                         <div className='login-user-pass'>
                             <form>
                                 <div className="form-group mt-3">
@@ -96,7 +91,7 @@ class LoginSection extends Component {
                                     <label className='font-weight-bold'>Password</label>
                                     <div className='input-group d-flex'>
                                         <input
-                                            type="password"
+                                            type={this.state.isShowPassword ? "text" : "password"}
                                             className="form-input form-control form-control-lg py-2 border-right-0 border"
                                             placeholder="Enter your password"
                                             value={this.state.password}

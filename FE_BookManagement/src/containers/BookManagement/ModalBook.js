@@ -6,8 +6,8 @@ import "./ModalBook.scss"
 import { emitter } from '../../utils/emitter';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as actions from "../../store/actions/index"
 class ModalBook extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
@@ -26,7 +26,7 @@ class ModalBook extends Component {
     listenToEmitter() {
         emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
             this.setState({
-                quantity: undefined,
+                quantity: "",
                 bookTitle: '',
                 genre: '',
                 author: '',
@@ -67,6 +67,7 @@ class ModalBook extends Component {
         let isValid = this.checkValidateInput();
         if (isValid) {
             this.props.createNewBook(this.state)
+            this.toggle()
         }
     }
     componentDidMount() {
@@ -75,6 +76,7 @@ class ModalBook extends Component {
 
     toggle = () => {
         this.props.toggleFromParent();
+        emitter.emit('EVENT_CLEAR_MODAL_DATA');
     }
     toggleInputGenre = () => {
         this.setState({
@@ -217,6 +219,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        createNewBook: (data) => dispatch(actions.createNewBook(data))
     };
 };
 

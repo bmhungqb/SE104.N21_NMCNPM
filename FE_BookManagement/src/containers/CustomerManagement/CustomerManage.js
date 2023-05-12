@@ -23,11 +23,12 @@ class CustomerManage extends Component {
         super(props)
         this.state = {
             customerDeleteId: undefined,
-            customerEdit: {},
-            arrCustomers: [],
+            customerEditId: undefined,
             isOpenModalCustomer: false,
             isOpenModalEditCustomer: false,
             isOpenModalDeleteCustomer: false,
+            inputSearch: "",
+            selectFilter: "id"
         }
     }
     async componentDidMount() {
@@ -36,7 +37,6 @@ class CustomerManage extends Component {
     getAllCustomersFromReact = async () => {
         let response = await getAllCustomers('ALL');
         if (response && response.errCode === 0) {
-            console.log(response.customers)
             this.setState({
                 arrCustomers: response.customers
             })
@@ -46,22 +46,6 @@ class CustomerManage extends Component {
         this.setState({
             isOpenModalCustomer: true,
         })
-    }
-    createNewCustomer = async (data) => {
-        try {
-            let response = await createNewCustomerService(data);
-            if (response && response.errCode !== 0) {
-                alert(response.errMessage)
-            } else {
-                await this.getAllCustomersFromReact();
-                this.setState({
-                    isOpenModalCustomer: false
-                })
-                emitter.emit('EVENT_CLEAR_MODAL_DATA')
-            }
-        } catch (e) {
-            console.log(e);
-        }
     }
     toggleCustomerModal = () => {
         this.setState({
@@ -80,7 +64,7 @@ class CustomerManage extends Component {
     }
     getCustomerEdit = (customer) => {
         this.setState({
-            customerEdit: customer
+            customerEditId: customer
         })
     }
     getCustomerDelete = (customerId) => {
@@ -88,35 +72,12 @@ class CustomerManage extends Component {
             customerDeleteId: customerId
         })
     }
-    editCustomer = async (customer) => {
-        try {
-            let res = await editCustomerService(customer);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalEditCustomer: false
-                })
-                await this.getAllCustomersFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    deleteCustomer = async () => {
-        try {
-            let res = await deleteCustomerService(this.state.customerDeleteId);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalDeleteCustomer: false
-                })
-                await this.getAllCustomersFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
+    handleOnchangeInputFilter = (e, id) => {
+        let copyState = { ...this.state }
+        copyState[id] = e.target.value;
+        this.setState({
+            ...copyState
+        })
     }
     render() {
         return (
@@ -124,15 +85,13 @@ class CustomerManage extends Component {
                 <ModalCustomer
                     isOpen={this.state.isOpenModalCustomer}
                     toggleFromParent={this.toggleCustomerModal}
-                    createNewCustomer={this.createNewCustomer}
                 />
                 {
                     this.state.isOpenModalEditCustomer &&
                     <ModalEditCustomer
                         isOpen={this.state.isOpenModalEditCustomer}
                         toggleFromParent={this.toggleCustomerEditModal}
-                        editCustomer={this.editCustomer}
-                        customerEdit={this.state.customerEdit}
+                        customerEditId={this.state.customerEditId}
                     />
                 }
                 {
@@ -140,7 +99,7 @@ class CustomerManage extends Component {
                     <ModalDeleteCustomer
                         isOpen={this.state.isOpenModalDeleteCustomer}
                         toggleFromParent={this.toggleCustomerDeleteModal}
-                        deleteCustomer={this.deleteCustomer}
+                        customerDeleteId={this.state.customerDeleteId}
                     />
                 }
                 <SideBar />
@@ -153,15 +112,26 @@ class CustomerManage extends Component {
                         </div>
                         <div className='customer-manage-content'>
                             <div className='action'>
-                                <div class="input-group form-outline w-25">
-                                    <input placeholder='Enter search' type="text" className="form-control h-100" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">By ID</a>
-                                            <a class="dropdown-item" href="#">By Author</a>
-                                            <a class="dropdown-item" href="#">By Title</a>
-                                        </div>
+                                <div class="input-group form-outline w-50">
+                                    <input
+                                        style={{ "height": "46px" }}
+                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        type="text" className="form-control w-75"
+                                        onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
+                                    />
+                                    <div className="input-group-append">
+                                        <select
+                                            className="form-select w-100 brounded-0"
+                                            value={this.state.selectFilter}
+                                            onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
+                                            style={{ "cursor": "pointer" }}
+                                        >
+                                            <option value={"id"}>ID</option>
+                                            <option value={"fullName"}>Full Name</option>
+                                            <option value={"phoneNumber"}>Phone Number</option>
+                                            <option value={"customerState"}>State</option>
+                                            <option value={"address"}>Address</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className='button-control'>
@@ -177,9 +147,9 @@ class CustomerManage extends Component {
                                 <TableCustomerManage
                                     toggleCustomerEditModal={this.toggleCustomerEditModal}
                                     toggleCustomerDeleteModal={this.toggleCustomerDeleteModal}
-                                    arrCustomers={this.state.arrCustomers}
                                     getCustomerEdit={(customerInfor) => this.getCustomerEdit(customerInfor)}
                                     getCustomerDelete={(customerId) => this.getCustomerDelete(customerId)}
+                                    optionSearch={[this.state.inputSearch, this.state.selectFilter]}
                                 />
                             </div>
 

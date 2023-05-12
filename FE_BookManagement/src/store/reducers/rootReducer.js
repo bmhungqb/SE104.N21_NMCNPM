@@ -5,6 +5,8 @@ import appReducer from "./appReducer";
 import userReducer from "./userReducer";
 import adminReducer from './adminReducer';
 import bookReducer from './bookReducer';
+import supplierReducer from './supplierReducer';
+import customerReducer from './customerReducer'
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
@@ -17,7 +19,7 @@ const persistCommonConfig = {
 const userPersistConfig = {
     ...persistCommonConfig,
     key: 'user',
-    whitelist: ['isLoggedIn', 'userInfo']
+    whitelist: ['isLoggedIn', 'userInfor']
 };
 
 const appPersistConfig = {
@@ -31,5 +33,7 @@ export default (history) => combineReducers({
     user: persistReducer(userPersistConfig, userReducer),
     app: persistReducer(appPersistConfig, appReducer),
     admin: adminReducer,
-    book: bookReducer
+    book: bookReducer,
+    customer: customerReducer,
+    supplier: supplierReducer
 })

@@ -7,6 +7,7 @@ import { emitter } from '../../utils/emitter';
 import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from 'react-flatpickr';
+import * as actions from "../../store/actions/index"
 class ModalEditBook extends Component {
 
     constructor(props) {
@@ -26,7 +27,13 @@ class ModalEditBook extends Component {
         }
     }
     componentDidMount() {
-        let bookInfor = this.props.bookEdit
+        let bookInfor;
+        this.props.listBooks.forEach(row => {
+            if (row.id === this.props.bookEditId) {
+                bookInfor = row
+                return
+            }
+        });
         if (bookInfor && !_.isEmpty(bookInfor)) {
             this.setState({
                 id: bookInfor.id,
@@ -41,17 +48,25 @@ class ModalEditBook extends Component {
         }
     }
     handleCancelEdit = () => {
-        let bookInfor = this.props.bookEdit
-        this.setState({
-            id: bookInfor.id,
-            quantity: bookInfor.quantity,
-            bookTitle: bookInfor.bookTitle,
-            genre: bookInfor.genre,
-            author: bookInfor.authorName,
-            publisher: bookInfor.publisherName,
-            sellingPrice: bookInfor.sellingPrice,
-            costPrice: bookInfor.costPrice,
-        })
+        let bookInfor;
+        this.props.listBooks.forEach(row => {
+            if (row.id === this.props.bookEditId) {
+                bookInfor = row
+                return
+            }
+        });
+        if (bookInfor && !_.isEmpty(bookInfor)) {
+            this.setState({
+                id: bookInfor.id,
+                quantity: bookInfor.quantity,
+                bookTitle: bookInfor.bookTitle,
+                genre: bookInfor.genre,
+                author: bookInfor.authorName,
+                publisher: bookInfor.publisherName,
+                sellingPrice: bookInfor.sellingPrice,
+                costPrice: bookInfor.costPrice,
+            })
+        }
         this.toggleEdit()
     }
     handleOnchangeInput = (event, id) => {
@@ -85,7 +100,7 @@ class ModalEditBook extends Component {
         let isValid = this.checkValidateInput();
         if (isValid) {
             this.toggleEdit();
-            this.props.editBook(this.state)
+            this.props.editABook(this.state)
         }
     }
     toggle = () => {
@@ -272,11 +287,13 @@ class ModalEditBook extends Component {
 
 const mapStateToProps = state => {
     return {
+        listBooks: state.book.listBooks,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        editABook: (data) => dispatch(actions.editABook(data))
     };
 };
 
