@@ -3,7 +3,6 @@ import homeController from "../controllers/homeController";
 import userController from '../controllers/userController';
 import bookController from '../controllers/bookController';
 import customerController from '../controllers/customerController';
-import employeeController from '../controllers/employeeController';
 import supplierController from '../controllers/supplierController';
 import discountController from '../controllers/discountController';
 let router = express.Router();
@@ -23,11 +22,11 @@ let initWebRoutes = (app) => {
     router.post("/api/create-new-customer", customerController.handleCreateNewCustomer);
     router.put("/api/edit-customer", customerController.handleEditCustomer);
     router.delete("/api/delete-customer", customerController.handleDeleteCustomer);
-    // Employee
-    router.get("/api/get-all-employees", employeeController.handleGetAllEmployees);
-    router.post("/api/create-new-employee", employeeController.handleCreateNewEmployee);
-    router.put("/api/edit-employee", employeeController.handleEditEmployee);
-    router.delete("/api/delete-employee", employeeController.handleDeleteEmployee);
+    // User
+    router.get("/api/get-all-users", userController.handleGetAllUsers);
+    router.post("/api/create-new-user", userController.handleCreateNewUser);
+    router.put("/api/edit-user", userController.handleEditUser);
+    router.delete("/api/delete-user", userController.handleDeleteUser);
     // Supplier
     router.get("/api/get-all-suppliers", supplierController.handleGetAllSuppliers);
     router.post("/api/create-new-supplier", supplierController.handleCreateNewSupplier);
