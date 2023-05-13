@@ -7,6 +7,8 @@ import adminReducer from './adminReducer';
 import bookReducer from './bookReducer';
 import supplierReducer from './supplierReducer';
 import customerReducer from './customerReducer'
+import usersReducer from '../reducers/usersReducer';
+import discountReducer from './discountReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
@@ -35,5 +37,7 @@ export default (history) => combineReducers({
     admin: adminReducer,
     book: bookReducer,
     customer: customerReducer,
-    supplier: supplierReducer
+    supplier: supplierReducer,
+    users: usersReducer,
+    discount: discountReducer
 })

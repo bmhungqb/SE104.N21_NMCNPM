@@ -1,58 +1,60 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import './CustomerManage.scss'
+import './UserManage.scss'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
+import TableUserManage from './TableUserManage';
+import ModalUser from './ModalUser';
+import ModalEditUser from './ModalEditUser';
+import ModalDeleteUser from './ModalDeleteUser';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
-import ModalCustomer from './ModalCustomer';
-import TableCustomerManage from './TableCustomerManage';
-import ModalEditCustomer from './ModalEditCustomer';
-import ModalDeleteCustomer from './ModalDeleteCustomer';
-class CustomerManage extends Component {
+class UserManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            customerDeleteId: undefined,
-            customerEditId: undefined,
-            isOpenModalCustomer: false,
-            isOpenModalEditCustomer: false,
-            isOpenModalDeleteCustomer: false,
+            userDeleteId: undefined,
+            userEditId: undefined,
+            isOpenModalUser: false,
+            isOpenModalEditUser: false,
+            isOpenModalDeleteUser: false,
             inputSearch: "",
             selectFilter: "id"
         }
     }
-    handleAddCustomer = () => {
+    handleAddNewUser = () => {
         this.setState({
-            isOpenModalCustomer: true,
+            isOpenModalUser: true,
         })
     }
-    toggleCustomerModal = () => {
+    toggleUserModal = () => {
         this.setState({
-            isOpenModalCustomer: !this.state.isOpenModalCustomer,
+            isOpenModalUser: !this.state.isOpenModalUser,
         })
     }
-    toggleCustomerEditModal = () => {
+    toggleUserEditModal = () => {
         this.setState({
-            isOpenModalEditCustomer: !this.state.isOpenModalEditCustomer,
+            isOpenModalEditUser: !this.state.isOpenModalEditUser,
         })
     }
-    toggleCustomerDeleteModal = () => {
+    toggleUserDeleteModal = () => {
         this.setState({
-            isOpenModalDeleteCustomer: !this.state.isOpenModalDeleteCustomer,
+            isOpenModalDeleteUser: !this.state.isOpenModalDeleteUser,
         })
     }
-    getCustomerEdit = (customer) => {
+    async componentDidMount() {
+    }
+    getUserEdit = (userId) => {
         this.setState({
-            customerEditId: customer
+            userEditId: userId
         })
     }
-    getCustomerDelete = (customerId) => {
+    getUserDelete = (userId) => {
         this.setState({
-            customerDeleteId: customerId
+            userDeleteId: userId
         })
     }
     handleOnchangeInputFilter = (e, id) => {
@@ -65,35 +67,35 @@ class CustomerManage extends Component {
     render() {
         return (
             <div className="d-flex" id="wrapper">
-                <ModalCustomer
-                    isOpen={this.state.isOpenModalCustomer}
-                    toggleFromParent={this.toggleCustomerModal}
+                <ModalUser
+                    isOpen={this.state.isOpenModalUser}
+                    toggleFromParent={this.toggleUserModal}
                 />
                 {
-                    this.state.isOpenModalEditCustomer &&
-                    <ModalEditCustomer
-                        isOpen={this.state.isOpenModalEditCustomer}
-                        toggleFromParent={this.toggleCustomerEditModal}
-                        customerEditId={this.state.customerEditId}
+                    this.state.isOpenModalEditUser &&
+                    <ModalEditUser
+                        isOpen={this.state.isOpenModalEditUser}
+                        toggleFromParent={this.toggleUserEditModal}
+                        userEditId={this.state.userEditId}
                     />
                 }
                 {
-                    this.state.isOpenModalDeleteCustomer &&
-                    <ModalDeleteCustomer
-                        isOpen={this.state.isOpenModalDeleteCustomer}
-                        toggleFromParent={this.toggleCustomerDeleteModal}
-                        customerDeleteId={this.state.customerDeleteId}
+                    this.state.isOpenModalDeleteUser &&
+                    <ModalDeleteUser
+                        isOpen={this.state.isOpenModalDeleteUser}
+                        toggleFromParent={this.toggleUserDeleteModal}
+                        userDeleteId={this.state.userDeleteId}
                     />
                 }
                 <SideBar />
                 <div id="page-content-wrapper">
                     <Header />
-                    <div className='customer-manage-container'>
-                        <div className='customer-manage-header'>
-                            <p className='title-header'>Customer Management</p>
+                    <div className='user-manage-container'>
+                        <div className='user-manage-header'>
+                            <p className='title-header'>Users</p>
                             <p className='infor-header'></p>
                         </div>
-                        <div className='customer-manage-content'>
+                        <div className='user-manage-content'>
                             <div className='action'>
                                 <div class="input-group form-outline w-50">
                                     <input
@@ -110,34 +112,32 @@ class CustomerManage extends Component {
                                             style={{ "cursor": "pointer" }}
                                         >
                                             <option value={"id"}>ID</option>
-                                            <option value={"fullName"}>Full Name</option>
-                                            <option value={"phoneNumber"}>Phone Number</option>
-                                            <option value={"customerState"}>State</option>
-                                            <option value={"address"}>Address</option>
+                                            <option value={"name"}>Full Name</option>
+                                            <option value={"role"}>Role</option>
                                         </select>
                                     </div>
                                 </div>
                                 <div className='button-control'>
                                     <button
                                         className='mx-2 btn px-3 btn-info'
-                                        onClick={() => this.handleAddCustomer()}
+                                        onClick={() => this.handleAddNewUser()}
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
-                                        Add Customer</button>
+                                        Add User</button>
                                 </div>
                             </div>
                             <div className='datatable'>
-                                <TableCustomerManage
-                                    toggleCustomerEditModal={this.toggleCustomerEditModal}
-                                    toggleCustomerDeleteModal={this.toggleCustomerDeleteModal}
-                                    getCustomerEdit={(customerInfor) => this.getCustomerEdit(customerInfor)}
-                                    getCustomerDelete={(customerId) => this.getCustomerDelete(customerId)}
+                                <TableUserManage
+                                    toggleUserEditModal={this.toggleUserEditModal}
+                                    toggleUserDeleteModal={this.toggleUserDeleteModal}
+                                    getUserEdit={(userId) => this.getUserEdit(userId)}
+                                    getUserDelete={(userId) => this.getUserDelete(userId)}
                                     optionSearch={[this.state.inputSearch, this.state.selectFilter]}
                                 />
                             </div>
 
                         </div>
-                        <div className='Customer-manage-footer'></div>
+                        <div className='user-manage-footer'></div>
                     </div>
                 </div>
             </div>
@@ -156,4 +156,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(CustomerManage);
+export default connect(mapStateToProps, mapDispatchToProps)(UserManage);
