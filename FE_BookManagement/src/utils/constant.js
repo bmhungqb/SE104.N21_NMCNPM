@@ -7,6 +7,7 @@ export const path = {
     SUPPLIER_MANAGEMENT: '/supplier-management',
     USER_MANAGEMENT: '/user-management',
     DISCOUNT_MANAGEMENT: '/discount-management',
+    REGULATION_MANAGEMENT: '/regulation-management',
 };
 
 export const LANGUAGES = {

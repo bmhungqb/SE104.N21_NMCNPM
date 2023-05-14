@@ -10,20 +10,15 @@
 // #page-content-wrapper {
 //     min-width: 100vw;
 // }
-.book-purchase-container {
-    .book-purchase-header {
+.user-manage-container {
+    .user-manage-header {
         margin-left: 40px;
-        height: 72px;
-
-        p {
-            margin-bottom: 0px !important;
-        }
+        margin-top: 15px;
 
         .title-header {
             font-size: 24px;
             font-weight: 700;
             margin-bottom: 1px;
-            margin-top: 15px;
         }
 
         .infor-header {
@@ -32,7 +27,7 @@
         }
     }
 
-    .book-purchase-content {
+    .user-manage-content {
         .action {
             display: flex;
             justify-content: space-around;
@@ -43,13 +38,13 @@
                 height: 38px;
             }
 
-            .button-add {
+            .button-control {
 
                 // width: 25%;
                 .btn {
-                    background-color: #009099;
+                    // background-color: #009099;
                     color: #ffff;
-                    width: 180px;
+                    // width: 180px;
                     height: 46px;
                 }
             }
@@ -64,5 +59,5 @@
         }
     }
 
-    .book-purchase-footer {}
+    .user-manage-footer {}
 }

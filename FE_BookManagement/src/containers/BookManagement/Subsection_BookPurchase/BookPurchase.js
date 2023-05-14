@@ -7,6 +7,7 @@ import Header from '../../Header/Header';
 import SideBar from '../../SideBar/sideBar';
 import TableBookPurchase from './TableBookPurchase';
 import ModalOrder from './ModalOrder';
+
 class BookPurchase extends Component {
     constructor(props) {
         super(props)
@@ -36,6 +37,13 @@ class BookPurchase extends Component {
             isOpenModalDeleteBook: !this.state.isOpenModalDeleteBook,
         })
     }
+    handleOnchangeInputFilter = (e, id) => {
+        let copyState = { ...this.state }
+        copyState[id] = e.target.value;
+        this.setState({
+            ...copyState
+        })
+    }
     render() {
         return (
             <div className="d-flex" id="wrapper">
@@ -60,22 +68,33 @@ class BookPurchase extends Component {
                 <SideBar />
                 <div id="page-content-wrapper">
                     <Header />
-                    <div className='book-manage-container'>
-                        <div className='book-manage-header'>
+                    <div className='book-purchase-container'>
+                        <div className='book-purchase-header'>
                             <p className='title-header'>Book Purchase</p>
                             <p className='infor-header'></p>
                         </div>
-                        <div className='book-manage-content'>
+                        <div className='book-purchase-content'>
                             <div className='action'>
-                                <div class="input-group form-outline w-25">
-                                    <input placeholder='Enter search' type="text" className="form-control h-100" />
-                                    <div class="input-group-append">
-                                        <button className="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
-                                        <div className="dropdown-menu">
-                                            <a className="dropdown-item" href="#">By ID</a>
-                                            <a className="dropdown-item" href="#">By Author</a>
-                                            <a className="dropdown-item" href="#">By Title</a>
-                                        </div>
+                                <div class="input-group form-outline w-50">
+                                    <input
+                                        style={{ "height": "46px" }}
+                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        type="text"
+                                        className="form-control w-75"
+                                        onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
+                                    />
+                                    <div className="input-group-append">
+                                        <select
+                                            className="form-select w-100 brounded-0"
+                                            value={this.state.selectFilter}
+                                            onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
+                                            style={{ "cursor": "pointer" }}
+                                        >
+                                            <option value={"id"}>ID</option>
+                                            <option value={"bookTitle"}>Title</option>
+                                            <option value={"authorName"}>Author</option>
+                                            <option value={"genre"}>Genre</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className='mx-1 button-add'>
@@ -93,7 +112,7 @@ class BookPurchase extends Component {
                             </div>
 
                         </div>
-                        <div className='book-manage-footer'></div>
+                        <div className='book-purchase-footer'></div>
                     </div>
                 </div>
             </div>

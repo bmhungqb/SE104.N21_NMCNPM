@@ -21,6 +21,7 @@ import CustomerManage from './CustomerManagement/CustomerManage';
 import SupplierManage from './SupplierManagement/SupplierManage';
 import UserManage from './UserManagement/UserManage';
 import DiscountManage from './Discount/DiscountManage';
+import RegulationManage from './Regulation/RegulationManage'
 // 
 import CustomScrollbars from '../components/CustomScrollbars'
 class App extends Component {
@@ -60,6 +61,7 @@ class App extends Component {
                                     <Route path={path.SUPPLIER_MANAGEMENT} component={userIsAuthenticated(SupplierManage)} />
                                     <Route path={path.USER_MANAGEMENT} component={userIsAuthenticated(UserManage)} />
                                     <Route path={path.DISCOUNT_MANAGEMENT} component={userIsAuthenticated(DiscountManage)} />
+                                    <Route path={path.REGULATION_MANAGEMENT} component={userIsAuthenticated(RegulationManage)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>
