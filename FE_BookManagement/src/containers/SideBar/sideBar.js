@@ -69,7 +69,7 @@ class SideBar extends Component {
                             </div>
                         </div>
                     </div>
-                    {this.state.role === USER_ROLE.MANAGER &&
+                    {true &&
                         <div className="list-group list-group-flush">
                             <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/home'>Home</NavLink>
                             <NavLink className="list-group-item list-group-item-action list-group-item-light p-3" to='/book-management'>Book Management</NavLink>

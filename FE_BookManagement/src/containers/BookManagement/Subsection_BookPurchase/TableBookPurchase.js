@@ -12,418 +12,64 @@ class TableBookPurchase extends Component {
         super(props);
         this.state = {
             columns: [{
-                name: "Title",
-                selector: row => row.title,
+                name: "Invoice ID",
+                selector: "id",
                 sortable: true,
                 sortFunction: this.caseInsensitiveSort,
             },
             {
-                name: "Year",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year2",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year3",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year4",
-                selector: row => row.year,
-            }
-                ,
-            {
-                name: "Year5",
-                selector: row => row.year,
+                name: "Customer ID",
+                selector: "customerId",
             },
             {
-                cell: () => <button
-                    onClick={() => { this.handleEditBook() }}
-                >
-                    <FontAwesomeIcon className='icon-right' icon={faPenToSquare} />
-                </button>,
+                name: "Name",
+                selector: "name",
+            },
+            {
+                name: "Total Amount",
+                selector: "totalAmount",
+            },
+            {
+                name: "Date",
+                selector: "date",
+            },
+            {
+                name: "Status",
+                selector: "status",
+                cell: (row) =>
+                    <button
+                        className='border-0'
+                        onClick={() => { this.handleViewDetailOrder(row) }}
+                        data-tag="allowRowEvents"
+                        style={row.status === "Debt" ?
+                            { "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#F0483E" } :
+                            { "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#03A9F5" }
+                        }
+                    >
+                        {row.status}
+                    </button>,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
             },
-            {
-                cell: () => <button
-                    onClick={() => { this.handleDeleteBook() }}
-                >
-                    <FontAwesomeIcon className='icon-right' icon={faTrash} />
-                </button>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            }
             ],
             data: [{
 
                 id: 1,
-                title: "buh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
+                customerId: "buh hung",
+                name: '2003',
+                totalAmount: '2003',
+                date: 'swq',
+                status: 'Debt',
             },
             {
-                id: 2,
-                title: "buinh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
+                id: 1,
+                customerId: "buh hung",
+                name: '2003',
+                totalAmount: '2003',
+                date: 'Paid',
+                status: 'Paid',
             },
-            {
-                id: 3,
-                title: "buimanh ng",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 4,
-                title: "buimanung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 5,
-                title: "buimanh h",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 6,
-                title: "imanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "h hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            },
-            {
-                id: 2,
-                title: "buimanh hung",
-                year: '2003',
-                year1: '2003',
-                year2: '2003',
-                year3: '2003',
-                year4: '2003',
-                year5: '2003',
-            }
-
             ],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
@@ -434,11 +80,13 @@ class TableBookPurchase extends Component {
         }
     }
 
-    handleEditBook = () => {
-        this.props.toggleFromParent();
-    }
-    handleDeleteBook = () => {
-        this.props.toggleBookDeleteModal();
+    handleViewDetailOrder = (row) => {
+        if (row.status === "Debt") {
+
+        }
+        else {
+
+        }
     }
     caseInsensitiveSort = (rowA, rowB) => {
         var a = rowA.title.toLowerCase();

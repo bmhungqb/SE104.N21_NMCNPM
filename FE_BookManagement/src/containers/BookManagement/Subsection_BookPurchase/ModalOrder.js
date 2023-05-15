@@ -144,6 +144,9 @@ class ModalOrder extends Component {
         this.setState({
             ...copyState
         })
+        // if (id === "phoneNumber") {
+        //     this.checkExistsCustomer();
+        // }
     }
     checkExistsCustomer = () => {
         this.setState({
