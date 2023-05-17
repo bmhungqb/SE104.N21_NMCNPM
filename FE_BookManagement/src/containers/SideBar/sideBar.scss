@@ -5714,8 +5714,8 @@ fieldset:disabled .btn {
 }
 
 .list-group-item-light {
-    color: #636464;
-    background-color: #fefefe;
+    color: #fff;
+    // background-color: #fefefe;
 }
 
 .list-group-item-light.list-group-item-action:hover,
@@ -12532,40 +12532,52 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     }
 }
 
-.sidebar-heading {
-    display: flex;
-    flex-direction: row;
+.sidebar-container {
+    background: #283342 !important;
+    color: #fff !important;
 
-    .logo {
-        width: 25%;
-        background-position: center center;
-        background-repeat: no-repeat;
-        background-size: contain;
-        background-image: url(../../assets//logo/logo.png);
-    }
-
-    .title {
-        text-transform: none;
-        height: 100%;
-        text-align: center;
-        font-weight: bold;
-        font-size: 16px;
-        line-height: 17px;
-        color: #0071ba;
-        width: 75%;
+    .sidebar-heading {
         display: flex;
-        margin-top: 0px;
-        margin-bottom: 0px;
-        align-items: center;
-        color: #ffff;
+        flex-direction: row;
+
+        .logo {
+            width: 25%;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-size: contain;
+            background-image: url(../../assets//logo/logo.png);
+        }
+
+        .title {
+            text-transform: none;
+            height: 100%;
+            text-align: center;
+            font-weight: bold;
+            font-size: 16px;
+            line-height: 17px;
+            color: #0071ba;
+            width: 75%;
+            display: flex;
+            margin-top: 0px;
+            margin-bottom: 0px;
+            align-items: center;
+            color: #ffff;
+        }
     }
 }
 
+
 .sidebar-infor {
+    background: #283342;
     display: flex;
     height: 100px;
     align-items: center;
     justify-content: space-between;
+
+    .nav-link {
+        background-color: transparent;
+        color: #fff !important;
+    }
 
     .avatar {
         margin-left: 16px;
@@ -12575,11 +12587,11 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
         background-position: center center;
         background-repeat: no-repeat;
         background-size: contain;
-        background-image: url(../../assets//logo/logo.png);
+        background-image: url(../../assets/images//Icon-vit-vang-facebook.jpg);
     }
 
     .infor-user {
-        margin-left: -100px;
+        margin-left: -30px;
 
         p {
             margin-top: 0px;
@@ -12615,7 +12627,16 @@ body.sb-sidenav-toggled #wrapper #sidebar-wrapper {
     }
 }
 
+.list-group {
+    background-color: #283342;
+    color: #fff !important;
+
+    p {
+        margin: 0 0 0 15px !important;
+    }
+}
+
 .list-group-item-light.list-group-item-action.active {
-    background-color: #009099;
+    background-color: #009099 !important;
     border: none;
 }

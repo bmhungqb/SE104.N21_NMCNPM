@@ -10,7 +10,7 @@ import { injectIntl, intlShape } from 'react-intl';
 import { Modal } from 'bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faLanguage } from "@fortawesome/free-solid-svg-icons";
-import { faSun, faMagnifyingGlass } from "@fortawesome/free-solid-svg-icons";
+import { faSun, faMagnifyingGlass, faMoon } from "@fortawesome/free-solid-svg-icons";
 import { event } from 'jquery';
 import e from 'cors';
 
@@ -20,7 +20,8 @@ class Header extends Component {
         this.state = {
             time: new Date(),
             sessionEN: '',
-            sessionVI: ''
+            sessionVI: '',
+            isMorning: true,
         }
     }
     refreshClock = () => {
@@ -33,7 +34,7 @@ class Header extends Component {
         if (this.state.time.getHours() < 12) {
             this.setState({
                 sessionEN: " Morning",
-                sessionVI: " Buổi sáng"
+                sessionVI: " Buổi sáng",
             })
         } else if (this.state.time.getHours() < 18) {
             this.setState({
@@ -43,7 +44,8 @@ class Header extends Component {
         } else {
             this.setState({
                 sessionEN: " Evening",
-                sessionVI: " Buổi tối"
+                sessionVI: " Buổi tối",
+                isMorning: false
             })
         }
     }
@@ -100,7 +102,9 @@ class Header extends Component {
                         <div className='time'>
                             <div className='up-content'>
                                 <span>
-                                    <FontAwesomeIcon icon={faSun} />
+                                    {this.state.isMorning ? <FontAwesomeIcon icon={faSun} color='#ffc800' fontSize={'16px'} /> :
+                                        <FontAwesomeIcon icon={faMoon} color='#5f798e' fontSize={'16px'} />
+                                    }
                                 </span>
                                 <p className='align-middle text mt-3'>
                                     <FormattedMessage id='header.session' />

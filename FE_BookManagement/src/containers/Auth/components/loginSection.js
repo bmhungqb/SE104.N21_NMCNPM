@@ -25,7 +25,6 @@ class LoginSection extends Component {
         })
         try {
             let data = await handleLoginApi(this.state.username, this.state.password);
-            console.log(data.user)
             if (data && data.errCode !== 0) {
                 this.setState({
                     errMessage: data.message
@@ -144,7 +143,6 @@ class LoginSection extends Component {
 
 const mapStateToProps = state => {
     return {
-
     };
 };
 
