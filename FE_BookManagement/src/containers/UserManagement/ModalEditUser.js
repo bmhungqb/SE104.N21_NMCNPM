@@ -97,7 +97,6 @@ class ModalEditUser extends Component {
             'password',
             'startWork',
             'address',
-            'image',
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -111,6 +110,7 @@ class ModalEditUser extends Component {
     handleSaveUser = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
+            console.log("here is modelEdituser: ", this.state)
             this.toggleEdit();
             this.props.editAUser(this.state)
         }
@@ -175,6 +175,7 @@ class ModalEditUser extends Component {
                             <div className='input-container'>
                                 <label>Day of birth</label>
                                 <DatePicker
+                                    disabled={!this.state.isAllowEdit}
                                     onChange={(e) => this.handleOnchangeDatePicker(e, 'birthDay')}
                                     value={this.state.birthDay}
                                 />
@@ -182,6 +183,7 @@ class ModalEditUser extends Component {
                             <div className='input-container'>
                                 <label>Start Work</label>
                                 <DatePicker
+                                    disabled={!this.state.isAllowEdit}
                                     onChange={(e) => this.handleOnchangeDatePicker(e, 'startWork')}
                                     value={this.state.startWork}
                                 />

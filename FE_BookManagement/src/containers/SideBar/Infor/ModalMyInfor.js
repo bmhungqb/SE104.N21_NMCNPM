@@ -33,12 +33,12 @@ class ModalMyInfor extends Component {
     }
     componentDidMount() {
         let userInfor = this.props.userInfor
-        console.log(userInfor)
         if (userInfor && !_.isEmpty(userInfor)) {
             let imageBase64 = "";
             if (userInfor.image) {
                 imageBase64 = Buffer.from(userInfor.image, 'base64').toString('binary');
             }
+            console.log("hi, check userInfor: ", userInfor)
             this.setState({
                 id: userInfor.id,
                 name: userInfor.name,
@@ -85,7 +85,6 @@ class ModalMyInfor extends Component {
             'username',
             'startWork',
             'address',
-            'image',
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -99,6 +98,7 @@ class ModalMyInfor extends Component {
     handleSaveUser = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
+            console.log("here is profile: ", this.state)
             this.toggleEdit();
             this.props.editAUser(this.state)
         }

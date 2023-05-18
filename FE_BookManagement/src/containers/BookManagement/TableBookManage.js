@@ -5,7 +5,7 @@ import "./TableBookManage.scss";
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import { faPenToSquare, faPlugCircleMinus, faPlugCirclePlus, faPlus, faPlusCircle, faPlusMinus, faPlusSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { data } from 'jquery';
 import { includes } from 'lodash';
 import * as actions from "../../store/actions/index"
@@ -39,32 +39,40 @@ class TableBookManage extends Component {
             {
                 cell:
                     (row) =>
-                        < button
-                            className='border-0 bg-transparent'
-                            onClick={() => { this.handleEditBook(row) }}
-                            data-tag="allowRowEvents"
-                        >
-                            <FontAwesomeIcon
-                                className='icon-right text-primary'
-                                icon={faPenToSquare}
-                            />
-                        </button >,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            {
-                cell: (row) =>
-                    <button
-                        className='border-0 bg-transparent'
-                        onClick={() => { this.handleDeleteBook(row) }}
-                        data-tag="allowRowEvents"
-                    >
-                        <FontAwesomeIcon
-                            className='icon-right text-danger'
-                            icon={faTrash}
-                        />
-                    </button>,
+                        <>
+                            < button
+                                className='border-0 bg-transparent'
+                                onClick={() => { this.handleEditBook(row) }}
+                                data-tag="allowRowEvents"
+                            >
+                                <FontAwesomeIcon
+                                    className='icon-right text-primary'
+                                    icon={faPenToSquare}
+                                />
+                            </button >
+                            < button
+                                style={{ "margin": "0 10px" }}
+                                className='border-0 bg-transparent'
+                                onClick={() => { this.handleInputBook(row) }}
+                                data-tag="allowRowEvents"
+                            >
+                                <FontAwesomeIcon
+                                    className='icon-right text-success'
+                                    icon={faPlusCircle}
+                                />
+                            </button >
+                            <button
+                                className='border-0 bg-transparent'
+                                onClick={() => { this.handleDeleteBook(row) }}
+                                data-tag="allowRowEvents"
+                            >
+                                <FontAwesomeIcon
+                                    className='icon-right text-danger'
+                                    icon={faTrash}
+                                />
+                            </button>
+                        </>
+                ,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
@@ -85,7 +93,11 @@ class TableBookManage extends Component {
 
     handleEditBook = (row) => {
         this.props.getBookEdit(row.id)
-        this.props.toggleFromParent();
+        this.props.toggleFromParent('edit');
+    }
+    handleInputBook = (row) => {
+        this.props.getBookEdit(row.id)
+        this.props.toggleFromParent('input');
     }
     handleDeleteBook = (row) => {
         this.props.getBookDelete(row.id)

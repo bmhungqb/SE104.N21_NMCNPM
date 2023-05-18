@@ -11,7 +11,7 @@ class ModalBook extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            quantity: undefined,
+            quantity: '0',
             bookTitle: '',
             genre: '',
             author: '',

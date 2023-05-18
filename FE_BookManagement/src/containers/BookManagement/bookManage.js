@@ -27,7 +27,8 @@ class BookManage extends Component {
             isOpenModalEditBook: false,
             isOpenModalDeleteBook: false,
             inputSearch: "",
-            selectFilter: "id"
+            selectFilter: "id",
+            editAction: 'edit',
         }
     }
     async componentDidMount() {
@@ -51,9 +52,10 @@ class BookManage extends Component {
             isOpenModalUser: !this.state.isOpenModalUser,
         })
     }
-    toggleBookEditModal = () => {
+    toggleBookEditModal = (id) => {
         this.setState({
             isOpenModalEditBook: !this.state.isOpenModalEditBook,
+            editAction: id
         })
     }
     toggleBookDeleteModal = () => {
@@ -89,8 +91,9 @@ class BookManage extends Component {
                     this.state.isOpenModalEditBook &&
                     <ModalEditBook
                         isOpen={this.state.isOpenModalEditBook}
-                        toggleFromParent={this.toggleBookEditModal}
+                        toggleFromParent={(id) => this.toggleBookEditModal(id)}
                         bookEditId={this.state.bookEditId}
+                        editAction={this.state.editAction}
                     />
                 }
                 {
