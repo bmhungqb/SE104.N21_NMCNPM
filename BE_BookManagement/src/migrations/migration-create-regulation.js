@@ -1,31 +1,26 @@
 'use strict';
+
+const { sequelize } = require("../models");
+
 module.exports = {
     async up(queryInterface, Sequelize) {
-        await queryInterface.createTable('Discounts', {
-            discountId: {
+        await queryInterface.createTable('Regulations', {
+            regulationId: {
+                allowNull: false,
                 primaryKey: true,
                 type: Sequelize.INTEGER
             },
-            name: {
+            name:{
                 type: Sequelize.STRING
             },
-            state: {
-                type: Sequelize.STRING
-            },
-            start: {
-                type: Sequelize.STRING
-            },
-            end: {
-                type: Sequelize.STRING
-            },
-            percentage: {
+            minimumInput: {
                 type: Sequelize.INTEGER
             },
-            state: {
-                type: Sequelize.STRING
+            minimumStock: {
+                type: Sequelize.INTEGER
             },
-            customerRank: {
-                type: Sequelize.STRING
+            maximumDept: {
+                type: Sequelize.INTEGER
             },
             createdAt: {
                 allowNull: false,
@@ -38,6 +33,6 @@ module.exports = {
         });
     },
     async down(queryInterface, Sequelize) {
-        await queryInterface.dropTable('Discounts');
+        await queryInterface.dropTable('Regulations');
     }
 };

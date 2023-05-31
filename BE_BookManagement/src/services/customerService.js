@@ -34,13 +34,15 @@ let createNewCustomer = (data) => {
                 })
             } else {
                 await db.Customer.create({
-                    firstName: data.firstName,
-                    lastName: data.lastName,
-                    customerState: data.customerState,
-                    sex: data.sex,
-                    phoneNumber: data.phoneNumber,
+                    fullName: data.fullName,
                     address: data.address,
+                    customerId: data.customerId,
+                    phoneNumber: data.phoneNumber,
                     email: data.email,
+                    sex: data.sex,
+                    dept:0,
+                    rank:'bronze',
+                    totalPurchaseValue:0,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 })

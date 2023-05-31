@@ -1,4 +1,5 @@
 import db from "../models/index";
+
 let getAllBooks = (bookId) => {
     return new Promise(async (resolve, reject) => {
         try {
@@ -22,41 +23,54 @@ let getAllBooks = (bookId) => {
         }
     })
 }
-let createNewBook = (data) => {
+let createNewBook = async(data) => {
+    const t = await db.sequelize.transaction();
     return new Promise(async (resolve, reject) => {
         try {
             // let check = await checkUserEmail(data.email)
+            const bookRegulation =await db.Regulation.findOne({where:{regulationId:1}})
             if (false) {
                 resolve({
                     errCode: 1,
                     errMessage: "Your email already in used, plz try another email"
                 })
             } else {
-                await db.Book.create({
-                    bookTitle: data.bookTitle,
-                    genre: data.genre,
-                    authorName: data.author,
-                    publisherName: data.publisher,
-                    costPrice: data.costPrice,
-                    sellingPrice: data.sellingPrice,
-                    quantity: data.quantity,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                })
-                resolve({
-                    errCode: 0,
-                    message: 'OK'
-                })
+                // Regulation 1
+                if (data.stock <bookRegulation.minimumInput || data.stock>bookRegulation.minimumStock){
+                    throw new Error("you cannot excess the number of regulation")
+                } else{
+                    const beginningStock=data.stock
+                    UpdateBeginningStock(data,t,beginningStock)
+                    const book =await db.Book.create({
+                        bookId:data.bookId,
+                        bookTitle: data.bookTitle,
+                        genre: data.genre,
+                        authorName: data.author,
+                        costPrice: data.costPrice,
+                        sellingPrice: data.costPrice*105/100,
+                        stock: data.stock,
+                        createdAt: new Date(),
+                        updatedAt: new Date()
+                    },{transaction:t})
+                    await t.commit();
+                    resolve({
+                        errCode: 0,
+                        book: book
+                    })
+                }
             }
         } catch (e) {
+            await t.rollback()
             reject(e);
         }
     })
 }
 
-let updateBookData = (data) => {
+let updateBookData = async(data) => {
+    const t = await db.sequelize.transaction()
     return new Promise(async (resolve, reject) => {
         try {
+            const bookRegulation = db.Regulation.findOne({where:{regulationId:1}})
             if (!data.id || !data.bookTitle || !data.genre
                 || !data.author || !data.publisher || !data.costPrice
                 || !data.sellingPrice || !data.quantity
@@ -67,23 +81,31 @@ let updateBookData = (data) => {
                 })
             }
             let book = await db.Book.findOne({
-                where: { id: data.id },
+                where: { bookId: data.bookId },
                 raw: false
             })
             if (book) {
-                book.bookTitle = data.bookTitle;
-                book.genre = data.genre;
-                book.authorName = data.author;
-                book.publisherName = data.publisher;
-                book.costPrice = data.costPrice;
-                book.sellingPrice = data.sellingPrice;
-                book.quantity = data.quantity;
-                book.updatedAt = new Date();
-                await book.save()
-                resolve({
-                    errCode: 0,
-                    message: 'Update the book succeeds! '
-                });
+                // regulation 1
+                if (data.stock <bookRegulation.minimumInput && data.stock>bookRegulation.minimumStock){
+                    throw Error("you cannot excess the number of book regulation ")
+                } else {
+                    const beginningStock = data.stock-book.stock
+                    UpdateBeginningStock(data,t,beginningStock)
+                    book.bookTitle = data.bookTitle;
+                    book.genre = data.genre;
+                    book.authorName = data.author;
+                    book.publisherName = data.publisher;
+                    book.costPrice = data.costPrice;
+                    book.sellingPrice = data.sellingPrice;
+                    book.stock = data.stock;
+                    book.updatedAt = new Date();
+                    await book.save()
+                    t.commit()
+                    resolve({
+                        errCode: 0,
+                        message: 'Update the book succeeds! '
+                    });
+                }
             }
             else {
                 resolve({
@@ -92,6 +114,7 @@ let updateBookData = (data) => {
                 });
             }
         } catch (e) {
+            t.rollback();
             reject(e)
         }
     })
@@ -116,10 +139,22 @@ let deleteBook = (bookId) => {
         })
     })
 }
+async function UpdateBeginningStock(data,t,beginningStock){
+    console.log(beginningStock)
+    const bookReport = await db.BookReport.create({
+        bookId:data.bookId,
+        date:data.createdAt,
+        beginningStock:beginningStock,
+        endingStock:0,
+        phatSinh:0
+    },{transaction:t})
+    console.log(bookReport)
+}
 
 module.exports = {
     createNewBook: createNewBook,
     getAllBooks: getAllBooks,
     updateBookData: updateBookData,
     deleteBook: deleteBook,
+    UpdateBeginningStock:UpdateBeginningStock,
 }

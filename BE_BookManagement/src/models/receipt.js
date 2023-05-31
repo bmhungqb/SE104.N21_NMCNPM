@@ -3,32 +3,28 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Discount extends Model {
+    class Receipt extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Discount.belongsTo(models.Invoice,{foreignKey:'discountId',targetKey:'discountId'})
-
+            Receipt.hasMany(models.Customer,{foreignKey:'customerId',sourceKey:'customerId'});
         }
     };
-    Discount.init({
-        discountId:{
+    Receipt.init({
+        receiptId:{
             type: DataTypes.INTEGER,
+            allowNull: false,
+            autoIncrement: true,
             primaryKey: true, 
         },
-        name: DataTypes.STRING,
-        state: DataTypes.STRING,
-        start: DataTypes.STRING,
-        end: DataTypes.STRING,
-        percentage: DataTypes.INTEGER,
-        state: DataTypes.STRING,
-        customerRank:DataTypes.STRING,
+        customerId:DataTypes.INTEGER,
+        amountReceived:DataTypes.INTEGER
     }, {
         sequelize,
-        modelName: 'Discount',
+        modelName: 'Receipt',
     });
-    return Discount;
+    return Receipt;
 };
