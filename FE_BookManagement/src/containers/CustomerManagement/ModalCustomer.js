@@ -6,6 +6,8 @@ import "./ModalCustomer.scss"
 import { emitter } from '../../utils/emitter';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DatePicker from 'react-flatpickr';
+import * as actions from '../../store/actions/index'
 class ModalCustomer extends Component {
 
     constructor(props) {
@@ -14,10 +16,11 @@ class ModalCustomer extends Component {
             firstName: "",
             lastName: "",
             customerState: "",
-            sex: "",
+            gender: "",
             phoneNumber: "",
             address: "",
             email: "",
+            birthDay: "",
             errMessage: ""
         }
         this.listenToEmitter();
@@ -28,10 +31,11 @@ class ModalCustomer extends Component {
                 firstName: "",
                 lastName: "",
                 customerState: "",
-                sex: "",
+                gender: "",
                 phoneNumber: "",
                 address: "",
                 email: "",
+                birthDay: "",
             })
         })
     }
@@ -42,16 +46,22 @@ class ModalCustomer extends Component {
             ...copyState
         })
     }
+    handleOnchangeDatePicker = (date) => {
+        this.setState({
+            birthDay: date[0]
+        })
+    }
     checkValidateInput = () => {
         let isValid = true;
         let arrInput = [
             'firstName',
             'lastName',
             'customerState',
-            'sex',
+            'gender',
             'phoneNumber',
             'address',
             'email',
+            'birthDay'
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -66,6 +76,8 @@ class ModalCustomer extends Component {
         let isValid = this.checkValidateInput();
         if (isValid) {
             this.props.createNewCustomer(this.state)
+            emitter.emit('EVENT_CLEAR_MODAL_DATA')
+            this.toggle()
         }
     }
     componentDidMount() {
@@ -73,6 +85,7 @@ class ModalCustomer extends Component {
     }
 
     toggle = () => {
+        // emitter.emit('EVENT_CLEAR_MODAL_DATA')
         this.props.toggleFromParent();
     }
     render() {
@@ -80,32 +93,104 @@ class ModalCustomer extends Component {
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => { this.toggle() }}
-                className={'modal-book-container'}
+                className={'modal-customer-container'}
                 size='lg'
             >
                 <ModalHeader toggle={() => { this.toggle() }}>Add new customer</ModalHeader>
                 <ModalBody>
-                    <div className='modal-book-body'>
-                        <div className='input-container'>
+                    <div className='modal-customer-body'>
+                        <div
+                            className='input-container'
+                            style={{ "width": "48%" }}
+                        >
                             <label>First Name</label>
                             <input
                                 type='text'
+                                style={{ "width": "80%" }}
                                 value={this.state.firstName}
                                 onChange={(e) => this.handleOnchangeInput(e, 'firstName')}
                             />
                         </div>
-                        <div className='input-container '>
+                        <div
+                            className='input-container'
+                            style={{ "width": "48%" }}
+                        >
                             <label>Last Name</label>
                             <input
                                 type='text'
+                                style={{ "width": "80%" }}
                                 value={this.state.lastName}
                                 onChange={(e) => this.handleOnchangeInput(e, 'lastName')}
                             />
                         </div>
-                        <div className='input-container '>
+
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
+                            <label>Gender</label>
+                            <div className='select-genre'>
+                                <select
+                                    style={{ "width": "60%" }}
+                                    className='form-select'
+                                    value={this.state.gender}
+                                    onChange={(e) => this.handleOnchangeInput(e, 'gender')}
+                                >
+                                    <option value={"Male"}>Male</option>
+                                    <option value={'Female'}>Female</option>
+                                    <option value={"Other"}>Other</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
+                            <label>Date of birth</label>
+                            <DatePicker
+                                style={{ "width": "60%" }}
+                                onChange={this.handleOnchangeDatePicker}
+                                value={this.state.birthDay}
+                            />
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
+                            <label>Phone Number</label>
+                            <input
+                                style={{ "width": "60%" }}
+                                type='text'
+                                value={this.state.phoneNumber}
+                                onChange={(e) => this.handleOnchangeInput(e, 'phoneNumber')}
+                            />
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
+                            <label>Address</label>
+                            <input
+                                style={{ "width": "80%" }}
+                                type='text'
+                                value={this.state.address}
+                                onChange={(e) => this.handleOnchangeInput(e, 'address')}
+                            />
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
+                            <label>Email</label>
+                            <input
+                                style={{ "width": "80%" }}
+                                type='text'
+                                value={this.state.email}
+                                onChange={(e) => this.handleOnchangeInput(e, 'email')}
+                            />
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
                             <label>Customer State</label>
                             <div className='select-genre'>
                                 <select
+                                    style={{ "width": "60%" }}
                                     className='form-select'
                                     value={this.state.customerState}
                                     onChange={(e) => this.handleOnchangeInput(e, 'customerState')}
@@ -116,49 +201,14 @@ class ModalCustomer extends Component {
                                 </select>
                             </div>
                         </div>
-                        <div className='input-container '>
-                            <label>Sex</label>
-                            <div className='select-genre'>
-                                <select
-                                    className='form-select'
-                                    value={this.state.sex}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'sex')}
-                                >
-                                    <option value={"Male"}>Male</option>
-                                    <option value={'Female'}>Female</option>
-                                    <option value={"Other"}>Other</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div className='input-container'>
-                            <label>Phone Number</label>
-                            <input
-                                type='text'
-                                value={this.state.phoneNumber}
-                                onChange={(e) => this.handleOnchangeInput(e, 'phoneNumber')}
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Address</label>
-                            <input
-                                type='text'
-                                value={this.state.address}
-                                onChange={(e) => this.handleOnchangeInput(e, 'address')}
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Email</label>
-                            <input
-                                type='text'
-                                value={this.state.email}
-                                onChange={(e) => this.handleOnchangeInput(e, 'email')}
-                            />
-                        </div>
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary'
                         onClick={() => this.handleAddNewCustomer()}
                     >Add</Button>
@@ -176,6 +226,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        createNewCustomer: (data) => dispatch(actions.createNewCutomer(data))
     };
 };
 

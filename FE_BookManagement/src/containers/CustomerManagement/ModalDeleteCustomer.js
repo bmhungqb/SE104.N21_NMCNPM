@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalDeleteCustomer.scss"
+import * as actions from '../../store/actions/index'
 class ModalDeleteCustomer extends Component {
 
     constructor(props) {
@@ -13,14 +14,12 @@ class ModalDeleteCustomer extends Component {
     componentDidMount() {
 
     }
-    handleDeleteBook = () => {
-        this.props.deleteBook();
-    }
     toggle = () => {
         this.props.toggleFromParent();
     }
     handleDeleteCustomer = () => {
-        this.props.deleteCustomer();
+        this.props.deleteACustomer(this.props.customerDeleteId);
+        this.toggle()
     }
     render() {
         return (
@@ -49,6 +48,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        deleteACustomer: (customerId) => dispatch(actions.deleteACustomer(customerId))
     };
 };
 

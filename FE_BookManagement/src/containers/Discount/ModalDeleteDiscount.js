@@ -3,6 +3,7 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalDeleteDiscount.scss"
+import * as actions from '../../store/actions/index'
 class ModalDeleteDiscount extends Component {
 
     constructor(props) {
@@ -17,7 +18,8 @@ class ModalDeleteDiscount extends Component {
         this.props.toggleFromParent();
     }
     handleDeleteDiscount = () => {
-        this.props.deleteDiscount();
+        this.props.deleteADiscount(this.props.discountDeleteId);
+        this.toggle()
     }
     render() {
         return (
@@ -46,6 +48,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        deleteADiscount: (discountId) => dispatch(actions.deleteADiscount(discountId))
     };
 };
 

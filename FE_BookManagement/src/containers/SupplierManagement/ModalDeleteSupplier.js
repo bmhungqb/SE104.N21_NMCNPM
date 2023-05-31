@@ -3,7 +3,8 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalDeleteSupplier.scss"
-class ModalDeleteSupplier extends Component {
+import * as actions from '../../store/actions/index'
+class ModalDeleteCustomer extends Component {
 
     constructor(props) {
         super(props);
@@ -17,7 +18,8 @@ class ModalDeleteSupplier extends Component {
         this.props.toggleFromParent();
     }
     handleDeleteSupplier = () => {
-        this.props.deleteSupplier();
+        this.props.deleteASupplier(this.props.supplierDeleteId);
+        this.toggle()
     }
     render() {
         return (
@@ -46,7 +48,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        deleteASupplier: (supplierId) => dispatch(actions.deleteASupplier(supplierId))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalDeleteSupplier);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalDeleteCustomer);

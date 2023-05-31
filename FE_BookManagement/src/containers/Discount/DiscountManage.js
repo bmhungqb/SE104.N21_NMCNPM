@@ -9,12 +9,6 @@ import TableDiscountManage from './TableDiscountManage';
 import ModalDiscount from './ModalDiscount';
 import ModalEditDiscount from './ModalEditDiscount';
 import ModalDeleteDiscount from './ModalDeleteDiscount';
-import {
-    createNewDiscountService,
-    getAllDiscounts,
-    editDiscountService,
-    deleteDiscountService
-} from '../../services/discountService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
@@ -23,11 +17,13 @@ class DiscountManage extends Component {
         super(props)
         this.state = {
             discountDeleteId: undefined,
-            discountEdit: {},
+            discountEdit: undefined,
             arrDiscounts: [],
             isOpenModalDiscount: false,
             isOpenModalEditDiscount: false,
             isOpenModalDeleteDiscount: false,
+            inputSearch: "",
+            selectFilter: "id"
         }
     }
     handleAddNewDiscount = () => {
@@ -50,47 +46,7 @@ class DiscountManage extends Component {
             isOpenModalDeleteDiscount: !this.state.isOpenModalDeleteDiscount,
         })
     }
-    getAllDiscountsFromReact = async () => {
-        let response = await getAllDiscounts('ALL');
-        if (response && response.errCode === 0) {
-            this.setState({
-                arrDiscounts: response.discounts
-            })
-        }
-    }
     async componentDidMount() {
-        await this.getAllDiscountsFromReact();
-    }
-    createNewDiscount = async (data) => {
-        try {
-            let response = await createNewDiscountService(data);
-            if (response && response.errCode !== 0) {
-                alert(response.errMessage)
-            } else {
-                await this.getAllDiscountsFromReact();
-                this.setState({
-                    isOpenModalDiscount: false
-                })
-                emitter.emit('EVENT_CLEAR_MODAL_DATA')
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    editDiscount = async (discount) => {
-        try {
-            let res = await editDiscountService(discount);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalEditDiscount: false
-                })
-                await this.getAllDiscountsFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
     }
     getDiscountEdit = (discount) => {
         this.setState({
@@ -102,20 +58,12 @@ class DiscountManage extends Component {
             discountDeleteId: discountId
         })
     }
-    deleteDiscount = async () => {
-        try {
-            let res = await deleteDiscountService(this.state.discountDeleteId);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalDeleteDiscount: false
-                })
-                await this.getAllDiscountsFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
+    handleOnchangeInputFilter = (e, id) => {
+        let copyState = { ...this.state }
+        copyState[id] = e.target.value;
+        this.setState({
+            ...copyState
+        })
     }
     render() {
         return (
@@ -123,7 +71,6 @@ class DiscountManage extends Component {
                 <ModalDiscount
                     isOpen={this.state.isOpenModalDiscount}
                     toggleFromParent={this.toggleDiscountModal}
-                    createNewDiscount={this.createNewDiscount}
                 />
                 {
                     this.state.isOpenModalEditDiscount &&
@@ -131,7 +78,6 @@ class DiscountManage extends Component {
                         isOpen={this.state.isOpenModalEditDiscount}
                         toggleFromParent={this.toggleDiscountEditModal}
                         discountEdit={this.state.discountEdit}
-                        editDiscount={this.editDiscount}
                     />
                 }
                 {
@@ -139,7 +85,7 @@ class DiscountManage extends Component {
                     <ModalDeleteDiscount
                         isOpen={this.state.isOpenModalDeleteDiscount}
                         toggleFromParent={this.toggleDiscountDeleteModal}
-                        deleteDiscount={this.deleteDiscount}
+                        discountDeleteId={this.state.discountDeleteId}
                     />
                 }
                 <SideBar />
@@ -152,15 +98,24 @@ class DiscountManage extends Component {
                         </div>
                         <div className='user-manage-content'>
                             <div className='action'>
-                                <div class="input-group form-outline w-25">
-                                    <input placeholder='Enter search' type="text" className="form-control h-100" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">By ID</a>
-                                            <a class="dropdown-item" href="#">By Author</a>
-                                            <a class="dropdown-item" href="#">By Title</a>
-                                        </div>
+                                <div class="input-group form-outline w-50">
+                                    <input
+                                        style={{ "height": "46px" }}
+                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        type="text" className="form-control w-75"
+                                        onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
+                                    />
+                                    <div className="input-group-append">
+                                        <select
+                                            className="form-select w-100 brounded-0"
+                                            value={this.state.selectFilter}
+                                            onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
+                                            style={{ "cursor": "pointer" }}
+                                        >
+                                            <option value={"id"}>ID</option>
+                                            <option value={"name"}>Name</option>
+                                            <option value={"state"}>State</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className='button-control'>
@@ -176,9 +131,9 @@ class DiscountManage extends Component {
                                 <TableDiscountManage
                                     toggleDiscountEditModal={this.toggleDiscountEditModal}
                                     toggleDiscountDeleteModal={this.toggleDiscountDeleteModal}
-                                    arrDiscounts={this.state.arrDiscounts}
                                     getDiscountEdit={(discountInfor) => this.getDiscountEdit(discountInfor)}
                                     getDiscountDelete={(discountId) => this.getDiscountDelete(discountId)}
+                                    optionSearch={[this.state.inputSearch, this.state.selectFilter]}
                                 />
                             </div>
 

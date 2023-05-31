@@ -5,32 +5,29 @@ import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
-import TableSupplierManage from './TableSupplierManage';
-import ModalSupplier from './ModalSupplier';
-import ModalEditSupplier from './ModalEditSupplier';
-import ModalDeleteSupplier from './ModalDeleteSupplier';
-import {
-    createNewSupplierService,
-    getAllSuppliers,
-    editSupplierService,
-    deleteSupplierService
-} from '../../../src/services/supplierService'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import ModalSupplier from './ModalSupplier';
+import TableSupplierManage from './TableSupplierManage';
+import ModalEditSupplier from './ModalEditSupplier';
+import ModalDeleteSupplier from './ModalDeleteSupplier';
 class SupplierManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
             supplierDeleteId: undefined,
-            supplierEdit: {},
-            arrSuppliers: [],
+            supplierEditId: undefined,
             isOpenModalSupplier: false,
             isOpenModalEditSupplier: false,
             isOpenModalDeleteSupplier: false,
+            inputSearch: "",
+            selectFilter: "id"
         }
     }
-    handleAddNewSupplier = () => {
+    async componentDidMount() {
+    }
+    handleAddSupplier = () => {
         this.setState({
             isOpenModalSupplier: true,
         })
@@ -50,51 +47,9 @@ class SupplierManage extends Component {
             isOpenModalDeleteSupplier: !this.state.isOpenModalDeleteSupplier,
         })
     }
-    async componentDidMount() {
-        await this.getAllSuppliersFromReact();
-    }
-    getAllSuppliersFromReact = async () => {
-        let response = await getAllSuppliers('ALL');
-        if (response && response.errCode === 0) {
-            this.setState({
-                arrSuppliers: response.suppliers
-            })
-        }
-    }
-    createNewSupplier = async (data) => {
-        try {
-            let response = await createNewSupplierService(data);
-            if (response && response.errCode !== 0) {
-                alert(response.errMessage)
-            } else {
-                await this.getAllSuppliersFromReact();
-                this.setState({
-                    isOpenModalSupplier: false
-                })
-                emitter.emit('EVENT_CLEAR_MODAL_DATA')
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
-    editSupplier = async (supplier) => {
-        try {
-            let res = await editSupplierService(supplier);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalEditSupplier: false
-                })
-                await this.getAllSuppliersFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }
     getSupplierEdit = (supplier) => {
         this.setState({
-            supplierEdit: supplier
+            supplierEditId: supplier
         })
     }
     getSupplierDelete = (supplierId) => {
@@ -102,20 +57,12 @@ class SupplierManage extends Component {
             supplierDeleteId: supplierId
         })
     }
-    deleteSupplier = async () => {
-        try {
-            let res = await deleteSupplierService(this.state.supplierDeleteId);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalDeleteSupplier: false
-                })
-                await this.getAllSuppliersFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
+    handleOnchangeInputFilter = (e, id) => {
+        let copyState = { ...this.state }
+        copyState[id] = e.target.value;
+        this.setState({
+            ...copyState
+        })
     }
     render() {
         return (
@@ -123,15 +70,13 @@ class SupplierManage extends Component {
                 <ModalSupplier
                     isOpen={this.state.isOpenModalSupplier}
                     toggleFromParent={this.toggleSupplierModal}
-                    createNewSupplier={this.createNewSupplier}
                 />
                 {
                     this.state.isOpenModalEditSupplier &&
                     <ModalEditSupplier
                         isOpen={this.state.isOpenModalEditSupplier}
                         toggleFromParent={this.toggleSupplierEditModal}
-                        supplierEdit={this.state.supplierEdit}
-                        editSupplier={this.editSupplier}
+                        supplierEditId={this.state.supplierEditId}
                     />
                 }
                 {
@@ -139,34 +84,44 @@ class SupplierManage extends Component {
                     <ModalDeleteSupplier
                         isOpen={this.state.isOpenModalDeleteSupplier}
                         toggleFromParent={this.toggleSupplierDeleteModal}
-                        deleteSupplier={this.deleteSupplier}
+                        supplierDeleteId={this.state.supplierDeleteId}
                     />
                 }
                 <SideBar />
                 <div id="page-content-wrapper">
                     <Header />
-                    <div className='user-manage-container'>
-                        <div className='user-manage-header'>
-                            <p className='title-header'>Employees</p>
+                    <div className='supplier-manage-container'>
+                        <div className='supplier-manage-header'>
+                            <p className='title-header'>Supplier Management</p>
                             <p className='infor-header'></p>
                         </div>
-                        <div className='user-manage-content'>
+                        <div className='supplier-manage-content'>
                             <div className='action'>
-                                <div class="input-group form-outline w-25">
-                                    <input placeholder='Enter search' type="text" className="form-control h-100" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">By ID</a>
-                                            <a class="dropdown-item" href="#">By Author</a>
-                                            <a class="dropdown-item" href="#">By Title</a>
-                                        </div>
+                                <div class="input-group form-outline w-50">
+                                    <input
+                                        style={{ "height": "46px" }}
+                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        type="text" className="form-control w-75"
+                                        onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
+                                    />
+                                    <div className="input-group-append">
+                                        <select
+                                            className="form-select w-100 brounded-0"
+                                            value={this.state.selectFilter}
+                                            onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
+                                            style={{ "cursor": "pointer" }}
+                                        >
+                                            <option value={"id"}>ID</option>
+                                            <option value={"name"}>Name</option>
+                                            <option value={"phoneNumber"}>Phone Number</option>
+                                            <option value={"email"}>Email</option>
+                                        </select>
                                     </div>
                                 </div>
                                 <div className='button-control'>
                                     <button
                                         className='mx-2 btn px-3 btn-info'
-                                        onClick={() => this.handleAddNewSupplier()}
+                                        onClick={() => this.handleAddSupplier()}
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
                                         Add Supplier</button>
@@ -176,14 +131,14 @@ class SupplierManage extends Component {
                                 <TableSupplierManage
                                     toggleSupplierEditModal={this.toggleSupplierEditModal}
                                     toggleSupplierDeleteModal={this.toggleSupplierDeleteModal}
-                                    arrSuppliers={this.state.arrSuppliers}
                                     getSupplierEdit={(supplierInfor) => this.getSupplierEdit(supplierInfor)}
                                     getSupplierDelete={(supplierId) => this.getSupplierDelete(supplierId)}
+                                    optionSearch={[this.state.inputSearch, this.state.selectFilter]}
                                 />
                             </div>
 
                         </div>
-                        <div className='user-manage-footer'></div>
+                        <div className='supplier-manage-footer'></div>
                     </div>
                 </div>
             </div>

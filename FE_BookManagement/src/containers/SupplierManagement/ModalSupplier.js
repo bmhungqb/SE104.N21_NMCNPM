@@ -6,14 +6,17 @@ import "./ModalSupplier.scss"
 import { emitter } from '../../utils/emitter';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import DatePicker from 'react-flatpickr';
+import * as actions from '../../store/actions/index'
 class ModalSupplier extends Component {
+
     constructor(props) {
         super(props);
         this.state = {
             name: "",
             phoneNumber: "",
-            email: "",
             address: "",
+            email: "",
             errMessage: ""
         }
         this.listenToEmitter();
@@ -23,8 +26,8 @@ class ModalSupplier extends Component {
             this.setState({
                 name: "",
                 phoneNumber: "",
-                email: "",
                 address: "",
+                email: "",
             })
         })
     }
@@ -40,8 +43,8 @@ class ModalSupplier extends Component {
         let arrInput = [
             'name',
             'phoneNumber',
-            'email',
             'address',
+            'email',
         ];
         for (let i = 0; i < arrInput.length; i++) {
             if (!this.state[arrInput[i]]) {
@@ -56,13 +59,15 @@ class ModalSupplier extends Component {
         let isValid = this.checkValidateInput();
         if (isValid) {
             this.props.createNewSupplier(this.state)
+            emitter.emit('EVENT_CLEAR_MODAL_DATA')
+            this.toggle()
         }
     }
     componentDidMount() {
-
     }
 
     toggle = () => {
+        // emitter.emit('EVENT_CLEAR_MODAL_DATA')
         this.props.toggleFromParent();
     }
     render() {
@@ -70,49 +75,75 @@ class ModalSupplier extends Component {
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => { this.toggle() }}
-                className={'modal-book-container'}
+                className={'modal-supplier-container'}
                 size='lg'
             >
                 <ModalHeader toggle={() => { this.toggle() }}>Add new supplier</ModalHeader>
                 <ModalBody>
-                    <div className='modal-book-body'>
-                        <div className='input-container'>
+                    <div className='modal-supplier-body'>
+                        <div
+                            className='input-container'
+                            style={{ "width": "48%" }}
+                        >
                             <label>Name</label>
                             <input
                                 type='text'
+                                style={{ "width": "90%" }}
                                 value={this.state.name}
                                 onChange={(e) => this.handleOnchangeInput(e, 'name')}
                             />
                         </div>
-                        <div className='input-container'>
+                        <div
+                            className='input-container'
+                            style={{ "width": "48%" }}
+                        >
                             <label>Phone Number</label>
                             <input
                                 type='text'
+                                style={{ "width": "90%" }}
                                 value={this.state.phoneNumber}
                                 onChange={(e) => this.handleOnchangeInput(e, 'phoneNumber')}
                             />
                         </div>
-                        <div className='input-container '>
-                            <label>Email</label>
-                            <input
-                                type='text'
-                                value={this.state.email}
-                                onChange={(e) => this.handleOnchangeInput(e, 'email')}
-                            />
-                        </div>
-                        <div className='input-container'>
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
                             <label>Address</label>
                             <input
+                                style={{ "width": "90%" }}
                                 type='text'
                                 value={this.state.address}
                                 onChange={(e) => this.handleOnchangeInput(e, 'address')}
                             />
                         </div>
+                        <div className='input-container'
+                            style={{ "width": "48%" }}
+                        >
+                            <label>Email</label>
+                            <input
+                                style={{ "width": "90%" }}
+                                type='text'
+                                value={this.state.email}
+                                onChange={(e) => this.handleOnchangeInput(e, 'email')}
+                            />
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "100%" }}
+                        >
+                            <label>Supply History</label>
+                            <div className='select-genre'>
+                                <textarea
+                                    style={{ "width": "100%" }} />
+                            </div>
+                        </div>
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary'
                         onClick={() => this.handleAddNewSupplier()}
                     >Add</Button>
@@ -130,6 +161,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        createNewSupplier: (data) => dispatch(actions.createNewSupplier(data))
     };
 };
 

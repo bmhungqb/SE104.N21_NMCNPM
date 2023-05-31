@@ -20,12 +20,15 @@ class BookManage extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            bookDeleteId: undefined,
-            bookEdit: {},
+            bookDeleteId: "",
+            bookEditId: "",
             arrBooks: [],
             isOpenModalUser: false,
             isOpenModalEditBook: false,
             isOpenModalDeleteBook: false,
+            inputSearch: "",
+            selectFilter: "id",
+            editAction: 'edit',
         }
     }
     async componentDidMount() {
@@ -49,9 +52,10 @@ class BookManage extends Component {
             isOpenModalUser: !this.state.isOpenModalUser,
         })
     }
-    toggleBookEditModal = () => {
+    toggleBookEditModal = (id) => {
         this.setState({
             isOpenModalEditBook: !this.state.isOpenModalEditBook,
+            editAction: id
         })
     }
     toggleBookDeleteModal = () => {
@@ -59,25 +63,9 @@ class BookManage extends Component {
             isOpenModalDeleteBook: !this.state.isOpenModalDeleteBook,
         })
     }
-    createNewBook = async (data) => {
-        try {
-            let response = await createNewBookService(data);
-            if (response && response.errCode !== 0) {
-                alert(response.errMessage)
-            } else {
-                await this.getAllBooksFromReact();
-                this.setState({
-                    isOpenModalUser: false
-                })
-                emitter.emit('EVENT_CLEAR_MODAL_DATA')
-            }
-        } catch (e) {
-            console.log(e);
-        }
-    }
     getBookEdit = (book) => {
         this.setState({
-            bookEdit: book
+            bookEditId: book
         })
     }
     getBookDelete = (bookId) => {
@@ -85,35 +73,12 @@ class BookManage extends Component {
             bookDeleteId: bookId
         })
     }
-    deleteBook = async () => {
-        try {
-            let res = await deleteBookService(this.state.bookDeleteId);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalDeleteBook: false
-                })
-                await this.getAllBooksFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
-    }
-    editBook = async (book) => {
-        try {
-            let res = await editBookService(book);
-            if (res && res.errCode === 0) {
-                this.setState({
-                    isOpenModalEditBook: false
-                })
-                await this.getAllBooksFromReact()
-            } else {
-                alert(res.errMessage)
-            }
-        } catch (e) {
-            console.log(e)
-        }
+    handleOnchangeInputFilter = (e, id) => {
+        let copyState = { ...this.state }
+        copyState[id] = e.target.value;
+        this.setState({
+            ...copyState
+        })
     }
     render() {
         return (
@@ -121,15 +86,14 @@ class BookManage extends Component {
                 <ModalBook
                     isOpen={this.state.isOpenModalUser}
                     toggleFromParent={this.toggleUserModal}
-                    createNewBook={this.createNewBook}
                 />
                 {
                     this.state.isOpenModalEditBook &&
                     <ModalEditBook
                         isOpen={this.state.isOpenModalEditBook}
-                        toggleFromParent={this.toggleBookEditModal}
-                        editBook={this.editBook}
-                        bookEdit={this.state.bookEdit}
+                        toggleFromParent={(id) => this.toggleBookEditModal(id)}
+                        bookEditId={this.state.bookEditId}
+                        editAction={this.state.editAction}
                     />
                 }
                 {
@@ -137,7 +101,7 @@ class BookManage extends Component {
                     <ModalDeleteBook
                         isOpen={this.state.isOpenModalDeleteBook}
                         toggleFromParent={this.toggleBookDeleteModal}
-                        deleteBook={this.deleteBook}
+                        bookDeleteId={this.state.bookDeleteId}
                     />
                 }
                 <SideBar />
@@ -150,18 +114,29 @@ class BookManage extends Component {
                         </div>
                         <div className='book-manage-content'>
                             <div className='action'>
-                                <div class="input-group form-outline w-25">
-                                    <input placeholder='Enter search' type="text" className="form-control h-100" />
-                                    <div class="input-group-append">
-                                        <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true">Search by</button>
-                                        <div class="dropdown-menu">
-                                            <a class="dropdown-item" href="#">By ID</a>
-                                            <a class="dropdown-item" href="#">By Author</a>
-                                            <a class="dropdown-item" href="#">By Title</a>
-                                        </div>
+                                <div class="input-group form-outline w-50">
+                                    <input
+                                        style={{ "height": "46px" }}
+                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        type="text"
+                                        className="form-control w-75"
+                                        onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
+                                    />
+                                    <div className="input-group-append">
+                                        <select
+                                            className="form-select w-100 brounded-0"
+                                            value={this.state.selectFilter}
+                                            onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
+                                            style={{ "cursor": "pointer" }}
+                                        >
+                                            <option value={"id"}>ID</option>
+                                            <option value={"bookTitle"}>Title</option>
+                                            <option value={"authorName"}>Author</option>
+                                            <option value={"genre"}>Genre</option>
+                                        </select>
                                     </div>
                                 </div>
-                                <div className='mx-1 button-add'>
+                                <div className='mx-1 button-add w-25'>
                                     <button
                                         className='btn px-3'
                                         onClick={() => this.handleAddNewBook()}
@@ -172,9 +147,9 @@ class BookManage extends Component {
                                 <TableBookManage
                                     toggleFromParent={this.toggleBookEditModal}
                                     toggleBookDeleteModal={this.toggleBookDeleteModal}
-                                    arrBooks={this.state.arrBooks}
                                     getBookEdit={(bookInfor) => this.getBookEdit(bookInfor)}
                                     getBookDelete={(bookId) => this.getBookDelete(bookId)}
+                                    optionSearch={[this.state.inputSearch, this.state.selectFilter]}
                                 />
                             </div>
 
