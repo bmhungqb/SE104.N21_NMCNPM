@@ -1,4 +1,5 @@
 'use strict';
+import db from '../models/index'
 const {
     Model
 } = require('sequelize');
@@ -10,20 +11,26 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            // define association here
+            Book.belongsTo(models.InvoiceDetail,{ foreignKey: 'bookId',targetKey:'bookId' })
+            Book.belongsTo(models.BookReport,{ foreignKey: 'bookId',targetKey:'bookId' })
+            Book.belongsTo(models.RentDetail,{ foreignKey: 'bookId',targetKey:'bookId' })
         }
     };
     Book.init({
+        bookId: {
+            type: DataTypes.INTEGER,
+            primaryKey: true, // Define the primary key
+          },
         bookTitle: DataTypes.STRING,
         genre: DataTypes.STRING,
         authorName: DataTypes.STRING,
-        publisherName: DataTypes.STRING,
-        costPrice: DataTypes.STRING,
-        sellingPrice: DataTypes.STRING,
-        quantity: DataTypes.INTEGER,
+        costPrice: DataTypes.INTEGER,
+        sellingPrice: DataTypes.INTEGER,
+        stock: DataTypes.INTEGER,
     }, {
         sequelize,
         modelName: 'Book',
-    });
+    });  
+
     return Book;
 };

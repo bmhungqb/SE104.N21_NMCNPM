@@ -34,12 +34,14 @@ let createNewDiscount = (data) => {
                 })
             } else {
                 await db.Discount.create({
+                    discountId:data.discountId,
                     state: data.state,
                     name: data.name,
                     start: data.start,
                     end: data.end,
                     percentage: data.percentage,
-                    quantity: data.quantity,
+                    state: data.state,
+                    customerRank: data.customerRank,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 })

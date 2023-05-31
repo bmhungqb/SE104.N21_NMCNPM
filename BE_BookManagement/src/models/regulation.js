@@ -3,32 +3,29 @@ const {
     Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-    class Discount extends Model {
+    class Regulation extends Model {
         /**
          * Helper method for defining associations.
          * This method is not a part of Sequelize lifecycle.
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Discount.belongsTo(models.Invoice,{foreignKey:'discountId',targetKey:'discountId'})
-
+            
         }
-    };
-    Discount.init({
-        discountId:{
+    };  
+    Regulation.init({
+        regulationId:{
             type: DataTypes.INTEGER,
+            allowNull: false,
             primaryKey: true, 
         },
-        name: DataTypes.STRING,
-        state: DataTypes.STRING,
-        start: DataTypes.STRING,
-        end: DataTypes.STRING,
-        percentage: DataTypes.INTEGER,
-        state: DataTypes.STRING,
-        customerRank:DataTypes.STRING,
+        name:DataTypes.STRING,
+        minimumInput:DataTypes.INTEGER,
+        minimumStock:DataTypes.INTEGER,
+        maximumDept:DataTypes.INTEGER,
     }, {
         sequelize,
-        modelName: 'Discount',
+        modelName: 'Regulation',
     });
-    return Discount;
+    return Regulation;
 };

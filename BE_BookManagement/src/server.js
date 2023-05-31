@@ -6,20 +6,24 @@ import connectDB from "./config/connectDB"
 const cors = require('cors');
 
 require('dotenv').config()
-
 let app = express()
+var cookieParser = require('cookie-parser')
+app.use(cookieParser())
 let port = process.env.PORT || 6969;
 // Add headers before the routes are defined
+
+var cookieParser = require('cookie-parser')
+
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', process.env.URL_REACT);
+    res.setHeader('Access-Control-Allow-Origin', "localhost:6969"); 
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
     // Request headers you wish to allow
-    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
+    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
@@ -28,6 +32,13 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
+const corsOptions = {
+    origin:'localhost:6969',
+    credentials: true,
+    optionSuccessStatus: 200,
+  }
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 

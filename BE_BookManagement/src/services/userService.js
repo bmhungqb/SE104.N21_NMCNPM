@@ -1,18 +1,16 @@
 import db from "../models/index"
 import bcrypt from "bcryptjs"
 
-const salt = bcrypt.genSaltSync(10);
-let hashUserPassword = (password) => {
-    return new Promise(async (resolve, reject) => {
-        try {
+let hashUserPassword = async (password) => {
+    try {
+            const salt = bcrypt.genSaltSync(10);
             let hashPassword = await bcrypt.hashSync(password, salt)
-            resolve(hashPassword)
+            return hashPassword
         }
         catch (e) {
             console.log(e);
-            reject(e);
+            throw Error(e)
         }
-    })
 }
 
 let checkUsername = (username) => {
@@ -22,7 +20,7 @@ let checkUsername = (username) => {
                 where: { username: username }
             })
             if (user) {
-                resolve(true)
+                resolve(user)
             }
             else {
                 resolve(false)
@@ -38,31 +36,19 @@ let handleUserLogin = (username, password) => {
     return new Promise(async (resolve, reject) => {
         try {
             let userData = {}
-            let isExists = await checkUsername(username)
-            if (isExists) {
+            let users = await checkUsername(username)
+            if (users) {
                 // User already exists
-                let user = await db.User.findOne({
-                    where: { username: username },
-                    attributes: ['username', 'password'],
-                    raw: true
-                })
-                if (user) {
-                    // compare password use bcrypt
-                    let check = 1 //await bcrypt.compareSync(password, user.password)
-                    if (check) {
+                let auth = await bcrypt.compare(password,users.password)
+                if (auth) {
+
                         userData.errCode = 0
                         userData.errMessage = "Login success";
-                        delete user.password
-                        userData.user = user
-                    }
-                    else {
-                        userData.errCode = 3;
-                        userData.errMessage = "Wrong password!";
-                    }
+                        userData.user = users
                 }
                 else {
-                    userData.errCode = 2;
-                    userData.errMessage = "User is not found!";
+                    userData.errCode = 3;
+                    userData.errMessage = "Wrong password!";
                 }
             }
             else {
@@ -78,8 +64,28 @@ let handleUserLogin = (username, password) => {
         }
     })
 }
+let createUser = (data) => {
+    return new Promise(async (resolve, reject) => {
+        let password =await hashUserPassword(data.password)
+        try {
+                await db.User.create({
+                    username: data.username,
+                    password: password,
+                    roleId: data.roleId,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                })
+                resolve({
+                    errCode: 0,
+                    message: 'OK'
+                })        
+        } catch (e) {
+            reject(e);
+        }
+    })
+}
 
 module.exports = {
     handleUserLogin: handleUserLogin,
-
+    createUser:createUser
 }

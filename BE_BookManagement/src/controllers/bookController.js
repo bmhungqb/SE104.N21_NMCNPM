@@ -17,14 +17,28 @@ let handleGetAllBooks = async (req, res) => {
     })
 }
 let handleCreateNewBook = async (req, res) => {
-    let message = await bookService.createNewBook(req.body);
-    return res.status(200).json(message);
+    try {
+        let message = await bookService.createNewBook(req.body);
+        return res.status(200).json(message);
+    } catch(e) {
+        return res.status(500).json({
+            errCode: 1,
+            errMessage: e.message
+        });
+    }
 }
 
 let handleEditBook = async (req, res) => {
-    let data = req.body;
-    let message = await bookService.updateBookData(data);
-    return res.status(200).json(message)
+    try{
+        let data = req.body;
+        let message = await bookService.updateBookData(data);
+        return res.status(200).json(message)
+    } catch(e) {
+        return res.status(500).json({
+            errCode: 1,
+            errMessage: e.message
+        });
+    }
 }
 
 let handleDeleteBook = async (req, res) => {
