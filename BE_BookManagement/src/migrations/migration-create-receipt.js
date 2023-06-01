@@ -11,6 +11,9 @@ module.exports = {
             customerId: {
                 type: Sequelize.INTEGER
             },
+            invoiceId: {
+                type: Sequelize.INTEGER
+            },
             amountReceived: {
                 type: Sequelize.INTEGER
             },

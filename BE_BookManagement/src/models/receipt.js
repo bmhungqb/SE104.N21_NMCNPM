@@ -21,6 +21,7 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true, 
         },
         customerId:DataTypes.INTEGER,
+        invoiceId:DataTypes.INTEGER,
         amountReceived:DataTypes.INTEGER
     }, {
         sequelize,

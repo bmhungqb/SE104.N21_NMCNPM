@@ -11,9 +11,6 @@ module.exports = {
             bookId: {
                 type: Sequelize.INTEGER
             },
-            date: {
-                type: Sequelize.INTEGER
-            },
             beginningStock: {
                 type: Sequelize.INTEGER
             },
