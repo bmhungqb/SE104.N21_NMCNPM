@@ -11,6 +11,8 @@ import invoiceController from '../controllers/invoiceController'
 import regulationController from '../controllers/regulationController';
 import receiptController from '../controllers/receiptController'
 import bookReportController from '../controllers/bookReportController'
+import deptReportController from "../controllers/deptReportController";
+import staticsticController from "../controllers/statisticController"
 
 let router = express.Router();
 import cors from "cors"
@@ -57,6 +59,9 @@ let initWebRoutes = (app) => {
     router.get("/api/get-all-invoiceDetails",invoiceController.GetAllInvoiceDetail);
     router.post("/api/create-new-invoice",invoiceController.CreateInvoice)
     router.post("/api/create-new-invoiceDetail",invoiceController.CreateInvoiceDetail)
+    router.post("/api/invoice-pay-immediately",invoiceController.PayInvoiceImmediately)
+    router.post("/api/invoice-pay-after",invoiceController.PayInvoiceAfter)
+    router.post("/api/invoice-dept",invoiceController.DeptInvoice)
     // Regulation
     router.get("/api/get-all-regulations",regulationController.GetAllRegulation)
     router.post("/api/create-new-regulation",regulationController.CreateRegulation)
@@ -66,6 +71,10 @@ let initWebRoutes = (app) => {
     router.post("/api/active-receipt-regulation",receiptController.ToggleRegulation)
     // Book Report
     router.get("/api/get-all-bookReports",bookReportController.GetBookReport)
+    // Dept Report
+    router.get("/api/get-all-deptReports",deptReportController.GetDeptReport)
+    // Statistic
+    router.get("/api/get-statistic",staticsticController.GetMonthStatistic)
     return app.use("/", router);
 }
 

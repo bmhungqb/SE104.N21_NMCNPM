@@ -17,9 +17,6 @@ module.exports = (sequelize, DataTypes) => {
         bookId:{
             type: DataTypes.INTEGER,
         },
-        date: {
-            type: DataTypes.DATE,
-        },
         beginningStock:DataTypes.INTEGER,
         endingStock:DataTypes.INTEGER,
         phatSinh:DataTypes.INTEGER

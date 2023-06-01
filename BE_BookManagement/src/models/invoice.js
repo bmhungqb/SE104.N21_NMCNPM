@@ -13,6 +13,7 @@ module.exports = (sequelize, DataTypes) => {
             Invoice.hasMany(models.Discount,{foreignKey:'discountId',sourceKey:'discountId'});
             Invoice.hasMany(models.Customer,{foreignKey:'customerId',sourceKey:'customerId'});
             Invoice.hasMany(models.InvoiceDetail,{foreignKey:'invoiceDetailId',sourceKey:'invoiceDetailId'})
+
         }
     };
     Invoice.init({
@@ -23,13 +24,14 @@ module.exports = (sequelize, DataTypes) => {
             primaryKey: true, 
         },
         customerId:DataTypes.INTEGER,
+        status:DataTypes.INTEGER,
         discountId:DataTypes.INTEGER,
         invoiceDetailId:DataTypes.INTEGER,
         initialPrice:DataTypes.INTEGER,
         discountPrice:DataTypes.INTEGER,
         totalPrice:DataTypes.INTEGER,
         customerPay:DataTypes.INTEGER,
-        changePrice:DataTypes.INTEGER,
+        remaining:DataTypes.INTEGER,
     }, {
         sequelize,
         modelName: 'Invoice',

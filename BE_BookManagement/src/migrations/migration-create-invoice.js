@@ -34,7 +34,10 @@ module.exports = {
             totalPrice: {
                 type: Sequelize.INTEGER
             },
-            changePrice: {
+            remaining: {
+                type: Sequelize.INTEGER
+            },
+            status: {
                 type: Sequelize.INTEGER
             },
             customerPay: {
