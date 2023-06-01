@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { data } from 'jquery';
+import * as actions from "../../store/actions/index"
 class TableCustomerManage extends Component {
 
     constructor(props) {
@@ -20,12 +21,8 @@ class TableCustomerManage extends Component {
                 sortFunction: this.caseInsensitiveSort,
             },
             {
-                name: "First Name",
-                selector: 'firstName',
-            },
-            {
-                name: "Last Name",
-                selector: "lastName",
+                name: "Full Name",
+                selector: 'fullName',
             },
             {
                 name: "Address",
@@ -40,40 +37,40 @@ class TableCustomerManage extends Component {
                 selector: "customerState",
             },
             {
+                name: "Actions",
                 cell:
                     (row) =>
-                        < button
-                            className='border-0 bg-transparent'
-                            onClick={() => { this.handleEditCustomer(row) }}
-                            data-tag="allowRowEvents"
-                        >
-                            <FontAwesomeIcon
-                                className='icon-right text-primary'
-                                icon={faPenToSquare}
-                            />
-                        </button >,
+                        <div
+                            className='d-flex justify-content-between w-75'>
+
+                            < button
+                                className='border-0 bg-transparent'
+                                onClick={() => { this.handleEditCustomer(row) }}
+                                data-tag="allowRowEvents"
+                            >
+                                <FontAwesomeIcon
+                                    className='icon-right text-primary'
+                                    icon={faPenToSquare}
+                                />
+                            </button >
+                            <button
+                                className='border-0 bg-transparent'
+                                onClick={() => { this.handleDeleteCustomer(row) }}
+                                data-tag="allowRowEvents"
+                            >
+                                <FontAwesomeIcon
+                                    className='icon-right text-danger'
+                                    icon={faTrash}
+                                />
+                            </button>
+                        </div>,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
             },
-            {
-                cell: (row) =>
-                    <button
-                        className='border-0 bg-transparent'
-                        onClick={() => { this.handleDeleteCustomer(row) }}
-                        data-tag="allowRowEvents"
-                    >
-                        <FontAwesomeIcon
-                            className='icon-right text-danger'
-                            icon={faTrash}
-                        />
-                    </button>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            }
             ],
-            dataTableBook: [],
+            optionSearch: [],
+            dataTableCustomer: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
                 rangeSeparatorText: 'de',
@@ -84,7 +81,7 @@ class TableCustomerManage extends Component {
     }
 
     handleEditCustomer = (row) => {
-        this.props.getCustomerEdit(row)
+        this.props.getCustomerEdit(row.id)
         this.props.toggleCustomerEditModal();
     }
     handleDeleteCustomer = (row) => {
@@ -106,16 +103,68 @@ class TableCustomerManage extends Component {
         return 0;
     };
     componentDidMount() {
+        this.props.fetchAllCustomers()
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.arrCustomers != this.props.arrCustomers) {
+        if (prevProps.listCustomers !== this.props.listCustomers) {
             let arr = []
-            this.props.arrCustomers.map((item, index) => {
-                arr.push(item)
+            this.props.listCustomers.map((item, index) => {
+                arr.push({
+                    "id": item.id,
+                    "fullName": item.firstName + " " + item.lastName,
+                    "address": item.address,
+                    "phoneNumber": item.phoneNumber,
+                    "customerState": item.customerState
+                })
             })
             this.setState({
                 dataTableCustomer: arr
             })
+        }
+        if (prevProps.optionSearch != this.props.optionSearch) {
+            if (this.props.optionSearch[0] === "") {
+                let arr = []
+                this.props.listCustomers.map((item, index) => {
+                    arr.push({
+                        "id": item.id,
+                        "fullName": item.firstName + " " + item.lastName,
+                        "address": item.address,
+                        "phoneNumber": item.phoneNumber,
+                        "customerState": item.customerState
+                    })
+                })
+                this.setState({
+                    dataTableCustomer: arr,
+                    optionSearch: this.props.optionSearch
+
+                })
+            }
+            else {
+                let listCustomerFilter;
+                if (this.props.optionSearch[1] == 'fullName') {
+                    listCustomerFilter = this.props.listCustomers.filter(row =>
+                        (row['firstName'] + " " + row['lastName']).toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase())
+                    )
+                }
+                else {
+                    listCustomerFilter = this.props.listCustomers.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
+                }
+                let arr = []
+                listCustomerFilter.map((item, index) => {
+                    arr.push({
+                        "id": item.id,
+                        "fullName": item.firstName + " " + item.lastName,
+                        "address": item.address,
+                        "phoneNumber": item.phoneNumber,
+                        "customerState": item.customerState
+                    })
+                })
+                this.setState({
+                    dataTableCustomer: arr,
+                    optionSearch: this.props.optionSearch
+
+                })
+            }
         }
     }
     render() {
@@ -138,11 +187,13 @@ class TableCustomerManage extends Component {
 
 const mapStateToProps = state => {
     return {
+        listCustomers: state.customer.listCustomers
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart())
     };
 };
 

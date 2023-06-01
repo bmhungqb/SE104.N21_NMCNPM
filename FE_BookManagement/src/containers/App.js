@@ -10,7 +10,6 @@ import { userIsAuthenticated, userIsNotAuthenticated } from '../hoc/authenticati
 
 import { path } from '../utils'
 
-import Home from '../routes/Home';
 import Login from './Auth/Login';
 
 import { CustomToastCloseButton } from '../components/CustomToast';
@@ -20,8 +19,9 @@ import BookManage from './BookManagement/bookManage.js';
 import BookPurchase from './BookManagement/Subsection_BookPurchase/BookPurchase';
 import CustomerManage from './CustomerManagement/CustomerManage';
 import SupplierManage from './SupplierManagement/SupplierManage';
-import EmployeeManage from './EmployeeMangement/EmployeeManage';
+import UserManage from './UserManagement/UserManage';
 import DiscountManage from './Discount/DiscountManage';
+import RegulationManage from './Regulation/RegulationManage'
 // 
 import CustomScrollbars from '../components/CustomScrollbars'
 class App extends Component {
@@ -52,14 +52,16 @@ class App extends Component {
                         <div className="content-container">
                             <CustomScrollbars style={{ height: '100vh' }}>
                                 <Switch>
+                                    <Route exact path={"/"} component={userIsAuthenticated(HomePage)} />
                                     <Route path={path.LOGIN} component={userIsNotAuthenticated(Login)} />
                                     <Route path={path.HOMEPAGE} component={userIsAuthenticated(HomePage)} />
                                     <Route path={path.BOOK_MANAGEMENT} component={userIsAuthenticated(BookManage)} />
                                     <Route path={path.BOOK_PURCHASE} component={userIsAuthenticated(BookPurchase)} />
                                     <Route path={path.CUSTOMER_MANAGEMENT} component={userIsAuthenticated(CustomerManage)} />
                                     <Route path={path.SUPPLIER_MANAGEMENT} component={userIsAuthenticated(SupplierManage)} />
-                                    <Route path={path.EMPLOYEE_MANAGEMENT} component={userIsAuthenticated(EmployeeManage)} />
+                                    <Route path={path.USER_MANAGEMENT} component={userIsAuthenticated(UserManage)} />
                                     <Route path={path.DISCOUNT_MANAGEMENT} component={userIsAuthenticated(DiscountManage)} />
+                                    <Route path={path.REGULATION_MANAGEMENT} component={userIsAuthenticated(RegulationManage)} />
                                 </Switch>
                             </CustomScrollbars>
                         </div>

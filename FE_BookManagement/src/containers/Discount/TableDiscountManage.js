@@ -7,6 +7,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import { data } from 'jquery';
+import * as actions from '../../store/actions/index'
 class TableDiscountManage extends Component {
 
     constructor(props) {
@@ -36,38 +37,37 @@ class TableDiscountManage extends Component {
                 selector: "state",
             },
             {
+                name: "Actions",
                 cell:
                     (row) =>
-                        < button
-                            className='border-0 bg-transparent'
-                            onClick={() => { this.handleEditDiscount(row) }}
-                            data-tag="allowRowEvents"
-                        >
-                            <FontAwesomeIcon
-                                className='icon-right text-primary'
-                                icon={faPenToSquare}
-                            />
-                        </button >,
+                        <div
+                            className='d-flex justify-content-between w-75'>
+
+                            < button
+                                className='border-0 bg-transparent'
+                                onClick={() => { this.handleEditDiscount(row) }}
+                                data-tag="allowRowEvents"
+                            >
+                                <FontAwesomeIcon
+                                    className='icon-right text-primary'
+                                    icon={faPenToSquare}
+                                />
+                            </button >
+                            <button
+                                className='border-0 bg-transparent'
+                                onClick={() => { this.handleDeleteDiscount(row) }}
+                                data-tag="allowRowEvents"
+                            >
+                                <FontAwesomeIcon
+                                    className='icon-right text-danger'
+                                    icon={faTrash}
+                                />
+                            </button>
+                        </div>,
                 ignoreRowClick: true,
                 allowOverflow: true,
                 button: true,
             },
-            {
-                cell: (row) =>
-                    <button
-                        className='border-0 bg-transparent'
-                        onClick={() => { this.handleDeleteDiscount(row) }}
-                        data-tag="allowRowEvents"
-                    >
-                        <FontAwesomeIcon
-                            className='icon-right text-danger'
-                            icon={faTrash}
-                        />
-                    </button>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            }
             ],
             dataTableBook: [],
             paginationComponentOptions: {
@@ -80,7 +80,7 @@ class TableDiscountManage extends Component {
     }
 
     handleEditDiscount = (row) => {
-        this.props.getDiscountEdit(row)
+        this.props.getDiscountEdit(row.id)
         this.props.toggleDiscountEditModal();
     }
     handleDeleteDiscount = (row) => {
@@ -102,16 +102,66 @@ class TableDiscountManage extends Component {
         return 0;
     };
     componentDidMount() {
+        this.props.fetchAllDiscounts()
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.arrDiscounts != this.props.arrDiscounts) {
+        if (prevProps.listDiscounts !== this.props.listDiscounts) {
             let arr = []
-            this.props.arrDiscounts.map((item, index) => {
-                arr.push(item)
+            this.props.listDiscounts.map((item, index) => {
+                arr.push({
+                    "id": item.id,
+                    "name": item.name,
+                    "state": item.state,
+                    "start": item.start,
+                    "end": item.end,
+                    "percentage": item.end,
+                    "quantity": item.end,
+                })
             })
             this.setState({
                 dataTableDiscount: arr
             })
+        }
+        if (prevProps.optionSearch != this.props.optionSearch) {
+            if (this.props.optionSearch[0] === "") {
+                let arr = []
+                this.props.listDiscounts.map((item, index) => {
+                    arr.push({
+                        "id": item.id,
+                        "name": item.name,
+                        "state": item.state,
+                        "start": item.start,
+                        "end": item.end,
+                        "percentage": item.end,
+                        "quantity": item.end,
+                    })
+                })
+                this.setState({
+                    dataTableDiscount: arr,
+                    optionSearch: this.props.optionSearch
+
+                })
+            }
+            else {
+                let listDiscountFilter = this.props.listDiscounts.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
+                let arr = []
+                listDiscountFilter.map((item, index) => {
+                    arr.push({
+                        "id": item.id,
+                        "name": item.name,
+                        "state": item.state,
+                        "start": item.start,
+                        "end": item.end,
+                        "percentage": item.end,
+                        "quantity": item.end,
+                    })
+                })
+                this.setState({
+                    dataTableDiscount: arr,
+                    optionSearch: this.props.optionSearch
+
+                })
+            }
         }
     }
     render() {
@@ -134,11 +184,13 @@ class TableDiscountManage extends Component {
 
 const mapStateToProps = state => {
     return {
+        listDiscounts: state.discount.listDiscounts
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        fetchAllDiscounts: () => dispatch(actions.fetchAllDiscountsStart())
     };
 };
 

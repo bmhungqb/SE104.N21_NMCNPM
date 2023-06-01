@@ -6,11 +6,14 @@ import "./ModalDiscount.scss"
 import { emitter } from '../../utils/emitter';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as actions from '../../store/actions/index'
+import DatePicker from 'react-flatpickr';
 class ModalDiscount extends Component {
     constructor(props) {
         super(props);
         this.state = {
             state: "",
+            code: "",
             name: "",
             start: "",
             end: "",
@@ -24,6 +27,7 @@ class ModalDiscount extends Component {
         emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
             this.setState({
                 state: "",
+                code: "",
                 name: "",
                 start: "",
                 end: "",
@@ -44,6 +48,7 @@ class ModalDiscount extends Component {
         let arrInput = [
             'state',
             'name',
+            'code',
             'start',
             'end',
             'percentage',
@@ -61,7 +66,19 @@ class ModalDiscount extends Component {
     handleAddNewDiscount = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
-            this.props.createNewDiscount(this.state)
+            this.props.createNewDiscount(
+                {
+                    name: this.state.name,
+                    code: this.state.code,
+                    state: this.state.state,
+                    start: this.state.start,
+                    end: this.state.end,
+                    percentage: this.state.percentage,
+                    quantity: this.state.quantity,
+                }
+            )
+            emitter.emit('EVENT_CLEAR_MODAL_DATA');
+            this.toggle()
         }
     }
     componentDidMount() {
@@ -71,18 +88,38 @@ class ModalDiscount extends Component {
     toggle = () => {
         this.props.toggleFromParent();
     }
+    handleOnchangeDatePicker = (date, id) => {
+        let copyState = { ...this.state }
+        copyState[id] = date[0]
+        this.setState({
+            ...copyState
+        })
+    }
     render() {
         return (
             <Modal
                 isOpen={this.props.isOpen}
                 toggle={() => { this.toggle() }}
-                className={'modal-book-container'}
+                className={'modal-discount-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Add new employee</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Add new discount</ModalHeader>
                 <ModalBody>
-                    <div className='modal-book-body'>
-                        <div className='input-container '>
+                    <div className='modal-discount-body'>
+                        <div className='input-container'
+                            style={{ "width": "42%" }}
+                        >
+                            <label>Voucher Code</label>
+                            <input
+                                // style={{ "width": "42%" }}
+                                type='text'
+                                value={this.state.code}
+                                onChange={(e) => this.handleOnchangeInput(e, 'code')}
+                            />
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "42%" }}
+                        >
                             <label>State</label>
                             <div className='select-genre'>
                                 <select
@@ -96,7 +133,9 @@ class ModalDiscount extends Component {
                                 </select>
                             </div>
                         </div>
-                        <div className='input-container'>
+                        <div className='input-container'
+                            style={{ "width": "97%" }}
+                        >
                             <label>Name</label>
                             <input
                                 type='text'
@@ -104,23 +143,27 @@ class ModalDiscount extends Component {
                                 onChange={(e) => this.handleOnchangeInput(e, 'name')}
                             />
                         </div>
-                        <div className='input-container'>
+                        <div className='input-container'
+                            style={{ "width": "42%" }}
+                        >
                             <label>Start</label>
-                            <input
-                                type='text'
+                            <DatePicker
+                                onChange={(date) => this.handleOnchangeDatePicker(date, 'start')}
                                 value={this.state.start}
-                                onChange={(e) => this.handleOnchangeInput(e, 'start')}
                             />
                         </div>
-                        <div className='input-container'>
+                        <div className='input-container'
+                            style={{ "width": "42%" }}
+                        >
                             <label>End</label>
-                            <input
-                                type='text'
+                            <DatePicker
+                                onChange={(date) => this.handleOnchangeDatePicker(date, 'end')}
                                 value={this.state.end}
-                                onChange={(e) => this.handleOnchangeInput(e, 'end')}
                             />
                         </div>
-                        <div className='input-container '>
+                        <div className='input-container'
+                            style={{ "width": "42%" }}
+                        >
                             <label>Percentage</label>
                             <input
                                 type='text'
@@ -128,7 +171,9 @@ class ModalDiscount extends Component {
                                 onChange={(e) => this.handleOnchangeInput(e, 'percentage')}
                             />
                         </div>
-                        <div className='input-container'>
+                        <div className='input-container'
+                            style={{ "width": "42%" }}
+                        >
                             <label>Quantity</label>
                             <input
                                 type='text'
@@ -139,8 +184,11 @@ class ModalDiscount extends Component {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary'
                         onClick={() => this.handleAddNewDiscount()}
                     >Add</Button>
@@ -158,6 +206,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        createNewDiscount: (data) => dispatch(actions.createNewDiscount(data))
     };
 };
 

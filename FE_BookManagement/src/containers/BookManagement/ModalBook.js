@@ -4,28 +4,29 @@ import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalBook.scss"
 import { emitter } from '../../utils/emitter';
-import { faPlus } from '@fortawesome/free-solid-svg-icons';
+import { faPlus, faMinus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import * as actions from "../../store/actions/index"
 class ModalBook extends Component {
-
     constructor(props) {
         super(props);
         this.state = {
-            quantity: undefined,
+            quantity: '0',
             bookTitle: '',
             genre: '',
             author: '',
             publisher: '',
             sellingPrice: '',
             costPrice: '',
-            errMessage: ""
+            errMessage: "",
+            isOpenInputGenre: false
         }
         this.listenToEmitter();
     }
     listenToEmitter() {
         emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
             this.setState({
-                quantity: 1,
+                quantity: "",
                 bookTitle: '',
                 genre: '',
                 author: '',
@@ -66,6 +67,7 @@ class ModalBook extends Component {
         let isValid = this.checkValidateInput();
         if (isValid) {
             this.props.createNewBook(this.state)
+            this.toggle()
         }
     }
     componentDidMount() {
@@ -74,8 +76,15 @@ class ModalBook extends Component {
 
     toggle = () => {
         this.props.toggleFromParent();
+        emitter.emit('EVENT_CLEAR_MODAL_DATA');
+    }
+    toggleInputGenre = () => {
+        this.setState({
+            isOpenInputGenre: !this.state.isOpenInputGenre
+        })
     }
     render() {
+        let { isOpenInputGenre } = this.state
         return (
             <Modal
                 isOpen={this.props.isOpen}
@@ -83,38 +92,39 @@ class ModalBook extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Book Information</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Add new book</ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
-                        {/* <div className='input-container'>
-                            <label>Book ID</label>
-                            <input
-                                type='text'
-                                value={this.state.bookId}
-                                onChange={(e) => this.handleOnchangeInput(e, 'bookId')}
-                            />
-                        </div> */}
-                        <div className='input-container'>
-                            <label>Quantity</label>
-                            <input
-                                type='text'
-                                value={this.state.quantity}
-                                onChange={(e) => this.handleOnchangeInput(e, 'quantity')}
-                            />
-                        </div>
-                        <div className='input-container '>
+                        <div
+                            className='input-container'
+                            style={{ "width": "74%" }}
+                        >
                             <label>Book Title</label>
                             <input
+                                className='w-100'
                                 type='text'
                                 value={this.state.bookTitle}
                                 onChange={(e) => this.handleOnchangeInput(e, 'bookTitle')}
                             />
                         </div>
-                        <div className='input-container '>
+                        <div
+                            className='input-container'
+                            style={{ "width": "24%" }}
+                        >
+                            <label>Quantity</label>
+                            <input
+                                className='w-100'
+                                type='text'
+                                value={this.state.quantity}
+                                onChange={(e) => this.handleOnchangeInput(e, 'quantity')}
+                            />
+                        </div>
+                        <div className='input-container d-flex w-100'>
                             <label>Genre</label>
-                            <div className='select-genre'>
+                            <div className='select-genre d-flex'>
                                 <select
-                                    className='form-select'
+                                    disabled={this.state.isOpenInputGenre}
+                                    className='form-select w-25'
                                     value={this.state.genre}
                                     onChange={(e) => this.handleOnchangeInput(e, 'genre')}
                                 >
@@ -123,17 +133,29 @@ class ModalBook extends Component {
                                     <option value={"Detective and Mystery"}>Detective and Mystery</option>
                                     <option value={"Fantasy"}>Fantasy</option>
                                 </select>
-                                <button class="btn btn-primary" type="button">
-                                    <FontAwesomeIcon icon={faPlus} />
+                                <button
+                                    className={this.state.isOpenInputGenre ? "border-0 btn btn-primary ml-2 bg-danger" : "border-0 btn btn-primary ml-2"}
+                                    type="button"
+                                    onClick={() => { this.toggleInputGenre() }}
+                                >
+                                    <FontAwesomeIcon icon={this.state.isOpenInputGenre ? faMinus : faPlus} />
                                 </button>
-                                <input
-                                    className='d-none'
-                                    value={this.state.genre}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'genre')}
-                                />
+                                {
+                                    this.state.isOpenInputGenre &&
+                                    <input
+                                        placeholder='Add new genre..'
+                                        className='ml-2'
+                                        style={{ "width": "68.5%" }}
+                                        value={this.state.genre}
+                                        onChange={(e) => this.handleOnchangeInput(e, 'genre')}
+                                    />
+                                }
                             </div>
                         </div>
-                        <div className='input-container'>
+                        <div
+                            className='input-container'
+                            style={{ "width": "49%" }}
+                        >
                             <label>Author</label>
                             <input
                                 type='text'
@@ -141,7 +163,10 @@ class ModalBook extends Component {
                                 onChange={(e) => this.handleOnchangeInput(e, 'author')}
                             />
                         </div>
-                        <div className='input-container'>
+                        <div
+                            className='input-container'
+                            style={{ "width": "49%" }}
+                        >
                             <label>Publisher</label>
                             <input
                                 type='text'
@@ -149,7 +174,9 @@ class ModalBook extends Component {
                                 onChange={(e) => this.handleOnchangeInput(e, 'publisher')}
                             />
                         </div>
-                        <div className='input-container '>
+                        <div className='input-container'
+                            style={{ "width": "30%" }}
+                        >
                             <label>Selling Price</label>
                             <input
                                 type='text'
@@ -157,7 +184,9 @@ class ModalBook extends Component {
                                 onChange={(e) => this.handleOnchangeInput(e, 'sellingPrice')}
                             />
                         </div>
-                        <div className='input-container'>
+                        <div className='input-container'
+                            style={{ "width": "30%" }}
+                        >
                             <label>Cost Price</label>
                             <input
                                 type='text'
@@ -168,8 +197,11 @@ class ModalBook extends Component {
                     </div>
                 </ModalBody>
                 <ModalFooter>
-                    <Button className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
                     <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary'
                         onClick={() => this.handleAddNewBook()}
                     >Add</Button>
@@ -187,6 +219,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        createNewBook: (data) => dispatch(actions.createNewBook(data))
     };
 };
 

@@ -2,8 +2,9 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ModalDeleteEmployee.scss"
-class ModalDeleteEmployee extends Component {
+import "./ModalDeleteUser.scss"
+import * as actions from '../../store/actions/index'
+class ModalDeleteUser extends Component {
 
     constructor(props) {
         super(props);
@@ -16,8 +17,9 @@ class ModalDeleteEmployee extends Component {
     toggle = () => {
         this.props.toggleFromParent();
     }
-    handleDeleteEmployee = () => {
-        this.props.deleteEmployee();
+    handleDeleteUser = () => {
+        this.props.deleteAUser(this.props.userDeleteId);
+        this.toggle();
     }
     render() {
         return (
@@ -28,10 +30,10 @@ class ModalDeleteEmployee extends Component {
                 size='ms'
             >
                 <ModalHeader
-                >Do you want to delete this customer?</ModalHeader>
+                >Do you want to delete this user?</ModalHeader>
                 <ModalFooter>
                     <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}>No</Button>
-                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteEmployee()}>Yes</Button>
+                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteUser()}>Yes</Button>
                 </ModalFooter>
             </Modal >
         )
@@ -46,7 +48,8 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
+        deleteAUser: (userId) => dispatch(actions.deleteAUser(userId))
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalDeleteEmployee);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalDeleteUser);

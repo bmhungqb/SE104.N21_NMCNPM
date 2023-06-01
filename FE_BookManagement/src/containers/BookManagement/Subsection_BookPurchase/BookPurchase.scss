@@ -10,8 +10,8 @@
 // #page-content-wrapper {
 //     min-width: 100vw;
 // }
-.book-manage-container {
-    .book-manage-header {
+.book-purchase-container {
+    .book-purchase-header {
         margin-left: 40px;
         height: 72px;
 
@@ -32,7 +32,7 @@
         }
     }
 
-    .book-manage-content {
+    .book-purchase-content {
         .action {
             display: flex;
             justify-content: space-around;
@@ -64,5 +64,5 @@
         }
     }
 
-    .book-manage-footer {}
+    .book-purchase-footer {}
 }

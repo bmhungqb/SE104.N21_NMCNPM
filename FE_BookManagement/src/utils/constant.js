@@ -1,19 +1,13 @@
 export const path = {
-    HOME: '/',
+    LOGIN: '/login',
     HOMEPAGE: '/home',
     BOOK_MANAGEMENT: '/book-management',
     BOOK_PURCHASE: '/book-purchase',
     CUSTOMER_MANAGEMENT: '/customer-management',
     SUPPLIER_MANAGEMENT: '/supplier-management',
-    EMPLOYEE_MANAGEMENT: '/employee-management',
+    USER_MANAGEMENT: '/user-management',
     DISCOUNT_MANAGEMENT: '/discount-management',
-    LOGIN: '/login',
-    LOG_OUT: '/logout',
-    SYSTEM: '/system',
-    DETAIL_DOCTOR: '/detail-doctor/:id',
-    DETAIL_SPECIALTY: '/detail-specialty/:id',
-    DETAIL_CLINIC: '/detail-clinic/:id',
-    VERIFY_EMAIL_BOOKING: '/verify-booking'
+    REGULATION_MANAGEMENT: '/regulation-management',
 };
 
 export const LANGUAGES = {
@@ -38,7 +32,7 @@ export const YesNoObj = {
 }
 
 export const USER_ROLE = {
-    ADMIN: 'R1',
-    DOCTOR: 'R2',
-    PATIENT: 'R3',
+    MANAGER: 'MANAGER',
+    SUPPORTER: 'SUPPORTER',
+    EMPLOYEE: 'EMPLOYEE',
 }
