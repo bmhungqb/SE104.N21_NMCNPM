@@ -1,29 +1,76 @@
+// import express from "express"
+// import bodyParser from "body-parser"
+// import configViewEngine from "./config/viewEngine"
+// import initWebRoutes from "./route/web"
+// import connectDB from "./config/connectDB"
+// const cors = require('cors');
+
+// require('dotenv').config()
+// let app = express()
+// var cookieParser = require('cookie-parser')
+// app.use(cookieParser())
+// let port = process.env.PORT || 8888;
+// // Add headers before the routes are defined
+
+// var cookieParser = require('cookie-parser')
+
+// app.use(function (req, res, next) {
+
+//     // Website you wish to allow to connect
+//     res.setHeader('Access-Control-Allow-Origin', "localhost:8080");
+
+//     // Request methods you wish to allow
+//     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
+
+//     // Request headers you wish to allow
+//     res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+
+//     // Set to true if you need the website to include cookies in the requests sent
+//     // to the API (e.g. in case you use sessions)
+//     res.setHeader('Access-Control-Allow-Credentials', true);
+
+//     // Pass to next layer of middleware
+//     next();
+// });
+// const corsOptions = {
+//     origin: 'localhost:8080',
+//     credentials: true,
+//     optionSuccessStatus: 200,
+// }
+
+// app.use(cors(corsOptions));
+// app.use(bodyParser.json({ limit: '50mb' }));
+// app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
+
+// configViewEngine(app);
+// initWebRoutes(app);
+// connectDB();
+// app.listen(port, () => {
+//     console.log("Backend BookManagement is running on the port: " + port);
+// })
 import express from "express"
 import bodyParser from "body-parser"
 import configViewEngine from "./config/viewEngine"
 import initWebRoutes from "./route/web"
 import connectDB from "./config/connectDB"
-const cors = require('cors');
+import cors from 'cors'
 
 require('dotenv').config()
+
 let app = express()
-var cookieParser = require('cookie-parser')
-app.use(cookieParser())
-let port = process.env.PORT || 6969;
+// // app.use(cors({ origin: true }));
+// app.use(cors());
 // Add headers before the routes are defined
-
-var cookieParser = require('cookie-parser')
-
 app.use(function (req, res, next) {
 
     // Website you wish to allow to connect
-    res.setHeader('Access-Control-Allow-Origin', "localhost:6969"); 
+    res.setHeader('Access-Control-Allow-Origin', 'http://localhost:3000');
 
     // Request methods you wish to allow
     res.setHeader('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
 
     // Request headers you wish to allow
-    res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    res.setHeader('Access-Control-Allow-Headers', 'X-Requested-With,content-type');
 
     // Set to true if you need the website to include cookies in the requests sent
     // to the API (e.g. in case you use sessions)
@@ -32,19 +79,19 @@ app.use(function (req, res, next) {
     // Pass to next layer of middleware
     next();
 });
-const corsOptions = {
-    origin:'localhost:6969',
-    credentials: true,
-    optionSuccessStatus: 200,
-  }
-
-app.use(cors(corsOptions));
+// config app
+// app.use(bodyParser.json());
+// app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(bodyParser.urlencoded({ limit: '50mb', extended: true }));
 
 configViewEngine(app);
 initWebRoutes(app);
+
 connectDB();
+
+let port = process.env.PORT || 1000
+
 app.listen(port, () => {
     console.log("Backend BookManagement is running on the port: " + port);
 })

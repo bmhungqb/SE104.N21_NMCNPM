@@ -17,11 +17,11 @@ let router = express.Router();
 import cors from "cors"
 import requireAuth from '../middlewares/roleMiddleware'
 let initWebRoutes = (app) => {
-    router.get('/',requireAuth, homeController.getHomePage);
+    router.get('/', requireAuth, homeController.getHomePage);
 
-    // login
-    router.post("/api/login", userController.handleLogin);
-    router.post("/api/create-new-user",userController.handleSignup)
+    // // login
+    // router.post("/api/login", userController.handleLogin);
+    // router.post("/api/create-new-user", userController.handleSignup)
     // Book
     router.post("/api/create-new-book", bookController.handleCreateNewBook);
     router.get("/api/get-all-books", bookController.handleGetAllBooks);
@@ -48,32 +48,34 @@ let initWebRoutes = (app) => {
     router.put("/api/edit-discount", discountController.handleEditDiscount);
     router.delete("/api/delete-discount", discountController.handleDeleteDiscount);
     // Rent
-    router.get("/api/get-all-rents",rentController.GetAllRent);
-    router.post("/api/create-new-rent",rentController.CreateRent);
-    router.post("/api/create-new-rentDetail",rentController.CreateRentDetail);
-    router.put("/api/edit-rent",rentController.EditRent)
-    router.delete("/api/delete-rent",rentController.DeleteRent)
+    router.get("/api/get-all-rents", rentController.GetAllRent);
+    router.post("/api/create-new-rent", rentController.CreateRent);
+    router.post("/api/create-new-rentDetail", rentController.CreateRentDetail);
+    router.put("/api/edit-rent", rentController.EditRent)
+    router.delete("/api/delete-rent", rentController.DeleteRent)
     // Invoice
-    router.get("/api/get-all-invoices",invoiceController.GetAllInvoice);
-    router.get("/api/get-all-invoiceDetails",invoiceController.GetAllInvoiceDetail);
-    router.post("/api/create-new-invoice",invoiceController.CreateInvoice)
-    router.post("/api/create-new-invoiceDetail",invoiceController.CreateInvoiceDetail)
-    router.post("/api/invoice-pay-immediately",invoiceController.PayInvoiceImmediately)
-    router.post("/api/invoice-pay-after",invoiceController.PayInvoiceAfter)
-    router.post("/api/invoice-dept",invoiceController.DeptInvoice)
+    router.get("/api/get-all-invoices", invoiceController.GetAllInvoice);
+    router.get("/api/get-all-invoiceDetails", invoiceController.GetAllInvoiceDetail);
+    router.post("/api/create-new-invoice", invoiceController.CreateInvoice)
+    router.post("/api/create-new-invoiceDetail", invoiceController.CreateInvoiceDetail)
+    router.post("/api/invoice-pay-immediately", invoiceController.PayInvoiceImmediately)
+    router.post("/api/invoice-pay-after", invoiceController.PayInvoiceAfter)
+    router.post("/api/invoice-dept", invoiceController.DeptInvoice)
     // Regulation
-    router.get("/api/get-all-regulations",regulationController.GetAllRegulation)
-    router.post("/api/create-new-regulation",regulationController.CreateRegulation)
+    router.get("/api/get-all-regulations", regulationController.GetAllRegulation)
+    router.post("/api/create-new-regulation", regulationController.CreateRegulation)
+    router.put("/api/edit-regulation", regulationController.UpdateRegulation);
+    router.delete("/api/delete-regulation", regulationController.handleDeleteRegulation);
     // Receipt
-    router.get("/api/get-all-receipts",receiptController.GetAllReceipts)
-    router.post("/api/create-new-receipt",receiptController.CreateReceipt)
-    router.post("/api/active-receipt-regulation",receiptController.ToggleRegulation)
+    router.get("/api/get-all-receipts", receiptController.GetAllReceipts)
+    router.post("/api/create-new-receipt", receiptController.CreateReceipt)
+    router.post("/api/active-receipt-regulation", receiptController.ToggleRegulation)
     // Book Report
-    router.get("/api/get-all-bookReports",bookReportController.GetBookReport)
+    router.get("/api/get-all-bookReports", bookReportController.GetBookReport)
     // Dept Report
-    router.get("/api/get-all-deptReports",deptReportController.GetDeptReport)
+    router.get("/api/get-all-deptReports", deptReportController.GetDeptReport)
     // Statistic
-    router.get("/api/get-statistic",staticsticController.GetMonthStatistic)
+    router.get("/api/get-statistic", staticsticController.GetMonthStatistic)
     return app.use("/", router);
 }
 

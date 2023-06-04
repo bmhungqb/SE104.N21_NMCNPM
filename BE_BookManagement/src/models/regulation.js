@@ -10,19 +10,19 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            
+
         }
-    };  
+    };
     Regulation.init({
-        regulationId:{
+        regulationId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
-            primaryKey: true, 
+            // allowNull: false,
+            primaryKey: true,
         },
-        name:DataTypes.STRING,
-        minimumInput:DataTypes.INTEGER,
-        minimumStock:DataTypes.INTEGER,
-        maximumDept:DataTypes.INTEGER,
+        name: DataTypes.STRING,
+        minimumInput: DataTypes.INTEGER,
+        minimumStock: DataTypes.INTEGER,
+        maximumDept: DataTypes.INTEGER,
     }, {
         sequelize,
         modelName: 'Regulation',

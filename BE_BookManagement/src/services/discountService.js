@@ -12,7 +12,7 @@ let getAllDiscounts = (discountId) => {
             }
             if (discountId && discountId !== 'ALL') {
                 discounts = await db.Discount.findOne({
-                    where: { id: discountId },
+                    where: { discountId: discountId },
                     attributes: {
                     }
                 })
@@ -34,7 +34,7 @@ let createNewDiscount = (data) => {
                 })
             } else {
                 await db.Discount.create({
-                    discountId:data.discountId,
+                    discountId: data.discountId,
                     state: data.state,
                     name: data.name,
                     start: data.start,
@@ -59,17 +59,14 @@ let createNewDiscount = (data) => {
 let updateDiscountData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id || !data.name || !data.state
-                || !data.start || !data.end || !data.percentage
-                || !data.quantity
-            ) {
+            if (!data.discountId) {
                 resolve({
                     errCode: 2,
                     errMessage: "Missing required parameters"
                 })
             }
             let discount = await db.Discount.findOne({
-                where: { id: data.id },
+                where: { discountId: data.discountId },
                 raw: false
             })
             if (discount) {
@@ -78,7 +75,6 @@ let updateDiscountData = (data) => {
                 discount.percentage = data.percentage;
                 discount.start = data.start;
                 discount.end = data.end;
-                discount.quantity = data.quantity;
                 discount.updatedAt = new Date();
                 await discount.save()
                 resolve({
@@ -100,7 +96,7 @@ let updateDiscountData = (data) => {
 let deleteDiscount = (discountId) => {
     return new Promise(async (resolve, reject) => {
         let discount = await db.Discount.findOne({
-            where: { id: discountId }
+            where: { discountId: discountId }
         })
         if (!discount) {
             resolve({
@@ -109,7 +105,7 @@ let deleteDiscount = (discountId) => {
             })
         }
         await db.Discount.destroy({
-            where: { id: discountId }
+            where: { discountId: discountId }
         })
         resolve({
             errCode: 0,

@@ -10,14 +10,14 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Discount.belongsTo(models.Invoice,{foreignKey:'discountId',targetKey:'discountId'})
+            Discount.belongsTo(models.Invoice, { foreignKey: 'discountId', targetKey: 'discountId' })
 
         }
     };
     Discount.init({
-        discountId:{
+        discountId: {
             type: DataTypes.INTEGER,
-            primaryKey: true, 
+            primaryKey: true,
         },
         name: DataTypes.STRING,
         state: DataTypes.STRING,
@@ -25,7 +25,7 @@ module.exports = (sequelize, DataTypes) => {
         end: DataTypes.STRING,
         percentage: DataTypes.INTEGER,
         state: DataTypes.STRING,
-        customerRank:DataTypes.STRING,
+        customerRank: DataTypes.STRING,
     }, {
         sequelize,
         modelName: 'Discount',

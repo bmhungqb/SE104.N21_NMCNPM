@@ -12,7 +12,7 @@ let getAllCustomers = (customerId) => {
             }
             if (customerId && customerId !== 'ALL') {
                 customers = await db.Customer.findOne({
-                    where: { id: customerId },
+                    where: { customerId: customerId },
                     attributes: {
                     }
                 })
@@ -34,15 +34,15 @@ let createNewCustomer = (data) => {
                 })
             } else {
                 await db.Customer.create({
+                    customerId: data.customerId,
                     fullName: data.fullName,
                     address: data.address,
-                    customerId: data.customerId,
                     phoneNumber: data.phoneNumber,
                     email: data.email,
                     sex: data.sex,
-                    dept:0,
-                    rank:'bronze',
-                    totalPurchaseValue:0,
+                    dept: 0,
+                    rank: data.rank,
+                    totalPurchaseValue: 0,
                     createdAt: new Date(),
                     updatedAt: new Date()
                 })
@@ -102,7 +102,7 @@ let updateCustomerData = (data) => {
 let deleteCustomer = (customerId) => {
     return new Promise(async (resolve, reject) => {
         let customer = await db.Customer.findOne({
-            where: { id: customerId }
+            where: { customerId: customerId }
         })
         if (!customer) {
             resolve({
@@ -111,7 +111,7 @@ let deleteCustomer = (customerId) => {
             })
         }
         await db.Customer.destroy({
-            where: { id: customerId }
+            where: { customerId: customerId }
         })
         resolve({
             errCode: 0,

@@ -1,6 +1,6 @@
 'use strict';
 
-const { sequelize } = require("../models");
+// const { sequelize } = require("../models");
 
 module.exports = {
     async up(queryInterface, Sequelize) {
@@ -8,9 +8,10 @@ module.exports = {
             regulationId: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
             },
-            name:{
+            name: {
                 type: Sequelize.STRING
             },
             minimumInput: {

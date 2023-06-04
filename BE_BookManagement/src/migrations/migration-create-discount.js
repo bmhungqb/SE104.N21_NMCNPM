@@ -4,7 +4,8 @@ module.exports = {
         await queryInterface.createTable('Discounts', {
             discountId: {
                 primaryKey: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
             },
             name: {
                 type: Sequelize.STRING

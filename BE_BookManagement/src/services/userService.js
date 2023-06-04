@@ -3,14 +3,14 @@ import bcrypt from "bcryptjs"
 
 let hashUserPassword = async (password) => {
     try {
-            const salt = bcrypt.genSaltSync(10);
-            let hashPassword = await bcrypt.hashSync(password, salt)
-            return hashPassword
-        }
-        catch (e) {
-            console.log(e);
-            throw Error(e)
-        }
+        const salt = bcrypt.genSaltSync(10);
+        let hashPassword = await bcrypt.hashSync(password, salt)
+        return hashPassword
+    }
+    catch (e) {
+        console.log(e);
+        throw Error(e)
+    }
 }
 
 let checkUsername = (username) => {
@@ -59,17 +59,18 @@ let handleUserLogin = (username, password) => {
                         userData.errCode = 0
                         userData.errMessage = "Login success";
                         userData.user = users
+                    }
+                    else {
+                        userData.errCode = 3;
+                        userData.errMessage = "Wrong password!";
+                    }
                 }
                 else {
-                    userData.errCode = 3;
-                    userData.errMessage = "Wrong password!";
+                    userData.errCode = 1;
+                    userData.errMessage = `Your username isn's exists in our system. Please try again!`;
                 }
+                resolve(userData);
             }
-            else {
-                userData.errCode = 1;
-                userData.errMessage = `Your username isn's exists in our system. Please try again!`;
-            }
-            resolve(userData);
         }
         catch (e) {
             reject(e);

@@ -5,7 +5,8 @@ module.exports = {
             bookId: {
                 allowNull: false,
                 primaryKey: true,
-                type: Sequelize.INTEGER
+                type: Sequelize.INTEGER,
+                autoIncrement: true,
             },
             bookTitle: {
                 type: Sequelize.STRING
