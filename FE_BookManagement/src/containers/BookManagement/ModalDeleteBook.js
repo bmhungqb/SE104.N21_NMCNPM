@@ -5,7 +5,6 @@ import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalDeleteBook.scss"
 import * as actions from '../../store/actions/index'
 class ModalDeleteBook extends Component {
-
     constructor(props) {
         super(props);
         this.state = {

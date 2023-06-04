@@ -22,7 +22,7 @@ class CustomerManage extends Component {
             isOpenModalEditCustomer: false,
             isOpenModalDeleteCustomer: false,
             inputSearch: "",
-            selectFilter: "id"
+            selectFilter: "customerId"
         }
     }
     handleAddCustomer = () => {
@@ -109,10 +109,10 @@ class CustomerManage extends Component {
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"id"}>ID</option>
+                                            <option value={"customerId"}>ID</option>
                                             <option value={"fullName"}>Full Name</option>
                                             <option value={"phoneNumber"}>Phone Number</option>
-                                            <option value={"customerState"}>State</option>
+                                            <option value={"rank"}>State</option>
                                             <option value={"address"}>Address</option>
                                         </select>
                                     </div>

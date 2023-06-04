@@ -16,9 +16,8 @@ class TableCustomerManage extends Component {
             dataTableCustomer: [],
             columns: [{
                 name: "Customer ID",
-                selector: 'id',
+                selector: 'customerId',
                 sortable: true,
-                sortFunction: this.caseInsensitiveSort,
             },
             {
                 name: "Full Name",
@@ -34,7 +33,7 @@ class TableCustomerManage extends Component {
             },
             {
                 name: "State",
-                selector: "customerState",
+                selector: "rank",
             },
             {
                 name: "Actions",
@@ -81,27 +80,13 @@ class TableCustomerManage extends Component {
     }
 
     handleEditCustomer = (row) => {
-        this.props.getCustomerEdit(row.id)
+        this.props.getCustomerEdit(row.customerId)
         this.props.toggleCustomerEditModal();
     }
     handleDeleteCustomer = (row) => {
-        this.props.getCustomerDelete(row.id)
+        this.props.getCustomerDelete(row.customerId)
         this.props.toggleCustomerDeleteModal();
     }
-    caseInsensitiveSort = (rowA, rowB) => {
-        var a = rowA.title.toLowerCase();
-        var b = rowB.title.toLowerCase();
-
-        if (a > b) {
-            return 1;
-        }
-
-        if (b > a) {
-            return -1;
-        }
-
-        return 0;
-    };
     componentDidMount() {
         this.props.fetchAllCustomers()
     }
@@ -110,11 +95,12 @@ class TableCustomerManage extends Component {
             let arr = []
             this.props.listCustomers.map((item, index) => {
                 arr.push({
-                    "id": item.id,
-                    "fullName": item.firstName + " " + item.lastName,
+                    "customerId": item.customerId,
+                    "fullName": item.fullName,
                     "address": item.address,
                     "phoneNumber": item.phoneNumber,
-                    "customerState": item.customerState
+                    "rank": item.rank,
+                    "email": item.email,
                 })
             })
             this.setState({
@@ -126,11 +112,11 @@ class TableCustomerManage extends Component {
                 let arr = []
                 this.props.listCustomers.map((item, index) => {
                     arr.push({
-                        "id": item.id,
-                        "fullName": item.firstName + " " + item.lastName,
+                        "customerId": item.customerId,
+                        "fullName": item.fullName,
                         "address": item.address,
                         "phoneNumber": item.phoneNumber,
-                        "customerState": item.customerState
+                        "rank": item.rank
                     })
                 })
                 this.setState({
@@ -143,7 +129,7 @@ class TableCustomerManage extends Component {
                 let listCustomerFilter;
                 if (this.props.optionSearch[1] == 'fullName') {
                     listCustomerFilter = this.props.listCustomers.filter(row =>
-                        (row['firstName'] + " " + row['lastName']).toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase())
+                        (row['fullName']).toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase())
                     )
                 }
                 else {
@@ -152,11 +138,11 @@ class TableCustomerManage extends Component {
                 let arr = []
                 listCustomerFilter.map((item, index) => {
                     arr.push({
-                        "id": item.id,
-                        "fullName": item.firstName + " " + item.lastName,
+                        "customerId": item.customerId,
+                        "fullName": item.fullName,
                         "address": item.address,
                         "phoneNumber": item.phoneNumber,
-                        "customerState": item.customerState
+                        "rank": item.rank
                     })
                 })
                 this.setState({

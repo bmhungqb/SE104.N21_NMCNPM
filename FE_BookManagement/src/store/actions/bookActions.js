@@ -12,15 +12,15 @@ export const createNewBook = (data) => {
         try {
             let res = await createNewBookService(data);
             if (res && res.errCode === 0) {
-                toast.success("Create a new user succeed !")
+                toast.success("Create a new book succeed !")
                 dispatch(saveBookSuccess());
                 dispatch(fetchAllBooksStart());
             } else {
-                toast.error("Create a new user error !")
+                toast.error("Create a new book error !")
                 dispatch(saveBookFailed());
             }
         } catch (e) {
-            toast.error("Create a new user error !")
+            toast.error("Create a new book error !")
             dispatch(saveBookFailed());
         }
     }

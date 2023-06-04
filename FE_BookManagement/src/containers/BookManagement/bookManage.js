@@ -27,7 +27,7 @@ class BookManage extends Component {
             isOpenModalEditBook: false,
             isOpenModalDeleteBook: false,
             inputSearch: "",
-            selectFilter: "id",
+            selectFilter: "bookId",
             editAction: 'edit',
         }
     }
@@ -129,7 +129,7 @@ class BookManage extends Component {
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"id"}>ID</option>
+                                            <option value={"bookId"}>ID</option>
                                             <option value={"bookTitle"}>Title</option>
                                             <option value={"authorName"}>Author</option>
                                             <option value={"genre"}>Genre</option>

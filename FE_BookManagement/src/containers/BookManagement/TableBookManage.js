@@ -16,9 +16,8 @@ class TableBookManage extends Component {
         this.state = {
             columns: [{
                 name: "BookID",
-                selector: 'id',
+                selector: 'bookId',
                 sortable: true,
-                sortFunction: this.caseInsensitiveSort,
             },
             {
                 name: "BookTitle",
@@ -34,7 +33,7 @@ class TableBookManage extends Component {
             },
             {
                 name: "Quantity",
-                selector: "quantity",
+                selector: "stock",
             },
             {
                 cell:
@@ -92,31 +91,17 @@ class TableBookManage extends Component {
     }
 
     handleEditBook = (row) => {
-        this.props.getBookEdit(row.id)
+        this.props.getBookEdit(row.bookId)
         this.props.toggleFromParent('edit');
     }
     handleInputBook = (row) => {
-        this.props.getBookEdit(row.id)
+        this.props.getBookEdit(row.bookId)
         this.props.toggleFromParent('input');
     }
     handleDeleteBook = (row) => {
-        this.props.getBookDelete(row.id)
+        this.props.getBookDelete(row.bookId)
         this.props.toggleBookDeleteModal();
     }
-    caseInsensitiveSort = (rowA, rowB) => {
-        var a = rowA.title.toLowerCase();
-        var b = rowB.title.toLowerCase();
-
-        if (a > b) {
-            return 1;
-        }
-
-        if (b > a) {
-            return -1;
-        }
-
-        return 0;
-    };
     componentDidMount() {
         this.props.fetchAllBooks()
     }

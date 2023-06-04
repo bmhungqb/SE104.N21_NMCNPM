@@ -8,86 +8,54 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as actions from '../../store/actions/index'
 import DatePicker from 'react-flatpickr';
+import { Formik, useFormik } from 'formik';
+import * as Yup from 'yup';
 class ModalEditDiscount extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            id: undefined,
-            code: "",
+            discountId: undefined,
             state: "",
             name: "",
             start: "",
             end: "",
             percentage: "",
-            quantity: "",
             isAllowEdit: false,
         }
     }
     componentDidMount() {
         let discountInfor;
         this.props.listDiscounts.forEach(row => {
-            if (row.id === this.props.discountEdit) {
+            if (row.discountId === this.props.discountEdit) {
                 discountInfor = row
                 return
             }
         });
         if (discountInfor && !_.isEmpty(discountInfor)) {
             this.setState({
-                id: discountInfor.id,
-                code: discountInfor.code,
+                discountId: discountInfor.discountId,
                 state: discountInfor.state,
                 name: discountInfor.name,
                 start: discountInfor.start,
                 end: discountInfor.end,
                 percentage: discountInfor.percentage,
-                quantity: discountInfor.quantity,
             })
         }
     }
-    handleOnchangeInput = (event, id) => {
-        let copyState = { ...this.state }
-        copyState[id] = event.target.value;
-        this.setState({
-            ...copyState
-        })
-    }
-    checkValidateInput = () => {
-        let isValid = true;
-        let arrInput = [
-            'state',
-            'name',
-            'code',
-            'start',
-            'end',
-            'percentage',
-            'quantity',
-        ];
-        for (let i = 0; i < arrInput.length; i++) {
-            if (!this.state[arrInput[i]]) {
-                isValid = false;
-                alert("Missing parameter " + arrInput[i]);
-                break;
-            }
-        }
-        return isValid
-    }
     handleSaveDiscount = () => {
-        let isValid = this.checkValidateInput();
-        if (isValid) {
-            this.props.editADiscount(this.state)
-            this.toggle()
-        }
+        this.props.editADiscount({
+            discountId: this.state.discountId,
+            state: this.state.state,
+            name: this.state.name,
+            start: this.state.start,
+            end: this.state.end,
+            percentage: this.state.percentage,
+        })
+        this.toggle()
     }
     toggle = () => {
         this.props.toggleFromParent();
-    }
-    handleOnchangeDatePicker = (date, id) => {
-        let copyState = { ...this.state }
-        copyState[id] = date[0]
-        this.setState({
-            ...copyState
-        })
     }
     toggleEdit = () => {
         this.setState({
@@ -109,126 +77,244 @@ class ModalEditDiscount extends Component {
         }
         this.toggleEdit()
     }
+    inputSchema = Yup.object().shape({
+        name: Yup.string().required("Required!"),
+        state: Yup.string().required("Required!"),
+        customerRank: Yup.string().required("Required!"),
+        percentage: Yup.number().required("Required!"),
+        start: Yup.string().required("Required!"),
+        end: Yup.string().required("Required!"),
+    })
+    handleChange = (e, values) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+        values[e.target.name] = e.target.value
+    }
     render() {
         return (
-            <Modal
-                isOpen={this.props.isOpen}
-                toggle={() => { this.toggle() }}
-                className={'modal-discount-container'}
-                size='lg'
+            <Formik
+                initialValues={{
+                    name: "",
+                    state: "",
+                    start: "",
+                    end: "",
+                    percentage: "",
+                    customerRank: "",
+                }}
+                validationSchema={this.inputSchema}
+                onSubmit={(values, { resetForm }) => this.handleAddNewDiscount(values, resetForm)}
+                innerRef={this.formikRef}
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Edit discount information</ModalHeader>
-                <ModalBody>
-                    <div className='modal-discount-body'>
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>Voucher Code</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                // style={{ "width": "42%" }}
-                                type='text'
-                                value={this.state.code}
-                                onChange={(e) => this.handleOnchangeInput(e, 'code')}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>State</label>
-                            <div className='select-genre'>
-                                <select
-                                    disabled={!this.state.isAllowEdit}
-                                    className='form-select'
-                                    value={this.state.state}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'state')}
+                {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+                    <Modal
+                        isOpen={this.props.isOpen}
+                        toggle={() => { this.toggle() }}
+                        className={'modal-discount-container'}
+                        size='lg'
+                    >
+                        <ModalHeader toggle={() => { this.toggle() }}>Edit discount information</ModalHeader>
+                        <ModalBody>
+                            <div className='modal-discount-body'>
+                                <div className='input-container'
+                                    style={{ "width": "43%" }}
                                 >
-                                    <option value={'Active'}>Active</option>
-                                    <option value={"End"}>End</option>
-                                    <option value={"Other"}>Other</option>
-                                </select>
+                                    <label>Name</label>
+                                    <input
+                                        disabled={!this.state.isAllowEdit}
+                                        type='text'
+                                        value={this.state.name}
+                                        onBlur={handleBlur}
+                                        name='name'
+                                        onChange={(e) => { this.handleChange(e, values) }}
+                                    />
+                                    {this.state.isAllowEdit &&
+                                        errors.name &&
+                                        touched.name &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.name}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "43%" }}
+                                >
+                                    <label>State</label>
+                                    <div className='select-genre'>
+                                        <select
+                                            className='form-select'
+                                            value={this.state.state}
+                                            onBlur={handleBlur}
+                                            name='state'
+                                            onChange={(e) => { this.handleChange(e, values) }}
+                                        >
+                                            <option value={'Active'}>Active</option>
+                                            <option value={"End"}>End</option>
+                                        </select>
+                                        {this.state.isAllowEdit &&
+                                            errors.state &&
+                                            touched.state &&
+                                            <p
+                                                style={{
+                                                    'position': 'absolute',
+                                                    'margin-top': '-2px',
+                                                    'margin-left': '2px',
+                                                    'color': 'red',
+                                                    'font-style': 'italic',
+                                                }}
+                                            >{errors.state}</p>
+                                        }
+                                    </div>
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "43%" }}
+                                >
+                                    <label>Start</label>
+                                    <DatePicker
+                                        value={this.state.start}
+                                        name='start'
+                                        onBlur={handleBlur}
+                                        onChange={(date) => {
+                                            values.start = date[0];
+                                            this.setState({
+                                                start: date[0]
+                                            })
+                                        }}
+                                    />
+                                    {this.state.isAllowEdit &&
+                                        errors.start &&
+                                        touched.start &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.start}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "43%" }}
+                                >
+                                    <label>End</label>
+                                    <DatePicker
+                                        value={this.state.end}
+                                        name='end'
+                                        onBlur={handleBlur}
+                                        onChange={(date) => {
+                                            values.end = date[0];
+                                            this.setState({
+                                                end: date[0]
+                                            })
+                                        }}
+                                    />
+                                    {this.state.isAllowEdit &&
+                                        errors.end &&
+                                        touched.end &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.end}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "43%" }}
+                                >
+                                    <label>Percentage</label>
+                                    <input
+                                        type='text'
+                                        value={this.state.percentage}
+                                        name='percentage'
+                                        onChange={(e) => { this.handleChange(e, values) }}
+                                        onBlur={handleBlur}
+                                    />
+                                    {this.state.isAllowEdit &&
+                                        errors.percentage &&
+                                        touched.percentage &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.percentage}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "43%" }}
+                                >
+                                    <label>Customer Rank</label>
+                                    <div className='select-genre'>
+                                        <select
+                                            className='form-select'
+                                            name='customerRank'
+                                            value={this.state.customerRank}
+                                            onBlur={handleBlur}
+                                            onChange={(e) => { this.handleChange(e, values) }}
+                                        >
+                                            <option value={'Normal'}>Normal</option>
+                                            <option value={"Vip"}>Vip</option>
+                                            <option value={"Gold"}>Gold</option>
+                                        </select>
+                                        {this.state.isAllowEdit &&
+                                            errors.customerRank &&
+                                            touched.customerRank &&
+                                            <p
+                                                style={{
+                                                    'position': 'absolute',
+                                                    'margin-top': '-2px',
+                                                    'margin-left': '2px',
+                                                    'color': 'red',
+                                                    'font-style': 'italic',
+                                                }}
+                                            >{errors.customerRank}</p>
+                                        }
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "97%" }}
-                        >
-                            <label>Name</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                type='text'
-                                value={this.state.name}
-                                onChange={(e) => this.handleOnchangeInput(e, 'name')}
-                            />
-                        </div>
-
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>Start</label>
-                            <DatePicker
-                                disabled={!this.state.isAllowEdit}
-                                onChange={(date) => this.handleOnchangeDatePicker(date, 'start')}
-                                value={this.state.start}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>End</label>
-                            <DatePicker
-                                disabled={!this.state.isAllowEdit}
-                                onChange={(date) => this.handleOnchangeDatePicker(date, 'end')}
-                                value={this.state.end}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>Percentage</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                type='text'
-                                value={this.state.percentage}
-                                onChange={(e) => this.handleOnchangeInput(e, 'percentage')}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>Quantity</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                type='text'
-                                value={this.state.quantity}
-                                onChange={(e) => this.handleOnchangeInput(e, 'quantity')}
-                            />
-                        </div>
-                    </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
-                        onClick={() => { this.toggleEdit() }}
-                    >Edit</Button>
-                    {
-                        this.state.isAllowEdit
-                        &&
-                        <Button
-                            style={{ "height": "40px", "width": "150px" }}
-                            className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                        >Cancel</Button>
-                    }
-                    {
-                        this.state.isAllowEdit &&
-                        <Button
-                            style={{ "height": "40px", "width": "150px" }}
-                            className='px-5 border-0 bg-primary'
-                            onClick={() => this.handleSaveDiscount()}
-                        >Save</Button>
-                    }
-                </ModalFooter>
-            </Modal >
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                style={{ "height": "40px", "width": "150px" }}
+                                className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
+                                onClick={() => { this.toggleEdit() }}
+                            >Edit</Button>
+                            {
+                                this.state.isAllowEdit
+                                &&
+                                <Button
+                                    style={{ "height": "40px", "width": "150px" }}
+                                    className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
+                                >Cancel</Button>
+                            }
+                            {
+                                this.state.isAllowEdit &&
+                                <Button
+                                    style={{ "height": "40px", "width": "150px" }}
+                                    className='px-5 border-0 bg-primary'
+                                    onClick={() => this.handleSaveDiscount()}
+                                >Save</Button>
+                            }
+                        </ModalFooter>
+                    </Modal >
+                )
+                }
+            </Formik>
         )
     }
 

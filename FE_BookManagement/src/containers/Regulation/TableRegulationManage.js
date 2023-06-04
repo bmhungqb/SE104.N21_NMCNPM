@@ -16,21 +16,24 @@ class TableRegulationManage extends Component {
             dataTableRegulation: [],
             columns: [{
                 name: "Regulation ID",
-                selector: 'id',
+                selector: 'regulationId',
                 sortable: true,
-                sortFunction: this.caseInsensitiveSort,
             },
             {
-                name: "Description",
-                selector: 'description',
+                name: "Name",
+                selector: 'name',
             },
             {
-                name: "Type of constraint",
-                selector: "typeConstraint",
+                name: "Minimum Input",
+                selector: "minimumInput",
             },
             {
-                name: "Constraint",
-                selector: "constraint",
+                name: "Minimum Stock",
+                selector: "minimumStock",
+            },
+            {
+                name: "Maximum Dept",
+                selector: "maximumDept",
             },
             {
                 name: "Actions",
@@ -76,27 +79,13 @@ class TableRegulationManage extends Component {
     }
 
     handleEditRegulation = (row) => {
-        this.props.getRegulationEdit(row.id)
+        this.props.getRegulationEdit(row.regulationId)
         this.props.toggleRegulationEditModal();
     }
     handleDeleteRegulation = (row) => {
-        this.props.getRegulationDelete(row.id)
+        this.props.getRegulationDelete(row.regulationId)
         this.props.toggleRegulationDeleteModal();
     }
-    caseInsensitiveSort = (rowA, rowB) => {
-        var a = rowA.title.toLowerCase();
-        var b = rowB.title.toLowerCase();
-
-        if (a > b) {
-            return 1;
-        }
-
-        if (b > a) {
-            return -1;
-        }
-
-        return 0;
-    };
     componentDidMount() {
         this.props.fetchAllRegulations()
     }
@@ -105,10 +94,11 @@ class TableRegulationManage extends Component {
             let arr = []
             this.props.listRegulations.map((item, index) => {
                 arr.push({
-                    "id": item.id,
-                    "description": item.description,
-                    "typeConstraint": item.typeConstraint,
-                    "constraint": item.constraint,
+                    "regulationId": item.regulationId,
+                    "name": item.name,
+                    "minimumInput": item.minimumInput,
+                    "minimumStock": item.minimumStock,
+                    "maximumDept": item.maximumDept,
                 })
             })
             this.setState({
@@ -120,10 +110,11 @@ class TableRegulationManage extends Component {
                 let arr = []
                 this.props.listRegulations.map((item, index) => {
                     arr.push({
-                        "id": item.id,
-                        "description": item.description,
-                        "typeConstraint": item.typeConstraint,
-                        "constraint": item.constraint,
+                        "regulationId": item.regulationId,
+                        "name": item.name,
+                        "minimumInput": item.minimumInput,
+                        "minimumStock": item.minimumStock,
+                        "maximumDept": item.maximumDept,
                     })
                 })
                 this.setState({
@@ -137,10 +128,11 @@ class TableRegulationManage extends Component {
                 let arr = []
                 listRegulationFilter.map((item, index) => {
                     arr.push({
-                        "id": item.id,
-                        "description": item.description,
-                        "typeConstraint": item.typeConstraint,
-                        "constraint": item.constraint,
+                        "regulationId": item.regulationId,
+                        "name": item.name,
+                        "minimumInput": item.minimumInput,
+                        "minimumStock": item.minimumStock,
+                        "maximumDept": item.maximumDept,
                     })
                 })
                 this.setState({

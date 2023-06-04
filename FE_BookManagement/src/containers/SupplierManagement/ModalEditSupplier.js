@@ -7,6 +7,8 @@ import { emitter } from '../../utils/emitter';
 import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as actions from '../../store/actions/index'
+import { Formik, useFormik } from 'formik';
+import * as Yup from 'yup';
 class ModalEditSupplier extends Component {
 
     constructor(props) {
@@ -22,185 +24,230 @@ class ModalEditSupplier extends Component {
         }
     }
     componentDidMount() {
-        let supplierInfor;
-        this.props.listSuppliers.forEach(row => {
-            if (row.id === this.props.supplierEditId) {
-                supplierInfor = row
-                return
-            }
-        });
+        const { listSuppliers, supplierEditId } = this.props;
+        const supplierInfor = listSuppliers.find(row => row.id === supplierEditId);
+
         if (supplierInfor && !_.isEmpty(supplierInfor)) {
-            this.setState({
-                id: supplierInfor.id,
-                name: supplierInfor.name,
-                phoneNumber: supplierInfor.phoneNumber,
-                address: supplierInfor.address,
-                email: supplierInfor.email,
-            })
+            const { id, name, phoneNumber, address, email } = supplierInfor;
+            this.setState({ id, name, phoneNumber, address, email });
         }
     }
+
     handleCancelEdit = () => {
-        let supplierInfor;
-        this.props.listSuppliers.forEach(row => {
-            if (row.id === this.props.supplierEditId) {
-                supplierInfor = row
-                return
-            }
-        });
+        const { listSuppliers, supplierEditId } = this.props;
+        const supplierInfor = listSuppliers.find(row => row.id === supplierEditId);
+
         if (supplierInfor && !_.isEmpty(supplierInfor)) {
-            this.setState({
-                ...this.props.listSuppliers
-            })
+            this.setState({ ...supplierInfor });
         }
-        this.toggleEdit()
+        this.toggleEdit();
     }
-    handleOnchangeInput = (event, id) => {
-        let copyState = { ...this.state }
-        copyState[id] = event.target.value;
-        this.setState({
-            ...copyState
+    handleSaveSupplier = (values) => {
+        this.props.editASupplier({
+            id: this.state.id,
+            name: values.name,
+            phoneNumber: values.phoneNumber,
+            address: values.address,
+            email: values.email,
         })
-    }
-    checkValidateInput = () => {
-        let isValid = true;
-        let arrInput = [
-            'name',
-            'phoneNumber',
-            'address',
-            'email',
-        ];
-        for (let i = 0; i < arrInput.length; i++) {
-            if (!this.state[arrInput[i]]) {
-                isValid = false;
-                alert("Missing parameter " + arrInput[i]);
-                break;
-            }
-        }
-        return isValid
-    }
-    handleSaveSupplier = () => {
-        let isValid = this.checkValidateInput();
-        if (isValid) {
-            this.toggleEdit();
-            this.props.editASupplier(this.state)
-        }
+        this.toggleEdit();
     }
     toggle = () => {
         this.props.toggleFromParent();
     }
     toggleEdit = () => {
+        this.setState(prevState => ({
+            isAllowEdit: !prevState.isAllowEdit
+        }));
+    }
+    inputSchema = Yup.object().shape({
+        name: Yup.string().required("Required!"),
+        address: Yup.string().required("Required!"),
+        email: Yup.string().email("Invalid email").required("Required!"),
+        phoneNumber: Yup.string()
+            .trim()
+            .matches(/^\d{10}$/, "Phone number must be 10 digits")
+            .required("Required!")
+    });
+    handleChange = (e, values) => {
         this.setState({
-            isAllowEdit: !this.state.isAllowEdit
-        })
+            [e.target.name]: e.target.value
+        });
+        values[e.target.name] = e.target.value
     }
     render() {
         return (
-            <Modal
-                isOpen={this.props.isOpen}
-                toggle={() => { this.toggle() }}
-                className={'modal-supplier-container'}
-                size='lg'
+            <Formik
+                initialValues={
+                    {
+                        name: '',
+                        phoneNumber: '',
+                        address: '',
+                        email: '',
+                    }
+                }
+                validationSchema={this.inputSchema}
+                onSubmit={(values) => this.handleSaveSupplier(values)}
+                innerRef={this.formikRef}
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Edit supplier information</ModalHeader>
-                <ModalBody>
-                    <div className='modal-supplier-body'>
-                        <div
-                            className='input-container'
-                            style={{ "width": "100%" }}
-                        >
-                            <label>Supplier ID</label>
-                            <input
-                                disabled={true}
-                                type='text'
-                                style={{ "width": "15%" }}
-                                value={this.state.id}
-                            />
-                        </div>
-                        <div
-                            className='input-container'
-                            style={{ "width": "48%" }}
-                        >
-                            <label>Name</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                type='text'
-                                style={{ "width": "90%" }}
-                                value={this.state.name}
-                                onChange={(e) => this.handleOnchangeInput(e, 'name')}
-                            />
-                        </div>
-                        <div
-                            className='input-container'
-                            style={{ "width": "48%" }}
-                        >
-                            <label>Phone Number</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                type='text'
-                                style={{ "width": "90%" }}
-                                value={this.state.phoneNumber}
-                                onChange={(e) => this.handleOnchangeInput(e, 'phoneNumber')}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "48%" }}
-                        >
-                            <label>Address</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                style={{ "width": "90%" }}
-                                type='text'
-                                value={this.state.address}
-                                onChange={(e) => this.handleOnchangeInput(e, 'address')}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "48%" }}
-                        >
-                            <label>Email</label>
-                            <input
-                                disabled={!this.state.isAllowEdit}
-                                style={{ "width": "90%" }}
-                                type='text'
-                                value={this.state.email}
-                                onChange={(e) => this.handleOnchangeInput(e, 'email')}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "100%" }}
-                        >
-                            <label>Supply History</label>
-                            <div className='select-genre'>
-                                <textarea
-                                    style={{ "width": "100%" }} />
+                {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+                    <Modal
+                        isOpen={this.props.isOpen}
+                        toggle={() => { this.toggle() }}
+                        className={'modal-supplier-container'}
+                        size='lg'
+                    >
+                        <ModalHeader toggle={() => { this.toggle() }}>Edit supplier information</ModalHeader>
+                        <ModalBody>
+                            <div className='modal-supplier-body'>
+                                <div
+                                    className='input-container'
+                                    style={{ "width": "100%" }}
+                                >
+                                    <label>Supplier ID</label>
+                                    <input
+                                        disabled={true}
+                                        type='text'
+                                        style={{ "width": "15%" }}
+                                        value={this.state.id}
+                                    />
+                                </div>
+                                <div
+                                    className='input-container'
+                                    style={{ "width": "48%" }}
+                                >
+                                    <label>Name</label>
+                                    <input
+                                        disabled={!this.state.isAllowEdit}
+                                        type='text'
+                                        style={{ "width": "90%" }}
+                                        value={this.state.name}
+                                        onBlur={handleBlur}
+                                        name='name'
+                                        onChange={(e) => this.handleChange(e, values)}
+                                    />
+                                    {this.state.isAllowEdit && errors.name &&
+                                        touched.name &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.name}</p>
+                                    }
+                                </div>
+                                <div
+                                    className='input-container'
+                                    style={{ "width": "48%" }}
+                                >
+                                    <label>Phone Number</label>
+                                    <input
+                                        disabled={!this.state.isAllowEdit}
+                                        type='text'
+                                        style={{ "width": "90%" }}
+                                        value={this.state.phoneNumber}
+                                        name='phoneNumber'
+                                        onBlur={handleBlur}
+                                        onChange={(e) => this.handleChange(e, values)}
+                                    />
+                                    {this.state.isAllowEdit && errors.phoneNumber &&
+                                        touched.phoneNumber &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.phoneNumber}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "48%" }}
+                                >
+                                    <label>Address</label>
+                                    <input
+                                        disabled={!this.state.isAllowEdit}
+                                        style={{ "width": "90%" }}
+                                        type='text'
+                                        value={this.state.address}
+                                        name='address'
+                                        onBlur={handleBlur}
+                                        onChange={(e) => this.handleChange(e, values)}
+                                    />
+                                    {this.state.isAllowEdit && errors.address &&
+                                        touched.address &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.address}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "48%" }}
+                                >
+                                    <label>Email</label>
+                                    <input
+                                        disabled={!this.state.isAllowEdit}
+                                        style={{ "width": "90%" }}
+                                        type='text'
+                                        value={this.state.email}
+                                        name='email'
+                                        onBlur={handleBlur}
+                                        onChange={(e) => this.handleChange(e, values)}
+                                    />
+                                    {this.state.isAllowEdit && errors.email &&
+                                        touched.email &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.email}</p>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
-                        onClick={() => { this.toggleEdit() }}
-                    >Edit</Button>
-                    {
-                        this.state.isAllowEdit
-                        &&
-                        <Button
-                            style={{ "height": "40px", "width": "150px" }}
-                            className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                        >Cancel</Button>
-                    }
-                    {
-                        this.state.isAllowEdit &&
-                        <Button
-                            style={{ "height": "40px", "width": "150px" }}
-                            className='px-5 border-0 bg-primary'
-                            onClick={() => this.handleSaveSupplier()}
-                        >Save</Button>
-                    }
-                </ModalFooter>
-            </Modal >
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                style={{ "height": "40px", "width": "150px" }}
+                                className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
+                                onClick={() => { this.toggleEdit() }}
+                            >Edit</Button>
+                            {
+                                this.state.isAllowEdit
+                                &&
+                                <Button
+                                    style={{ "height": "40px", "width": "150px" }}
+                                    className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
+                                >Cancel</Button>
+                            }
+                            {
+                                this.state.isAllowEdit &&
+                                <Button
+                                    style={{ "height": "40px", "width": "150px" }}
+                                    className='px-5 border-0 bg-primary'
+                                    type='submit'
+                                    onClick={handleSubmit}
+                                >Save</Button>
+                            }
+                        </ModalFooter>
+                    </Modal >
+                )
+                }
+            </Formik >
         )
     }
 

@@ -15,27 +15,31 @@ class ModalOrder extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            provisional: 0,
+            discountAmount: 0,
             totalPrice: 0,
+            isExistsDiscount: false,
             isExistsCustomer: false,
-            firstName: "",
-            lastName: "",
+            // Create a customer
+            customerId: "",
             customerState: "",
             gender: "",
             phoneNumber: "",
             address: "",
             email: "",
-            birthDay: "",
             fullName: "",
             customerState: "",
+            // discount & books
+            messageCheckDiscount: "Discount isn't exists",
+            discountId: undefined,
+            percentageDiscount: 0,
             options: [],
-            selectedOption: [],
-            dataTableBookSelect: [
-            ],
+            selectedOption: "",
+            dataTableBookSelect: [],
             columns: [{
                 name: "Book Title",
                 selector: 'title',
                 sortable: true,
-                sortFunction: this.caseInsensitiveSort,
             },
             {
                 name: "Quantity",
@@ -91,7 +95,8 @@ class ModalOrder extends Component {
     }
 
     handleOnchangeQuantity = (row, e) => {
-        let data = this.state.dataTableBookSelect;
+        // const data = JSON.parse(JSON.stringify(this.state.dataTableBookSelect));
+        const data = _.cloneDeep(this.state.dataTableBookSelect);
         let totalMoney = 0;
         data.forEach(item => {
             if (row.title === item.title) {
@@ -100,23 +105,36 @@ class ModalOrder extends Component {
             }
             totalMoney += item.totalAmount
         })
+        let discountA = totalMoney * this.state.percentageDiscount / 100
         this.setState({
-            dataTableBookSelect: data,
-            totalPrice: totalMoney
+            dataTableBookSelect: [...data],
+            provisional: totalMoney,
+            discountAmount: discountA,
+            totalPrice: totalMoney - discountA
         })
     }
     handleDeleteItem = (row) => {
-        let arr = this.state.dataTableBookSelect;
-        arr.forEach(item => {
-            if (item.title === row.title) {
-                arr.pop(item)
-                return;
+        let data = _.cloneDeep(this.state.dataTableBookSelect);
+        let totalMoney = this.state.provisional
+        data.forEach(item => {
+            if (row.title === item.title) {
+                totalMoney -= item.totalAmount
             }
         })
+        let discountA = totalMoney * this.state.percentageDiscount / 100
+        let rows = data.filter(item => item.title !== row.title);
+        this.setState({
+            dataTableBookSelect: [...rows],
+            provisional: totalMoney,
+            discountAmount: discountA,
+            totalPrice: totalMoney - discountA
+        })
     }
+
     componentDidMount() {
         this.props.fetchAllBooks();
         this.props.fetchAllCustomers();
+        this.props.fetchAllDiscounts();
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.listBooks !== this.props.listBooks) {
@@ -139,47 +157,73 @@ class ModalOrder extends Component {
         this.props.toggleFromParent();
     }
     handleOnchangeInput = (event, id) => {
-        let copyState = { ...this.state }
-        copyState[id] = event.target.value;
-        this.setState({
-            ...copyState
-        })
-        // if (id === "phoneNumber") {
-        //     this.checkExistsCustomer();
-        // }
+        const value = event.target.value;
+        this.setState(
+            { [id]: value },
+            () => {
+                if (id === "discountId") {
+                    this.checkExistsDiscount();
+                }
+                if (id == "phoneNumber") {
+                    this.checkExistsCustomer();
+                }
+            }
+        );
     }
+
     checkExistsCustomer = () => {
-        this.setState({
-            isExistsCustomer: false,
-            firstName: "",
-            lastName: "",
-            customerState: "",
-            gender: "",
-            address: "",
-            email: "",
-            birthDay: "",
-            fullName: "",
-            customerState: ""
-        })
+        let isExistsCustomer = false;
+        let customerId = "";
+        let customerState = "";
+        let address = "";
+        let email = "";
+        let fullName = "";
+
         if (this.state.phoneNumber) {
             this.props.listCustomers.forEach(customer => {
                 if (this.state.phoneNumber === customer.phoneNumber) {
-                    this.setState({
-                        isExistsCustomer: true,
-                        firstName: customer.firstName,
-                        lastName: customer.lastName,
-                        customerState: customer.customerState,
-                        gender: customer.gender,
-                        address: customer.address,
-                        email: customer.email,
-                        birthDay: customer.birthDay,
-                        fullName: customer.firstName + customer.lastName,
-                    })
-                    return;
+                    isExistsCustomer = true;
+                    customerId = customer.customerId;
+                    fullName = customer.fullName;
+                    customerState = customer.customerState;
+                    address = customer.address;
+                    email = customer.email;
+                    return; // Exit the forEach loop early
                 }
             });
         }
+
+        this.setState({
+            isExistsCustomer: isExistsCustomer,
+            customerId: customerId,
+            fullName: fullName,
+            customerState: customerState,
+            address: address,
+            email: email
+        });
     }
+
+    checkExistsDiscount = () => {
+        const { listDiscounts } = this.props;
+        let isExistsDiscount = false;
+        let percentageDiscount = 0;
+        let messageCheckDiscount = "Discount isn't exists";
+
+        listDiscounts.forEach(discount => {
+            if (this.state.discountId == discount.discountId) {
+                isExistsDiscount = true;
+                percentageDiscount = discount.percentage;
+                messageCheckDiscount = `Discount: ${discount.percentage}%`;
+                return; // exit the forEach loop early
+            }
+        });
+        this.setState({
+            isExistsDiscount: isExistsDiscount,
+            percentageDiscount: percentageDiscount,
+            messageCheckDiscount: messageCheckDiscount
+        });
+    }
+
     handleChange = (selectedOption) => {
         this.setState({
             selectedOption: selectedOption
@@ -194,6 +238,9 @@ class ModalOrder extends Component {
                 flag = true;
             }
         })
+        this.setState({
+            selectedOption: "",
+        })
         if (!flag) {
             let book;
             this.props.listBooks.forEach(item => {
@@ -201,11 +248,11 @@ class ModalOrder extends Component {
                     book = item;
                 }
             })
-            let copyDataTableBook = this.state.dataTableBookSelect;
+            let copyDataTableBook = [...this.state.dataTableBookSelect];
             copyDataTableBook.push(
                 {
                     'title': book.bookTitle,
-                    'quantity': 1,
+                    'quantity': 0,
                     'netAmount': book.sellingPrice,
                     'totalAmount': book.sellingPrice
                 }
@@ -215,14 +262,32 @@ class ModalOrder extends Component {
             })
         }
     }
-    handleOnchangeDatePicker = (date) => {
-        this.setState({
-            birthDay: date[0]
+    // handle dept & paid
+    handleCreateNewCustomer = () => {
+        this.props.createNewCustomer(
+            {
+                fullName: this.state.fullName,
+                rank: this.state.customerState,
+                sex: this.state.gender,
+                phoneNumber: this.state.phoneNumber,
+                address: this.state.address,
+                email: this.state.email,
+            }
+        )
+    }
+    handleDept = () => {
+        if (!this.state.isExistsCustomer) this.handleCreateNewCustomer();
+    }
+    handlePaid = () => {
+        if (!this.state.isExistsCustomer) this.handleCreateNewCustomer();
+        this.props.CreateInvoice({
+            // customerId: this.state.customerId,
+            // discountId: this.state.discountId,
+            customerId: "3",
+            discountId: "2",
         })
     }
-
     render() {
-        let { dataTableBookSelect } = this.state
         return (
             <Modal
                 isOpen={this.props.isOpen}
@@ -235,69 +300,53 @@ class ModalOrder extends Component {
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'
-                            style={{ "width": "100%" }}
+                            style={{ "width": "49%" }}
                         >
                             <label>Phone Number</label>
                             <div className='d-flex'>
                                 <input
                                     value={this.state.phoneNumber}
                                     type='text'
+                                    style={{ "width": "100%" }}
                                     onChange={(e) => this.handleOnchangeInput(e, 'phoneNumber')}
                                 />
-                                <button
-                                    className={"border-0 btn btn-primary ml-2"}
-                                    type="button"
-                                    onClick={() => { this.checkExistsCustomer() }}
-                                >
-                                    <FontAwesomeIcon icon={faCheck} />
-                                </button>
                             </div>
                         </div>
+
                         {
                             this.state.isExistsCustomer &&
                             <>
                                 <div
                                     className='input-container'
-                                    style={{ "width": "48%" }}
+                                    style={{ "width": "49%" }}
                                 >
                                     <label>Full Name</label>
                                     <input
-                                        className='w-100'
+                                        disabled={true}
                                         type='text'
                                         value={this.state.fullName}
                                     />
                                 </div>
                                 <div
                                     className='input-container'
-                                    style={{ "width": "48%" }}
+                                    style={{ "width": "49%" }}
                                 >
                                     <label>Email</label>
                                     <input
-                                        className='w-100'
+                                        disabled={true}
                                         type='text'
                                         value={this.state.email}
                                     />
                                 </div>
                                 <div
                                     className='input-container'
-                                    style={{ "width": "48%" }}
+                                    style={{ "width": "49%" }}
                                 >
                                     <label>Address</label>
                                     <input
-                                        className='w-100'
+                                        disabled={true}
                                         type='text'
                                         value={this.state.address}
-                                    />
-                                </div>
-                                <div
-                                    className='input-container'
-                                    style={{ "width": "48%" }}
-                                >
-                                    <label>State</label>
-                                    <input
-                                        className='w-100'
-                                        type='text'
-                                        value={this.state.customerState}
                                     />
                                 </div>
                             </>
@@ -307,36 +356,22 @@ class ModalOrder extends Component {
                             <>
                                 <div
                                     className='input-container'
-                                    style={{ "width": "30%" }}
+                                    style={{ "width": "49%" }}
                                 >
-                                    <label>First Name</label>
+                                    <label>Full Name</label>
                                     <input
                                         type='text'
-                                        style={{ "width": "90%" }}
-                                        value={this.state.firstName}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'firstName')}
-                                    />
-                                </div>
-                                <div
-                                    className='input-container'
-                                    style={{ "width": "30%" }}
-                                >
-                                    <label>Last Name</label>
-                                    <input
-                                        type='text'
-                                        style={{ "width": "90%" }}
-                                        value={this.state.lastName}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'lastName')}
+                                        value={this.state.fullName}
+                                        onChange={(e) => this.handleOnchangeInput(e, 'fullName')}
                                     />
                                 </div>
 
                                 <div className='input-container'
-                                    style={{ "width": "30%" }}
+                                    style={{ "width": "49%" }}
                                 >
                                     <label>Gender</label>
                                     <div className='select-genre'>
                                         <select
-                                            style={{ "width": "90%" }}
                                             className='form-select'
                                             value={this.state.gender}
                                             onChange={(e) => this.handleOnchangeInput(e, 'gender')}
@@ -348,22 +383,11 @@ class ModalOrder extends Component {
                                     </div>
                                 </div>
                                 <div className='input-container'
-                                    style={{ "width": "30%" }}
-                                >
-                                    <label>Date of birth</label>
-                                    <DatePicker
-                                        style={{ "width": "90%" }}
-                                        onChange={this.handleOnchangeDatePicker}
-                                        value={this.state.birthDay}
-                                    />
-                                </div>
-                                <div className='input-container'
-                                    style={{ "width": "30%" }}
+                                    style={{ "width": "49%" }}
                                 >
                                     <label>Customer State</label>
                                     <div className='select-genre'>
                                         <select
-                                            style={{ "width": "90%" }}
                                             className='form-select'
                                             value={this.state.customerState}
                                             onChange={(e) => this.handleOnchangeInput(e, 'customerState')}
@@ -375,22 +399,20 @@ class ModalOrder extends Component {
                                     </div>
                                 </div>
                                 <div className='input-container'
-                                    style={{ "width": "30%" }}
+                                    style={{ "width": "49%" }}
                                 >
                                     <label>Email</label>
                                     <input
-                                        style={{ "width": "90%" }}
                                         type='text'
                                         value={this.state.email}
                                         onChange={(e) => this.handleOnchangeInput(e, 'email')}
                                     />
                                 </div>
                                 <div className='input-container'
-                                    style={{ "width": "100%" }}
+                                    style={{ "width": "49%" }}
                                 >
                                     <label>Address</label>
                                     <input
-                                        style={{ "width": "59%" }}
                                         type='text'
                                         value={this.state.address}
                                         onChange={(e) => this.handleOnchangeInput(e, 'address')}
@@ -398,15 +420,35 @@ class ModalOrder extends Component {
                                 </div>
                             </>
                         }
+                        <div className='input-container'
+                            style={{ "width": "100%" }}
+                        >
+                            <label>Discount code</label>
+                            <div className='d-flex'>
+                                <input
+                                    value={this.state.discountId}
+                                    type='text'
+                                    style={{ "width": "49%" }}
+                                    onChange={(e) => this.handleOnchangeInput(e, 'discountId')}
+                                />
+                                {
+                                    this.state.discountId &&
+                                    <span
+                                        className='d-flex ml-2'
+                                        style={this.state.isExistsDiscount ?
+                                            { "alignItems": "center", "height": "100%", "color": "green" }
+                                            :
+                                            { "alignItems": "center", "height": "100%", "color": "red" }
+                                        }
+                                    >{this.state.messageCheckDiscount}
+                                    </span>
+                                }
+                            </div>
+                        </div>
 
                     </div>
-                    <div
-                        className='select-container d-flex mt-3 mb-3'
-                        style={{ "width": "100%", "justifyContent": "center" }}
-                    >
-                        <div
-                            style={{ "width": "400px", "position": "inherit", "z-index": "2" }}
-                        >
+                    <div className='select-container d-flex mt-3 mb-3' style={{ width: "100%", justifyContent: "center" }}>
+                        <div style={{ width: "400px", position: "relative", zIndex: "2" }}>
                             <Select
                                 value={this.state.selectedOption}
                                 onChange={this.handleChange}
@@ -414,10 +456,10 @@ class ModalOrder extends Component {
                             />
                         </div>
                         <button
-                            style={{ "width": "80px" }}
-                            className={"border-0 btn btn-primary ml-2"}
+                            style={{ width: "80px" }}
+                            className="border-0 btn btn-primary ml-2"
                             type="button"
-                            onClick={() => { this.handleInsertBookSelect() }}
+                            onClick={this.handleInsertBookSelect}
                         >
                             <FontAwesomeIcon icon={faPlus} />
                             Insert
@@ -433,31 +475,36 @@ class ModalOrder extends Component {
                     }
                     {
                         this.state.dataTableBookSelect.length !== 0 &&
-                        <div className="float-right mr-5">
+                        <div className="w-100 border-top border-2 mt-1">
                             <div className='d-flex'
-                                style={{ "align-items": "center" }}
+                                style={{ "align-items": "center", "justifyContent": "left" }}
                             >
-                                <label className='mr-2 bg-primary'>Discount:</label>
-                                <p>100000</p>
+                                <label className='mr-2'>Provisional: {this.state.provisional}</label>
                             </div>
                             <div className='d-flex'
-                                style={{ "align-items": "center" }}
+                                style={{ "align-items": "center", "justifyContent": "left" }}
                             >
-                                <label className='mr-2 bg-primary'>Total Amount: </label>
-                                <p>{this.state.totalPrice}</p>
+                                <label className='mr-2'>Discount: {this.state.discountAmount}</label>
+                            </div>
+                            <div className='d-flex'
+                                style={{ "align-items": "center", "justifyContent": "left" }}
+                            >
+                                <label className='mr-2'>Total Amount: {this.state.totalPrice}</label>
                             </div>
                         </div>
                     }
                 </ModalBody>
-                <ModalFooter>
+                <ModalFooter style={{ "justifyContent": "space-evenly" }}>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                        className='px-5 border-0 bg-danger'
+                        onClick={() => { this.handleDept() }}
+                    >Debt</Button>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary'
-                        onClick={() => this.handleAddNewOrder()}
-                    >Add</Button>
+                        onClick={() => this.handlePaid()}
+                    >Paid</Button>
                 </ModalFooter>
             </Modal >
         )
@@ -468,14 +515,19 @@ class ModalOrder extends Component {
 const mapStateToProps = state => {
     return {
         listCustomers: state.customer.listCustomers,
-        listBooks: state.book.listBooks
+        listBooks: state.book.listBooks,
+        listDiscounts: state.discount.listDiscounts
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
         fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart()),
-        fetchAllBooks: () => dispatch(actions.fetchAllBooksStart())
+        createNewCustomer: (data) => dispatch(actions.createNewCutomer(data)),
+        fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),
+        fetchAllDiscounts: () => dispatch(actions.fetchAllDiscountsStart()),
+        // invoice
+        CreateInvoice: (data) => dispatch(actions.CreateInvoice(data))
     };
 };
 

@@ -16,9 +16,8 @@ class TableDiscountManage extends Component {
             dataTableDiscount: [],
             columns: [{
                 name: "Discount ID",
-                selector: 'id',
+                selector: 'discountId',
                 sortable: true,
-                sortFunction: this.caseInsensitiveSort,
             },
             {
                 name: "Name",
@@ -80,27 +79,13 @@ class TableDiscountManage extends Component {
     }
 
     handleEditDiscount = (row) => {
-        this.props.getDiscountEdit(row.id)
+        this.props.getDiscountEdit(row.discountId)
         this.props.toggleDiscountEditModal();
     }
     handleDeleteDiscount = (row) => {
-        this.props.getDiscountDelete(row.id)
+        this.props.getDiscountDelete(row.discountId)
         this.props.toggleDiscountDeleteModal();
     }
-    caseInsensitiveSort = (rowA, rowB) => {
-        var a = rowA.title.toLowerCase();
-        var b = rowB.title.toLowerCase();
-
-        if (a > b) {
-            return 1;
-        }
-
-        if (b > a) {
-            return -1;
-        }
-
-        return 0;
-    };
     componentDidMount() {
         this.props.fetchAllDiscounts()
     }
@@ -109,13 +94,12 @@ class TableDiscountManage extends Component {
             let arr = []
             this.props.listDiscounts.map((item, index) => {
                 arr.push({
-                    "id": item.id,
+                    "discountId": item.discountId,
                     "name": item.name,
                     "state": item.state,
                     "start": item.start,
                     "end": item.end,
                     "percentage": item.end,
-                    "quantity": item.end,
                 })
             })
             this.setState({
@@ -127,13 +111,12 @@ class TableDiscountManage extends Component {
                 let arr = []
                 this.props.listDiscounts.map((item, index) => {
                     arr.push({
-                        "id": item.id,
+                        "discountId": item.discountId,
                         "name": item.name,
                         "state": item.state,
                         "start": item.start,
                         "end": item.end,
                         "percentage": item.end,
-                        "quantity": item.end,
                     })
                 })
                 this.setState({
@@ -147,13 +130,12 @@ class TableDiscountManage extends Component {
                 let arr = []
                 listDiscountFilter.map((item, index) => {
                     arr.push({
-                        "id": item.id,
+                        "discountId": item.discountId,
                         "name": item.name,
                         "state": item.state,
                         "start": item.start,
                         "end": item.end,
                         "percentage": item.end,
-                        "quantity": item.end,
                     })
                 })
                 this.setState({

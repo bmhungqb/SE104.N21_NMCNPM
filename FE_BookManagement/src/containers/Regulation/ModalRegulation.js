@@ -8,137 +8,172 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as actions from '../../store/actions/index'
 import DatePicker from 'react-flatpickr';
+import { Formik, useFormik } from 'formik';
+import * as Yup from 'yup';
 class ModalRegulation extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            description: "",
-            typeConstraint: "",
-            constraint: "",
             errMessage: ""
         }
-        this.listenToEmitter();
+        this.formikRef = React.createRef();
     }
-    listenToEmitter() {
-        emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
-            this.setState({
-                description: "",
-                typeConstraint: "",
-                constraint: "",
+    handleAddNewRegulation = (values, resetForm) => {
+        this.props.createNewRegulation(
+            {
+                name: values.name,
+                minimumInput: values.minimumInput,
+                minimumStock: values.minimumStock,
+                maximumDept: values.maximumDept,
             })
-        })
+        this.toggle();
+        resetForm();
     }
-    handleOnchangeInput = (event, id) => {
-        let copyState = { ...this.state }
-        copyState[id] = event.target.value;
-        this.setState({
-            ...copyState
-        })
-    }
-    checkValidateInput = () => {
-        let isValid = true;
-        let arrInput = [
-            'description',
-            'typeConstraint',
-            'constraint',
-        ];
-        for (let i = 0; i < arrInput.length; i++) {
-            if (!this.state[arrInput[i]]) {
-                isValid = false;
-                alert("Missing parameter " + arrInput[i]);
-                break;
-            }
-        }
-        return isValid
-    }
-    handleAddNewConstraint = () => {
-        let isValid = this.checkValidateInput();
-        if (isValid) {
-            this.props.createNewRegulation(
-                {
-                    description: this.state.description,
-                    typeConstraint: this.state.typeConstraint,
-                    constraint: this.state.constraint,
-                }
-            )
-            emitter.emit('EVENT_CLEAR_MODAL_DATA');
-            this.toggle()
-        }
-    }
-    componentDidMount() {
-
-    }
-
     toggle = () => {
         this.props.toggleFromParent();
+        this.formikRef.current.resetForm();
     }
-    handleOnchangeDatePicker = (date, id) => {
-        let copyState = { ...this.state }
-        copyState[id] = date[0]
-        this.setState({
-            ...copyState
-        })
-    }
+    inputSchema = Yup.object().shape({
+        name: Yup.string().required("Required!"),
+        minimumInput: Yup.number().required("Required!"),
+        minimumStock: Yup.number().required("Required!"),
+        maximumDept: Yup.number().required("Required!"),
+    })
     render() {
         return (
-            <Modal
-                isOpen={this.props.isOpen}
-                toggle={() => { this.toggle() }}
-                className={'modal-regulation-container'}
-                size='lg'
+            <Formik
+                initialValues={{
+                    name: '',
+                    minimumInput: '',
+                    minimumStock: '',
+                    maximumDept: '',
+                }}
+                validationSchema={this.inputSchema}
+                onSubmit={(values, { resetForm }) => this.handleAddNewRegulation(values, resetForm)}
+                innerRef={this.formikRef}
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Add new regulation</ModalHeader>
-                <ModalBody>
-                    <div className='modal-regulation-body'>
-                        <div className='input-container'
-                            style={{ "width": "97%" }}
-                        >
-                            <label>Description</label>
-                            <input
-                                type='text'
-                                value={this.state.description}
-                                onChange={(e) => this.handleOnchangeInput(e, 'description')}
-                            />
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>Type Of Constraint</label>
-                            <div className='select-genre'>
-                                <select
-                                    className='form-select'
-                                    value={this.state.typeConstraint}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'typeConstraint')}
+                {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+                    <Modal
+                        isOpen={this.props.isOpen}
+                        toggle={() => { this.toggle() }}
+                        className={'modal-regulation-container'}
+                        size='lg'
+                    >
+                        <ModalHeader toggle={() => { this.toggle() }}>Add new regulation</ModalHeader>
+                        <ModalBody>
+                            <div className='modal-regulation-body'>
+                                <div className='input-container'
+                                    style={{ "width": "100%" }}
                                 >
-                                    <option value={'Active'}>Active</option>
-                                    <option value={"End"}>End</option>
-                                    <option value={"Other"}>Other</option>
-                                </select>
+                                    <label>Name</label>
+                                    <input
+                                        type='text'
+                                        value={values.name}
+                                        onBlur={handleBlur}
+                                        name='name'
+                                        onChange={handleChange}
+                                    />
+                                    {errors.name &&
+                                        touched.name &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.name}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "42%" }}
+                                >
+                                    <label>Minimum Input</label>
+                                    <input
+                                        type='text'
+                                        value={values.minimumInput}
+                                        onBlur={handleBlur}
+                                        name='minimumInput'
+                                        onChange={handleChange}
+                                    />
+                                    {errors.minimumInput &&
+                                        touched.minimumInput &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.minimumInput}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "42%" }}
+                                >
+                                    <label>Minimum Stock</label>
+                                    <input
+                                        type='text'
+                                        value={values.minimumStock}
+                                        onBlur={handleBlur}
+                                        name='minimumStock'
+                                        onChange={handleChange}
+                                    />
+                                    {errors.minimumStock &&
+                                        touched.minimumStock &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.minimumStock}</p>
+                                    }
+                                </div>
+                                <div className='input-container'
+                                    style={{ "width": "42%" }}
+                                >
+                                    <label>Maximum Dept</label>
+                                    <input
+                                        type='text'
+                                        value={values.maximumDept}
+                                        onBlur={handleBlur}
+                                        name='maximumDept'
+                                        onChange={handleChange}
+                                    />
+                                    {errors.maximumDept &&
+                                        touched.maximumDept &&
+                                        <p
+                                            style={{
+                                                'position': 'absolute',
+                                                'margin-top': '60px',
+                                                'margin-left': '2px',
+                                                'color': 'red',
+                                                'font-style': 'italic',
+                                            }}
+                                        >{errors.maximumDept}</p>
+                                    }
+                                </div>
                             </div>
-                        </div>
-                        <div className='input-container'
-                            style={{ "width": "42%" }}
-                        >
-                            <label>Constraint</label>
-                            <input
-                                type='text'
-                                value={this.state.constraint}
-                                onChange={(e) => this.handleOnchangeInput(e, 'constraint')}
-                            />
-                        </div>
-                    </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-primary'
-                        onClick={() => this.handleAddNewConstraint()}
-                    >Add</Button>
-                </ModalFooter>
-            </Modal >
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                style={{ "height": "40px", "width": "150px" }}
+                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                            <Button
+                                style={{ "height": "40px", "width": "150px" }}
+                                className='px-5 border-0 bg-primary'
+                                onClick={handleSubmit}
+                            >Add</Button>
+                        </ModalFooter>
+                    </Modal >
+                )
+                }
+            </Formik>
         )
     }
 
