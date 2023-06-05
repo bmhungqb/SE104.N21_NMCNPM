@@ -16,9 +16,12 @@ async function CreateInvoice(req, res) {
         invoiceRaw.invoiceDetailId = invoiceRaw.invoiceId
         invoiceRaw.save();
         const invoice = invoiceRaw
+        const [result] = await db.sequelize.query('SELECT LAST_INSERT_ID() as invoiceId');
+        const invoiceId = result[0].invoiceId;
         res.status(200).json({
             errCode: 0,
-            invoice: invoice
+            invoice: invoice,
+            invoiceId: invoiceId,
         });
     } catch (e) {
         res.status(400).json({

@@ -34,7 +34,6 @@ let createNewCustomer = (data) => {
                 })
             } else {
                 await db.Customer.create({
-                    customerId: data.customerId,
                     fullName: data.fullName,
                     address: data.address,
                     phoneNumber: data.phoneNumber,
@@ -46,9 +45,12 @@ let createNewCustomer = (data) => {
                     createdAt: new Date(),
                     updatedAt: new Date()
                 })
+                const [result] = await db.sequelize.query('SELECT LAST_INSERT_ID() as customerId');
+                const customerId = result[0].customerId;
                 resolve({
                     errCode: 0,
-                    message: 'OK'
+                    message: "OK",
+                    newCustomerId: customerId
                 })
             }
         } catch (e) {
