@@ -1,34 +1,65 @@
 import actionTypes from './actionTypes';
+import { toast } from 'react-toastify';
 import {
-    getAllInvoices,
+    getAllInvoicesService,
     getAllInvoicesDetail,
     CreateInvoiceSevice,
-    CreateInvoiceDetail,
+    CreateInvoiceDetailService,
     PayInvoiceImmediately,
     PayInvoiceAfter,
     DeptInvoice
-} from '../../services/invoiceService'
-import { toast } from 'react-toastify';
+} from '../../services/invoiceService';
+import {
+    createNewCustomerService,
+    getAllCustomers,
+    editCustomerService,
+    deleteCustomerService
+} from '../../services/customerService'
 //BOOK
-export const CreateInvoice = (data) => {
+// create invoie with not exists customer
+export const CreateInvoiceNotExistsCustomer = (dataCustomer, dataInvoice, dataBook) => {
     return async (dispatch, getState) => {
         try {
-            let res = await CreateInvoiceSevice(data);
+            let res = await createNewCustomerService(dataCustomer);
             if (res && res.errCode === 0) {
-                toast.success("Create a new invoice succeed !")
-                dispatch(saveInvoiceSuccess());
-                // dispatch(fetchAllInvoicesStart());
-            } else {
-                toast.error("Create a new invoice error !")
-                dispatch(saveInvoiceFailed());
+                const modifiedDataInvoice = {
+                    ...dataInvoice,
+                    customerId: res.newCustomerId
+                };
+                dispatch(CreateInvoiceExistsCustomer(modifiedDataInvoice))
             }
-        } catch (e) {
-            toast.error("Create a new invoice error !")
+        }
+        catch (e) {
             dispatch(saveInvoiceFailed());
         }
     }
 }
-
+// create invoice with exists customer
+export const CreateInvoiceExistsCustomer = (dataInvoice, dataBook) => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await CreateInvoiceSevice(dataInvoice);
+            if (res && res.errCode == 0) {
+                for (const book of dataBook) {
+                    const modifiedData = {
+                        ...book,
+                        invoiceDetailId: res.invoiceId
+                    };
+                    dispatch(CreateInvoiceDetail(modifiedData))
+                }
+                toast.success("Create a new invoice succeed !")
+                dispatch(saveInvoiceSuccess())
+            }
+            else {
+                toast.error("Create a new invoice failed !")
+                dispatch(saveInvoiceFailed())
+            }
+        }
+        catch (e) {
+            dispatch(saveInvoiceFailed());
+        }
+    }
+}
 export const saveInvoiceSuccess = () => ({
     type: actionTypes.CREATE_INVOICE_SUCCESS
 })
@@ -36,84 +67,54 @@ export const saveInvoiceFailed = () => ({
     type: actionTypes.CREATE_INVOICE_FAILED
 })
 
-// export const fetchAllInvoicesStart = () => {
-//     return async (dispatch, getState) => {
-//         try {
-//             let res = await getAllBooks("ALL");
-//             if (res && res.errCode === 0) {
-//                 toast.success("Fetch all books succeed")
-//                 dispatch(
-//                     fetchAllBooksSuccess(res.books.reverse())
-//                 );
-//             } else {
-//                 toast.error("Fetch all books error")
-//                 dispatch(fetchAllBooksFailed());
-//             }
-//         } catch (e) {
-//             dispatch(fetchAllBooksFailed());
-//         }
-//     }
-// }
+export const CreateInvoiceDetail = (dataInvoiceDetail) => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await CreateInvoiceDetailService(dataInvoiceDetail);
+            if (res && res.errCode === 0) {
+                // toast.success("Create a new invoice detail succeed !")
+                dispatch(saveInvoiceDetailSuccess());
+            } else {
+                // toast.error("Create a new invoice detail error !")
+                dispatch(saveInvoiceDetailFailed());
+            }
+        } catch (e) {
+            dispatch(saveInvoiceDetailFailed());
+        }
+    }
+}
 
-// export const fetchAllBooksSuccess = (data) => ({
-//     type: actionTypes.FETCH_ALL_BOOKS_SUCCESS,
-//     dataBooks: data
-// })
+export const saveInvoiceDetailSuccess = () => ({
+    type: actionTypes.CREATE_INVOICE_DETAIL_SUCCESS
+})
+export const saveInvoiceDetailFailed = () => ({
+    type: actionTypes.CREATE_INVOICE_DETAIL_FAILED
+})
 
-// export const fetchAllBooksFailed = () => ({
-//     type: actionTypes.FETCH_ALL_BOOKS_FAILED
-// })
+export const fetchAllInvoicesStart = () => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await getAllInvoicesService("ALL");
+            if (res && res.errCode === 0) {
+                toast.success("Fetch all invoices succeed")
+                dispatch(
+                    fetchAllInvoicesSuccess(res.invoices.reverse())
+                );
+            } else {
+                toast.error("Fetch all invoices error")
+                dispatch(fetchAllInvoicesFailed());
+            }
+        } catch (e) {
+            dispatch(fetchAllInvoicesFailed());
+        }
+    }
+}
 
-// export const editABook = (data) => {
-//     return async (dispatch, getState) => {
-//         try {
-//             let res = await editBookService(data);
-//             if (res && res.errCode === 0) {
-//                 toast.success("Update the book succeed !")
-//                 dispatch(editBookSuccess());
-//                 dispatch(fetchAllBooksStart());
-//             } else {
-//                 toast.error("Update the book error !")
-//                 dispatch(editBookFailed());
-//             }
-//         } catch (e) {
-//             toast.error("Update the book error !")
-//             dispatch(editBookFailed());
-//         }
-//     }
-// }
+export const fetchAllInvoicesSuccess = (data) => ({
+    type: actionTypes.FETCH_ALL_INVOICES_SUCCESS,
+    dataInvoices: data
+})
 
-// export const editBookSuccess = () => ({
-//     type: actionTypes.EDIT_BOOK_SUCCESS
-// })
-
-// export const editBookFailed = () => ({
-//     type: actionTypes.EDIT_BOOK_FAILED
-// })
-
-// export const deleteABook = (bookId) => {
-//     return async (dispatch, getState) => {
-//         try {
-//             let res = await deleteBookService(bookId);
-//             if (res && res.errCode === 0) {
-//                 toast.success("Delete the user succeed !")
-//                 dispatch(deleteBookSuccess());
-//                 dispatch(fetchAllBooksStart());
-//             } else {
-//                 toast.error("Delete the user error !")
-//                 dispatch(deleteBookFailed());
-//             }
-//         } catch (e) {
-//             toast.error("Delete the user error !")
-//             dispatch(deleteBookFailed());
-//         }
-//     }
-// }
-
-// export const deleteBookSuccess = () => ({
-//     type: actionTypes.DELETE_BOOK_SUCCESS
-// })
-
-// export const deleteBookFailed = () => ({
-//     type: actionTypes.DELETE_BOOK_FAILED
-// })
+export const fetchAllInvoicesFailed = () => ({
+    type: actionTypes.FETCH_ALL_INVOICES_FAILED
+})

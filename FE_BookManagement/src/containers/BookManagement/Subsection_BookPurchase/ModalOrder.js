@@ -10,6 +10,8 @@ import DataTable from 'react-data-table-component';
 import Select from 'react-select';
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import DatePicker from 'react-flatpickr';
+import AccordionItem from 'react-bootstrap/esm/AccordionItem';
+import { data } from 'jquery';
 class ModalOrder extends Component {
 
     constructor(props) {
@@ -20,6 +22,7 @@ class ModalOrder extends Component {
             totalPrice: 0,
             isExistsDiscount: false,
             isExistsCustomer: false,
+            isDebt: false,
             // Create a customer
             customerId: "",
             customerState: "",
@@ -49,7 +52,7 @@ class ModalOrder extends Component {
                         <input
                             defaultValue={row.quantity}
                             type="number"
-                            min={0}
+                            min={1}
                             max={10000}
                             style={{
                                 "width": "80px",
@@ -222,8 +225,12 @@ class ModalOrder extends Component {
             percentageDiscount: percentageDiscount,
             messageCheckDiscount: messageCheckDiscount
         });
+        let discountTemp = this.state.provisional * percentageDiscount / 100;
+        this.setState({
+            discountAmount: discountTemp,
+            totalPrice: this.state.provisional - discountTemp
+        })
     }
-
     handleChange = (selectedOption) => {
         this.setState({
             selectedOption: selectedOption
@@ -251,41 +258,93 @@ class ModalOrder extends Component {
             let copyDataTableBook = [...this.state.dataTableBookSelect];
             copyDataTableBook.push(
                 {
+                    "bookId": book.bookId,
                     'title': book.bookTitle,
-                    'quantity': 0,
+                    'quantity': 1,
                     'netAmount': book.sellingPrice,
                     'totalAmount': book.sellingPrice
                 }
             )
+            let totalMoney = this.state.provisional + book.sellingPrice;
+            let discountA = totalMoney * this.state.percentageDiscount / 100
             this.setState({
-                dataTableBookSelect: copyDataTableBook
+                dataTableBookSelect: copyDataTableBook,
+                provisional: totalMoney,
+                discountAmount: discountA,
+                totalPrice: totalMoney - discountA
             })
         }
     }
-    // handle dept & paid
-    handleCreateNewCustomer = () => {
-        this.props.createNewCustomer(
-            {
-                fullName: this.state.fullName,
-                rank: this.state.customerState,
-                sex: this.state.gender,
-                phoneNumber: this.state.phoneNumber,
-                address: this.state.address,
-                email: this.state.email,
-            }
-        )
-    }
     handleDept = () => {
-        if (!this.state.isExistsCustomer) this.handleCreateNewCustomer();
+        let dataBook = [];
+        this.state.dataTableBookSelect.forEach((item) => {
+            dataBook.push({
+                quantity: item.quantity,
+                bookId: item.bookId
+            });
+        });
+
+        if (this.state.isExistsCustomer) {
+            this.props.CreateInvoiceExistsCustomer({
+                customerId: this.state.customerId,
+                discountId: this.state.discountId
+            },
+                dataBook
+            )
+        }
+        else {
+            this.props.CreateInvoiceNotExistsCustomer(
+                {
+                    fullName: this.state.fullName,
+                    rank: this.state.customerState,
+                    sex: this.state.gender,
+                    phoneNumber: this.state.phoneNumber,
+                    address: this.state.address,
+                    email: this.state.email,
+                },
+                {
+                    customerId: this.state.customerId,
+                    discountId: this.state.discountId
+                },
+                dataBook
+            )
+        }
+        this.toggle()
     }
     handlePaid = () => {
-        if (!this.state.isExistsCustomer) this.handleCreateNewCustomer();
-        this.props.CreateInvoice({
-            // customerId: this.state.customerId,
-            // discountId: this.state.discountId,
-            customerId: "3",
-            discountId: "2",
-        })
+        let dataBook = [];
+        this.state.dataTableBookSelect.forEach((item) => {
+            dataBook.push({
+                quantity: item.quantity,
+                bookId: item.bookId
+            });
+        });
+
+        if (this.state.isExistsCustomer) {
+            this.props.CreateInvoiceExistsCustomer({
+                customerId: this.state.customerId,
+                discountId: this.state.discountId
+            },
+                dataBook
+            )
+        }
+        else {
+            this.props.CreateInvoiceNotExistsCustomer(
+                {
+                    fullName: this.state.fullName,
+                    rank: this.state.customerState,
+                    sex: this.state.gender,
+                    phoneNumber: this.state.phoneNumber,
+                    address: this.state.address,
+                    email: this.state.email,
+                },
+                {
+                    discountId: this.state.discountId
+                },
+                dataBook
+            )
+        }
+        this.toggle()
     }
     render() {
         return (
@@ -491,6 +550,33 @@ class ModalOrder extends Component {
                             >
                                 <label className='mr-2'>Total Amount: {this.state.totalPrice}</label>
                             </div>
+                            <div class="form-check">
+                                <input class="form-check-input"
+                                    type="checkbox"
+                                    value={this.state.isDebt}
+                                    onChange={() => {
+                                        this.setState({
+                                            isDebt: !this.state.isDebt
+                                        })
+                                    }}
+                                />
+                                <label class="form-check-label" for="defaultCheck1">
+                                    Debt
+                                </label>
+                            </div>
+                            {
+                                this.state.isDebt &&
+                                <div
+                                    className='input-container'
+                                    style={{ "width": "49%" }}
+                                >
+                                    <label>Debt</label>
+                                    <input
+                                        type='text'
+                                        value={this.state.fullName}
+                                    />
+                                </div>
+                            }
                         </div>
                     }
                 </ModalBody>
@@ -527,7 +613,8 @@ const mapDispatchToProps = dispatch => {
         fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),
         fetchAllDiscounts: () => dispatch(actions.fetchAllDiscountsStart()),
         // invoice
-        CreateInvoice: (data) => dispatch(actions.CreateInvoice(data))
+        CreateInvoiceNotExistsCustomer: (dataCustomer, dataInvoice, dataBook) => dispatch(actions.CreateInvoiceNotExistsCustomer(dataCustomer, dataInvoice, dataBook)),
+        CreateInvoiceExistsCustomer: (dataInvoice, dataBook) => dispatch(actions.CreateInvoiceExistsCustomer(dataInvoice, dataBook)),
     };
 };
 

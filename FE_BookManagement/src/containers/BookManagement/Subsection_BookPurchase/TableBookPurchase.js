@@ -6,6 +6,8 @@ import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
+import actionTypes from '../../../store/actions/actionTypes';
+import * as actions from "../../../store/actions/index"
 class TableBookPurchase extends Component {
 
     constructor(props) {
@@ -13,9 +15,8 @@ class TableBookPurchase extends Component {
         this.state = {
             columns: [{
                 name: "Invoice ID",
-                selector: "id",
+                selector: "invoiceId",
                 sortable: true,
-                sortFunction: this.caseInsensitiveSort,
             },
             {
                 name: "Customer ID",
@@ -31,7 +32,7 @@ class TableBookPurchase extends Component {
             },
             {
                 name: "Date",
-                selector: "date",
+                selector: "createAt",
             },
             {
                 name: "Status",
@@ -53,24 +54,7 @@ class TableBookPurchase extends Component {
                 button: true,
             },
             ],
-            data: [{
-
-                id: 1,
-                customerId: "buh hung",
-                name: '2003',
-                totalAmount: '2003',
-                date: 'swq',
-                status: 'Debt',
-            },
-            {
-                id: 1,
-                customerId: "buh hung",
-                name: '2003',
-                totalAmount: '2003',
-                date: 'Paid',
-                status: 'Paid',
-            },
-            ],
+            dataTableInvoice: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
                 rangeSeparatorText: 'de',
@@ -88,24 +72,42 @@ class TableBookPurchase extends Component {
 
         }
     }
-    caseInsensitiveSort = (rowA, rowB) => {
-        var a = rowA.title.toLowerCase();
-        var b = rowB.title.toLowerCase();
-
-        if (a > b) {
-            return 1;
-        }
-
-        if (b > a) {
-            return -1;
-        }
-
-        return 0;
-    };
     componentDidMount() {
-
+        this.props.fetchAllInvoicesStart()
     }
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.listInvoices !== this.props.listInvoices) {
+            let arr = []
+            this.props.listInvoices.map((item, index) => {
+                console.log(item)
+                arr.push({
+                    "invoiceId": item.invoiceId,
+                    "customerId": item.customerId,
+                    "name": item.Customers[0].fullName,
+                    "totalAmount": item.totalPrice,
+                    "createAt": item.createdAt
+                })
+            })
+            this.setState({
+                dataTableInvoice: arr
+            })
+        }
+        if (prevProps.optionSearch != this.props.optionSearch) {
+            if (this.props.optionSearch[0] === "") {
+                this.setState({
+                    dataTableInvoice: this.props.listInvoices,
+                    optionSearch: this.props.optionSearch
+                })
+            }
+            else {
+                const arr = this.props.listInvoices.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
+                this.setState({
+                    dataTableInvoice: arr,
+                    optionSearch: this.props.optionSearch
+                })
+            }
+        }
+    }
     toggle = () => {
         this.props.toggleFromParent();
     }
@@ -114,7 +116,7 @@ class TableBookPurchase extends Component {
             <Fragment>
                 <DataTable
                     columns={this.state.columns}
-                    data={this.state.data}
+                    data={this.state.dataTableInvoice}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
                     fixedHeader
@@ -129,11 +131,13 @@ class TableBookPurchase extends Component {
 
 const mapStateToProps = state => {
     return {
+        listInvoices: state.invoice.listInvoices
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        fetchAllInvoicesStart: () => dispatch(actions.fetchAllInvoicesStart())
     };
 };
 

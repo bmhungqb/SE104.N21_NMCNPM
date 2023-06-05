@@ -1,5 +1,5 @@
 import axios from '../axios'
-const getAllInvoices = (invoiceId) => {
+const getAllInvoicesService = (invoiceId) => {
     return axios.get(`./api/get-all-invoices?id=${invoiceId}`)
 }
 const getAllInvoicesDetail = (invoiceDetailId) => {
@@ -8,7 +8,7 @@ const getAllInvoicesDetail = (invoiceDetailId) => {
 const CreateInvoiceSevice = (dataInvoice) => {
     return axios.post('./api/create-new-invoice', dataInvoice)
 }
-const CreateInvoiceDetail = (dataInvoiceDetail) => {
+const CreateInvoiceDetailService = (dataInvoiceDetail) => {
     return axios.post('./api/create-new-invoiceDetail', dataInvoiceDetail)
 }
 
@@ -22,10 +22,10 @@ const DeptInvoice = (dataInvoice) => {
     return axios.post('./api/invoice-dept', dataInvoice)
 }
 export {
-    getAllInvoices,
+    getAllInvoicesService,
     getAllInvoicesDetail,
     CreateInvoiceSevice,
-    CreateInvoiceDetail,
+    CreateInvoiceDetailService,
     PayInvoiceImmediately,
     PayInvoiceAfter,
     DeptInvoice

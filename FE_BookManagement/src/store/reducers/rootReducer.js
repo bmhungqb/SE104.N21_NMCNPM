@@ -10,6 +10,7 @@ import customerReducer from './customerReducer'
 import usersReducer from '../reducers/usersReducer';
 import discountReducer from './discountReducer';
 import regulationReducer from './regulationReducer';
+import invoiceReducer from './invoiceReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
@@ -41,5 +42,6 @@ export default (history) => combineReducers({
     supplier: supplierReducer,
     users: usersReducer,
     discount: discountReducer,
-    regulation: regulationReducer
+    regulation: regulationReducer,
+    invoice: invoiceReducer,
 })

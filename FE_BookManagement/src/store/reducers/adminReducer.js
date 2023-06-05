@@ -18,7 +18,8 @@ const initialState = {
     // allScheduleTime: [],
     // allRequiredDoctorInfor: [],
     listBooks: [],
-    listCustomers: []
+    listCustomers: [],
+    listInvoices: [],
 }
 
 const adminReducer = (state = initialState, action) => {

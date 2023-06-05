@@ -5,13 +5,13 @@ const initialState = {
 
 const invoiceReducer = (state = initialState, action) => {
     switch (action.type) {
-        case actionTypes.FETCH_ALL_BOOKS_SUCCESS:
-            state.listBooks = action.dataBooks
+        case actionTypes.FETCH_ALL_INVOICES_SUCCESS:
+            state.listInvoices = action.dataInvoices
             return {
                 ...state
             }
-        case actionTypes.FETCH_ALL_BOOKS_FAILED:
-            state.listBooks = []
+        case actionTypes.FETCH_ALL_INVOICES_FAILED:
+            state.listInvoices = []
             return {
                 ...state
             }
