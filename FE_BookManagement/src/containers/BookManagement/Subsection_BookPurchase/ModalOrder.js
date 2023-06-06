@@ -23,6 +23,7 @@ class ModalOrder extends Component {
             isExistsDiscount: false,
             isExistsCustomer: false,
             isDebt: false,
+            debtAmount: undefined,
             // Create a customer
             customerId: "",
             customerState: "",
@@ -277,6 +278,7 @@ class ModalOrder extends Component {
     }
     handleDept = () => {
         let dataBook = [];
+        let isPaid = false
         this.state.dataTableBookSelect.forEach((item) => {
             dataBook.push({
                 quantity: item.quantity,
@@ -285,15 +287,16 @@ class ModalOrder extends Component {
         });
 
         if (this.state.isExistsCustomer) {
-            this.props.CreateInvoiceExistsCustomer({
-                customerId: this.state.customerId,
-                discountId: this.state.discountId
-            },
+            this.props.CreateInvoiceExistsCustomer(isPaid,
+                {
+                    customerId: this.state.customerId,
+                    discountId: this.state.discountId
+                },
                 dataBook
             )
         }
         else {
-            this.props.CreateInvoiceNotExistsCustomer(
+            this.props.CreateInvoiceNotExistsCustomer(isPaid,
                 {
                     fullName: this.state.fullName,
                     rank: this.state.customerState,
@@ -313,23 +316,24 @@ class ModalOrder extends Component {
     }
     handlePaid = () => {
         let dataBook = [];
+        let isPaid = true
         this.state.dataTableBookSelect.forEach((item) => {
             dataBook.push({
                 quantity: item.quantity,
                 bookId: item.bookId
             });
         });
-
         if (this.state.isExistsCustomer) {
-            this.props.CreateInvoiceExistsCustomer({
-                customerId: this.state.customerId,
-                discountId: this.state.discountId
-            },
+            this.props.CreateInvoiceExistsCustomer(isPaid,
+                {
+                    customerId: this.state.customerId,
+                    discountId: this.state.discountId
+                },
                 dataBook
             )
         }
         else {
-            this.props.CreateInvoiceNotExistsCustomer(
+            this.props.CreateInvoiceNotExistsCustomer(isPaid,
                 {
                     fullName: this.state.fullName,
                     rank: this.state.customerState,
@@ -553,6 +557,7 @@ class ModalOrder extends Component {
                             <div class="form-check">
                                 <input class="form-check-input"
                                     type="checkbox"
+                                    style={{ cursor: 'pointer' }}
                                     value={this.state.isDebt}
                                     onChange={() => {
                                         this.setState({
@@ -560,8 +565,8 @@ class ModalOrder extends Component {
                                         })
                                     }}
                                 />
-                                <label class="form-check-label" for="defaultCheck1">
-                                    Debt
+                                <label className="form-check-label font-weight-bold" for="defaultCheck1">
+                                    DEBT
                                 </label>
                             </div>
                             {
@@ -570,10 +575,12 @@ class ModalOrder extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Debt</label>
+                                    <label>Paid amount</label>
                                     <input
+                                        className='ml-2'
                                         type='text'
-                                        value={this.state.fullName}
+                                        value={this.state.debtAmount}
+                                        onChange={(e) => this.handleOnchangeInput(e, 'debtAmount')}
                                     />
                                 </div>
                             }
@@ -613,8 +620,8 @@ const mapDispatchToProps = dispatch => {
         fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),
         fetchAllDiscounts: () => dispatch(actions.fetchAllDiscountsStart()),
         // invoice
-        CreateInvoiceNotExistsCustomer: (dataCustomer, dataInvoice, dataBook) => dispatch(actions.CreateInvoiceNotExistsCustomer(dataCustomer, dataInvoice, dataBook)),
-        CreateInvoiceExistsCustomer: (dataInvoice, dataBook) => dispatch(actions.CreateInvoiceExistsCustomer(dataInvoice, dataBook)),
+        CreateInvoiceNotExistsCustomer: (isPaid, dataCustomer, dataInvoice, dataBook) => dispatch(actions.CreateInvoiceNotExistsCustomer(isPaid, dataCustomer, dataInvoice, dataBook)),
+        CreateInvoiceExistsCustomer: (isPaid, dataInvoice, dataBook) => dispatch(actions.CreateInvoiceExistsCustomer(isPaid, dataInvoice, dataBook)),
     };
 };
 

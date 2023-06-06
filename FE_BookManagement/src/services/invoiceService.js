@@ -12,10 +12,10 @@ const CreateInvoiceDetailService = (dataInvoiceDetail) => {
     return axios.post('./api/create-new-invoiceDetail', dataInvoiceDetail)
 }
 
-const PayInvoiceImmediately = (dataInvoice) => {
+const PayInvoiceImmediatelyService = (dataInvoice) => {
     return axios.post('./api/invoice-pay-immediately', dataInvoice)
 }
-const PayInvoiceAfter = (dataInvoice) => {
+const PayInvoiceAfterService = (dataInvoice) => {
     return axios.post('./api/invoice-pay-after', dataInvoice)
 }
 const DeptInvoice = (dataInvoice) => {
@@ -26,7 +26,7 @@ export {
     getAllInvoicesDetail,
     CreateInvoiceSevice,
     CreateInvoiceDetailService,
-    PayInvoiceImmediately,
-    PayInvoiceAfter,
+    PayInvoiceImmediatelyService,
+    PayInvoiceAfterService,
     DeptInvoice
 }

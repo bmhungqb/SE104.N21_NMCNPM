@@ -29,7 +29,7 @@ class ModalCustomer extends Component {
     handleAddNewCustomer = () => {
         this.props.createNewCustomer(
             {
-                fullname: this.state.firstName + " " + this.state.lastName,
+                fullName: `${this.state.firstName} ${this.state.lastName}`,
                 rank: this.state.customerState,
                 sex: this.state.gender,
                 phoneNumber: this.state.phoneNumber,

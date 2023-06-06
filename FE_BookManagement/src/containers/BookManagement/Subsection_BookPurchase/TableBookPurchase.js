@@ -42,9 +42,9 @@ class TableBookPurchase extends Component {
                         className='border-0'
                         onClick={() => { this.handleViewDetailOrder(row) }}
                         data-tag="allowRowEvents"
-                        style={row.status === "Debt" ?
-                            { "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#F0483E" } :
-                            { "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#03A9F5" }
+                        style={row.status == "Paid" ?
+                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#F0483E" } :
+                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#03A9F5" }
                         }
                     >
                         {row.status}
@@ -79,13 +79,15 @@ class TableBookPurchase extends Component {
         if (prevProps.listInvoices !== this.props.listInvoices) {
             let arr = []
             this.props.listInvoices.map((item, index) => {
-                console.log(item)
+                let date = new Date();
+                date = item.createAt.strptime();
                 arr.push({
                     "invoiceId": item.invoiceId,
                     "customerId": item.customerId,
                     "name": item.Customers[0].fullName,
                     "totalAmount": item.totalPrice,
-                    "createAt": item.createdAt
+                    "createAt": date.getDate(),
+                    "status": item.status ? "Paid" : "Debt"
                 })
             })
             this.setState({

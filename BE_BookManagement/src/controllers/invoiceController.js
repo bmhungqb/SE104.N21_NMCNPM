@@ -54,8 +54,8 @@ async function PayInvoiceImmediately(req, res) {
     try {
         let invoiceId = req.body.invoiceId
         const invoice = await db.Invoice.findOne({ where: { invoiceId: invoiceId } })
-        invoice.remaining = 0,
-            invoice.customerPay = invoice.totalPrice;
+        invoice.remaining = 0;
+        invoice.customerPay = invoice.totalPrice;
         invoice.status = 1;
         await db.DeptReport.create({
             customerId: invoice.customerId,
@@ -167,10 +167,16 @@ async function CreateInvoiceDetail(req, res) {
         )
         invoiceServices.CalculateTotalPrice(invoiceDetail[0].invoiceDetailId)
         t.commit()
-        res.status(200).json({ invoiceDetail: invoiceDetail });
+        res.status(200).json({
+            errCode: 0,
+            invoiceDetail: invoiceDetail
+        });
     } catch (e) {
         t.rollback()
-        res.status(400).json({ error: e.message })
+        res.status(400).json({
+            errCode: 0,
+            error: e.message
+        })
     }
 }
 async function GetAllInvoiceDetail(req, res) {
