@@ -10,22 +10,22 @@ module.exports = (sequelize, DataTypes) => {
          * The `models/index` file will call this method automatically.
          */
         static associate(models) {
-            Rent.hasMany(models.Customer,{ foreignKey: 'customerId',sourceKey:'customerId' })
-            Rent.hasMany(models.RentDetail,{foreignKey:'rentDetailId',sourceKey:'rentDetailId'})
+            Rent.hasMany(models.Customer, { foreignKey: 'customerId', sourceKey: 'customerId' })
+            Rent.hasMany(models.RentDetail, { foreignKey: 'rentDetailId', sourceKey: 'rentDetailId' })
         }
-    };  
+    };
     Rent.init({
-        rentId:{
+        rentId: {
             type: DataTypes.INTEGER,
-            allowNull: false,
+            // allowNull: false,
             autoIncrement: true,
-            primaryKey: true, 
+            primaryKey: true,
         },
-        rentDetailId:DataTypes.INTEGER,
-        customerId:DataTypes.INTEGER,
-        dayRent:DataTypes.INTEGER,
-        dateReturn:DataTypes.DATE,
-        rentPrice:DataTypes.INTEGER
+        rentDetailId: DataTypes.INTEGER,
+        customerId: DataTypes.INTEGER,
+        dayRent: DataTypes.INTEGER,
+        dateReturn: DataTypes.DATE,
+        rentPrice: DataTypes.INTEGER
     }, {
         sequelize,
         modelName: 'Rent',

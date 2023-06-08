@@ -1,28 +1,28 @@
 import db from "../models/index"
-let getAllRent = async()=>{
-    try{
+let getAllRent = async () => {
+    try {
         let rents = await db.Rent.findAll({
             include: [
-              {
-                model: db.Customer,
-                attributes: ['fullName'],
-              },
-              {
-                model: db.Book,
-                attributes: ['bookTitle'],
-              },
-            ],attributes:['id','bookId','customerId','quantity']
-          });
+                {
+                    model: db.Customer,
+                    attributes: ['fullName'],
+                },
+                {
+                    model: db.Book,
+                    attributes: ['bookTitle'],
+                },
+            ], attributes: ['id', 'bookId', 'customerId', 'quantity']
+        });
         return rents
-    } catch(e) {
+    } catch (e) {
         return e
     }
 }
-let updateRentData = async(data)=>{
+let updateRentData = async (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.id || !data.bookId || !data.customerId
-                || !data.quantity 
+                || !data.quantity
             ) {
                 resolve({
                     errCode: 2,
@@ -44,7 +44,7 @@ let updateRentData = async(data)=>{
                     errCode: 0,
                     message: 'Update the rent succeeds! '
                 });
-            }   
+            }
             else {
                 resolve({
                     errCode: 1,
@@ -56,36 +56,36 @@ let updateRentData = async(data)=>{
         }
     })
 }
-let deleteRentData = async(data)=>{
-    return new Promise( async(resolve,reject)=>{
+let deleteRentData = async (data) => {
+    return new Promise(async (resolve, reject) => {
         console.log(data.id)
-        const rent = await db.Rent.findOne({where: { id: data.id }})
-        if(rent){
+        const rent = await db.Rent.findOne({ where: { id: data.id } })
+        if (rent) {
             console.log(rent)
-            const destroy = await db.Rent.destroy({where :{id:data.id}})
-            console.log("destroy ne ",destroy)
+            const destroy = await db.Rent.destroy({ where: { id: data.id } })
+            console.log("destroy ne ", destroy)
             resolve(destroy)
         } else {
             resolve(rent)
         }
-    } )
+    })
 }
-async function PriceEachRentDetailId(id){
-    const rent = await db.Rent.findOne({where:{rentId:1}})
-    const rentDetails = await db.RentDetail.findAll({include:[{model:db.Book}]})
+async function PriceEachRentDetailId(id) {
+    const rent = await db.Rent.findOne({ where: { rentId: id } })
+    const rentDetails = await db.RentDetail.findAll({ include: [{ model: db.Book }] })
     let totalPrice = 0;
-    rentDetails.forEach((rentDetail)=>{
-            if (rentDetail.rentDetailId==id){
-                totalPrice += (rentDetail.Books[0].sellingPrice*rentDetail.quantity*rent.dayRent*1.5/100);
-            }
-        })
+    rentDetails.forEach((rentDetail) => {
+        if (rentDetail.rentDetailId == id) {
+            totalPrice += (rentDetail.Books[0].sellingPrice * rentDetail.quantity * rent.dayRent * 1.5 / 100);
+        }
+    })
     rent.rentPrice = totalPrice;
     await rent.save();
 }
 
-module.exports={
-    getAllRent:getAllRent,
-    updateRentData:updateRentData,
-    deleteRentData:deleteRentData,
-    PriceEachRentDetailId:PriceEachRentDetailId,
+module.exports = {
+    getAllRent: getAllRent,
+    updateRentData: updateRentData,
+    deleteRentData: deleteRentData,
+    PriceEachRentDetailId: PriceEachRentDetailId,
 }
