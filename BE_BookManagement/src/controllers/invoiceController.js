@@ -32,18 +32,44 @@ async function CreateInvoice(req, res) {
 }
 async function GetAllInvoice(req, res) {
     try {
-        const invoices = await db.Invoice.findAll(
-            {
-                include: [
-                    { model: db.Customer },
-                    { model: db.Discount },
-                    { model: db.InvoiceDetail }
-                ]
-            });
-        res.status(200).json({
-            errCode: 0,
-            invoices: invoices
-        })
+        let invoiceId = req.query.id;
+        if (!invoiceId) {
+            return res.status(200).json({
+                errCode: 1,
+                errMessage: "Missing required parameters",
+                customers: []
+            })
+        }
+        else {
+            if (invoiceId === "ALL") {
+                const invoices = await db.Invoice.findAll(
+                    {
+                        include: [
+                            { model: db.Customer },
+                            { model: db.Discount },
+                            { model: db.InvoiceDetail }
+                        ]
+                    });
+                res.status(200).json({
+                    errCode: 0,
+                    invoices: invoices
+                })
+            }
+            if (invoiceId && invoiceId !== 'ALL') {
+                const invoices = await db.Invoice.findOne({
+                    where: { invoiceId: invoiceId },
+                    include: [
+                        { model: db.Customer },
+                        { model: db.Discount },
+                        { model: db.InvoiceDetail }
+                    ]
+                })
+                res.status(200).json({
+                    errCode: 0,
+                    invoices: invoices
+                })
+            }
+        }
     } catch (e) {
         res.status(400).json({ error: e.message })
     }
@@ -180,9 +206,43 @@ async function CreateInvoiceDetail(req, res) {
     }
 }
 async function GetAllInvoiceDetail(req, res) {
+    // try {
+    //     const invoiceDetails = await db.InvoiceDetail.findAll({ include: [{ model: db.Book }] })
+    //     res.status(200).json({ invoiceDetails: invoiceDetails })
+    // } catch (e) {
+    //     res.status(400).json({ error: e.message })
+    // }
     try {
-        const invoiceDetails = await db.InvoiceDetail.findAll({ include: [{ model: db.Book }] })
-        res.status(200).json({ invoiceDetails: invoiceDetails })
+        let invoiceDetailId = req.query.id;
+        if (!invoiceDetailId) {
+            return res.status(200).json({
+                errCode: 1,
+                errMessage: "Missing required parameters",
+                customers: []
+            })
+        }
+        else {
+            if (invoiceDetailId === "ALL") {
+                const invoicesDetail = await db.InvoiceDetail.findAll(
+                    {
+                        include: [{ model: db.Book }]
+                    });
+                res.status(200).json({
+                    errCode: 0,
+                    invoicesDetail: invoicesDetail
+                })
+            }
+            if (invoiceDetailId && invoiceDetailId !== 'ALL') {
+                const invoicesDetail = await db.InvoiceDetail.findAll({
+                    where: { invoiceDetailId: invoiceDetailId },
+                    include: [{ model: db.Book }]
+                })
+                res.status(200).json({
+                    errCode: 0,
+                    invoicesDetail: invoicesDetail
+                })
+            }
+        }
     } catch (e) {
         res.status(400).json({ error: e.message })
     }

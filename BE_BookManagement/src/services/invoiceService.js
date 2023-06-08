@@ -15,10 +15,16 @@ async function CalculateTotalPrice(id) {
         include: [{ model: db.Customer }, { model: db.Discount }, { model: db.InvoiceDetail }]
     })
     let newTotalPriceBook = await PriceEachInvoiceDetailId(id)
-    if (!invoice.Discounts[0].percentage) {
-        let discountPrice = 0
+    let discountPrice = 0
+    if ((invoice.Discounts[0] && invoice.Discounts[0].percentage !== undefined)) {
+        discountPrice = newTotalPriceBook * invoice.Discounts[0].percentage / 100
+    } else {
+        discountPrice = 0
     }
-    else { let discountPrice = newTotalPriceBook * invoice.Discounts[0].percentage / 100 }
+    // if (!invoice.Discounts[0].percentage) {
+    //     let discountPrice = 0
+    // }
+    // else { let discountPrice = newTotalPriceBook * invoice.Discounts[0].percentage / 100 }
     // let discountPrice = newTotalPriceBook * invoice.Discounts[0].percentage / 100
     // let changePrice = invoice.customerPay - (newTotalPriceBook - discountPrice)
     // if change less than 0 update dept update dept report
