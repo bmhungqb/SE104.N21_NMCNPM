@@ -2,12 +2,12 @@ import actionTypes from './actionTypes';
 import { toast } from 'react-toastify';
 import {
     getAllInvoicesService,
-    getAllInvoicesDetail,
+    getAllInvoicesDetailService,
     CreateInvoiceSevice,
     CreateInvoiceDetailService,
     PayInvoiceImmediatelyService,
     PayInvoiceAfterService,
-    DeptInvoice
+    DeptInvoiceService
 } from '../../services/invoiceService';
 import {
     createNewCustomerService,
@@ -18,7 +18,7 @@ import {
 import { reject, tail } from 'lodash';
 //BOOK
 // create invoie with not exists customer
-export const CreateInvoiceNotExistsCustomer = (isPaid, dataCustomer, dataInvoice, dataBook) => {
+export const CreateInvoiceNotExistsCustomer = (isPaid, customerPay, dataCustomer, dataInvoice, dataBook) => {
     return async (dispatch, getState) => {
         try {
             let res = await createNewCustomerService(dataCustomer);
@@ -27,7 +27,7 @@ export const CreateInvoiceNotExistsCustomer = (isPaid, dataCustomer, dataInvoice
                     ...dataInvoice,
                     customerId: res.newCustomerId
                 };
-                dispatch(CreateInvoiceExistsCustomer(isPaid, modifiedDataInvoice, dataBook))
+                dispatch(CreateInvoiceExistsCustomer(isPaid, customerPay, modifiedDataInvoice, dataBook))
             }
         }
         catch (e) {
@@ -36,19 +36,20 @@ export const CreateInvoiceNotExistsCustomer = (isPaid, dataCustomer, dataInvoice
     }
 }
 // create invoice with exists customer
-export const CreateInvoiceExistsCustomer = (isPaid, dataInvoice, dataBook) => {
+export const CreateInvoiceExistsCustomer = (isPaid, customerPay, dataInvoice, dataBook) => {
     return async (dispatch, getState) => {
         try {
             let res = await CreateInvoiceSevice(dataInvoice);
             if (res && res.errCode === 0) {
+                let invoiceId = res.invoiceId;
                 const apiCalls = dataBook.map(async (book) => {
                     const modifiedData = {
                         ...book,
-                        invoiceDetailId: res.invoiceId
+                        invoiceDetailId: invoiceId
                     };
-
                     let resCreateInvoiceDetail = await CreateInvoiceDetailService(modifiedData);
-                    return resCreateInvoiceDetail
+                    let resDeptInvoice = await DeptInvoiceService({ invoiceId: invoiceId });
+                    return resCreateInvoiceDetail;
                 });
 
                 const resCreateInvoiceArray = await Promise.all(apiCalls);
@@ -60,13 +61,24 @@ export const CreateInvoiceExistsCustomer = (isPaid, dataInvoice, dataBook) => {
                         toast.error("Create a new invoice detail failed!");
                     }
                 }
+                let resDeptInvoice = await DeptInvoiceService({ invoiceId: invoiceId });
+                if (resDeptInvoice && resDeptInvoice.errCode === 0) {
+                    if (isPaid) {
+                        dispatch(PayInvoiceImmediately({ invoiceId: invoiceId }));
+                    } else {
+                        dispatch(PayInvoiceAfter({
+                            invoiceId: invoiceId,
+                            customerPay: customerPay,
+                        }));
+                    }
 
-                if (isPaid) {
-                    dispatch(PayInvoiceImmediately(res.invoiceId));
+                    toast.success("Create a new invoice succeed!");
+                    dispatch(saveInvoiceSuccess());
+                } else {
+                    toast.error("DeptInvoiceService failed!");
+                    dispatch(saveInvoiceFailed());
                 }
 
-                toast.success("Create a new invoice succeed!");
-                dispatch(saveInvoiceSuccess());
             } else {
                 toast.error("Create a new invoice failed!");
                 dispatch(saveInvoiceFailed());
@@ -77,6 +89,8 @@ export const CreateInvoiceExistsCustomer = (isPaid, dataInvoice, dataBook) => {
         }
     };
 };
+
+
 
 export const saveInvoiceSuccess = () => ({
     type: actionTypes.CREATE_INVOICE_SUCCESS
@@ -109,11 +123,14 @@ export const saveInvoiceDetailFailed = () => ({
     type: actionTypes.CREATE_INVOICE_DETAIL_FAILED
 })
 
-export const fetchAllInvoicesStart = () => {
+export const fetchAllInvoicesStart = (id) => {
     return async (dispatch, getState) => {
         try {
-            let res = await getAllInvoicesService("ALL");
+            let res = await getAllInvoicesService(id);
             if (res && res.errCode === 0) {
+                if (id !== "ALL") {
+                    return res.invoices
+                }
                 toast.success("Fetch all invoices succeed")
                 dispatch(
                     fetchAllInvoicesSuccess(res.invoices.reverse())
@@ -135,6 +152,37 @@ export const fetchAllInvoicesSuccess = (data) => ({
 
 export const fetchAllInvoicesFailed = () => ({
     type: actionTypes.FETCH_ALL_INVOICES_FAILED
+})
+
+export const fetchAllInvoicesDetailStart = (id) => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await getAllInvoicesDetailService(id);
+            if (res && res.errCode === 0) {
+                if (id !== "ALL") {
+                    return res.invoicesDetail
+                }
+                toast.success("Fetch all invoices detail succeed")
+                dispatch(
+                    fetchAllInvoicesDetailSuccess(res.invoices.reverse())
+                );
+            } else {
+                toast.error("Fetch all invoices detail error")
+                dispatch(fetchAllInvoicesDetailFailed());
+            }
+        } catch (e) {
+            dispatch(fetchAllInvoicesDetailFailed());
+        }
+    }
+}
+
+export const fetchAllInvoicesDetailSuccess = (data) => ({
+    type: actionTypes.FETCH_ALL_INVOICES_DETAIL_SUCCESS,
+    dataInvoiceDetail: data
+})
+
+export const fetchAllInvoicesDetailFailed = () => ({
+    type: actionTypes.FETCH_ALL_INVOICES_DETAIL_FAILED
 })
 
 export const PayInvoiceImmediately = (invoiceId) => {
@@ -161,6 +209,23 @@ export const PayInvoiceAfter = (data) => {
             }
             else {
                 toast.error("Debt failed!")
+            }
+        }
+        catch (e) {
+            reject(e)
+        }
+    }
+}
+
+export const DeptInvoice = (invoiceId) => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await DeptInvoiceService(invoiceId);
+            if (res && res.errCode === 0) {
+                toast.success("Create debt first success!")
+            }
+            else {
+                toast.error("Create debt first failed!")
             }
         }
         catch (e) {

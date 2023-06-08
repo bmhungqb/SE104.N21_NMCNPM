@@ -1,19 +1,19 @@
 import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
-import './BookPurchase.scss'
+import './BookRental.scss'
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import Header from '../../Header/Header';
 import SideBar from '../../SideBar/sideBar';
-import TableBookPurchase from './TableBookPurchase';
-import ModalOrder from './ModalOrder';
-import ModalViewOrder from './ModalViewOrder';
-class BookPurchase extends Component {
+import TableBookRental from './TableBookRental';
+import ModalRental from './ModalRental';
+import ModalViewRental from './ModalViewRental';
+class BookRental extends Component {
     constructor(props) {
         super(props)
         this.state = {
             isOpenModalOrder: false,
-            isOpenModalViewOrder: false,
+            isOpenModalViewRental: false,
             isOpenModalDeleteBook: false,
             isModalPaid: false,
             invoiceId: undefined,
@@ -34,9 +34,9 @@ class BookPurchase extends Component {
             isOpenModalOrder: !this.state.isOpenModalOrder,
         })
     }
-    toggleViewOrderModal = (id) => {
+    toggleViewRentalModal = (id) => {
         this.setState({
-            isOpenModalViewOrder: !this.state.isOpenModalViewOrder,
+            isOpenModalViewRental: !this.state.isOpenModalViewRental,
         })
         if (id === "debt") {
             this.setState({
@@ -64,16 +64,16 @@ class BookPurchase extends Component {
     render() {
         return (
             <div className="d-flex" id="wrapper">
-                <ModalOrder
+                <ModalRental
                     isOpen={this.state.isOpenModalOrder}
                     toggleFromParent={this.toggleOrderModal}
                 />
                 {
-                    this.state.isOpenModalViewOrder &&
-                    <ModalViewOrder
+                    this.state.isOpenModalViewRental &&
+                    <ModalViewRental
                         isModalPaid={this.state.isModalPaid}
-                        isOpen={this.state.isOpenModalViewOrder}
-                        toggleFromParent={(id) => this.toggleViewOrderModal(id)}
+                        isOpen={this.state.isOpenModalViewRental}
+                        toggleFromParent={(id) => this.toggleViewRentalModal(id)}
                         invoiceId={this.state.invoiceId}
                     />
                 }
@@ -82,7 +82,7 @@ class BookPurchase extends Component {
                     <Header />
                     <div className='book-purchase-container'>
                         <div className='book-purchase-header'>
-                            <p className='title-header'>Book Purchase</p>
+                            <p className='title-header'>Book Rental</p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='book-purchase-content'>
@@ -113,12 +113,12 @@ class BookPurchase extends Component {
                                     <button
                                         className='btn px-3'
                                         onClick={() => this.handleCreateOrder()}
-                                    ><i className="fa fa-plus"></i> Create order</button>
+                                    ><i className="fa fa-plus"></i> Create Rent Receipt</button>
                                 </div>
                             </div>
                             <div className='datatable'>
-                                <TableBookPurchase
-                                    toggleFromParent={this.toggleViewOrderModal}
+                                <TableBookRental
+                                    toggleFromParent={this.toggleViewRentalModal}
                                     toggleBookDeleteModal={this.toggleBookDeleteModal}
                                     getInvoiceId={(invoiceId) => this.getInvoiceId(invoiceId)}
                                 />
@@ -144,4 +144,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(BookPurchase);
+export default connect(mapStateToProps, mapDispatchToProps)(BookRental);

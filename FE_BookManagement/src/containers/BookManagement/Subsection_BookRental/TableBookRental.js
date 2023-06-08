@@ -1,14 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
-import "./TableBookPurchase.scss";
+import "./TableBookRental.scss";
 import DataTable from 'react-data-table-component';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import actionTypes from '../../../store/actions/actionTypes';
 import * as actions from "../../../store/actions/index"
-class TableBookPurchase extends Component {
+class TableBookRental extends Component {
 
     constructor(props) {
         super(props);
@@ -143,4 +143,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(TableBookPurchase);
+export default connect(mapStateToProps, mapDispatchToProps)(TableBookRental);

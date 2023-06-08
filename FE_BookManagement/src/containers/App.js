@@ -17,6 +17,7 @@ import { CustomToastCloseButton } from '../components/CustomToast';
 import HomePage from './HomePage/homePage.js'
 import BookManage from './BookManagement/bookManage.js';
 import BookPurchase from './BookManagement/Subsection_BookPurchase/BookPurchase';
+import BookRental from './BookManagement/Subsection_BookRental/BookRental';
 import CustomerManage from './CustomerManagement/CustomerManage';
 import SupplierManage from './SupplierManagement/SupplierManage';
 import UserManage from './UserManagement/UserManage';
@@ -57,6 +58,7 @@ class App extends Component {
                                     <Route path={path.HOMEPAGE} component={userIsAuthenticated(HomePage)} />
                                     <Route path={path.BOOK_MANAGEMENT} component={userIsAuthenticated(BookManage)} />
                                     <Route path={path.BOOK_PURCHASE} component={userIsAuthenticated(BookPurchase)} />
+                                    <Route path={path.BOOK_RENTAL} component={userIsAuthenticated(BookRental)} />
                                     <Route path={path.CUSTOMER_MANAGEMENT} component={userIsAuthenticated(CustomerManage)} />
                                     <Route path={path.SUPPLIER_MANAGEMENT} component={userIsAuthenticated(SupplierManage)} />
                                     <Route path={path.USER_MANAGEMENT} component={userIsAuthenticated(UserManage)} />

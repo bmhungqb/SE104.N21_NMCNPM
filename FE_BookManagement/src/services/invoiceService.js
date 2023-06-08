@@ -1,9 +1,9 @@
 import axios from '../axios'
-const getAllInvoicesService = (invoiceId) => {
-    return axios.get(`./api/get-all-invoices?id=${invoiceId}`)
+const getAllInvoicesService = (id) => {
+    return axios.get(`./api/get-all-invoices?id=${id}`)
 }
-const getAllInvoicesDetail = (invoiceDetailId) => {
-    return axios.get(`./api/get-all-invoiceDetails?id=${invoiceDetailId}`)
+const getAllInvoicesDetailService = (id) => {
+    return axios.get(`./api/get-all-invoiceDetails?id=${id}`)
 }
 const CreateInvoiceSevice = (dataInvoice) => {
     return axios.post('./api/create-new-invoice', dataInvoice)
@@ -12,21 +12,21 @@ const CreateInvoiceDetailService = (dataInvoiceDetail) => {
     return axios.post('./api/create-new-invoiceDetail', dataInvoiceDetail)
 }
 
-const PayInvoiceImmediatelyService = (dataInvoice) => {
-    return axios.post('./api/invoice-pay-immediately', dataInvoice)
+const PayInvoiceImmediatelyService = (invoiceId) => {
+    return axios.post('./api/invoice-pay-immediately', invoiceId)
 }
 const PayInvoiceAfterService = (dataInvoice) => {
     return axios.post('./api/invoice-pay-after', dataInvoice)
 }
-const DeptInvoice = (dataInvoice) => {
-    return axios.post('./api/invoice-dept', dataInvoice)
+const DeptInvoiceService = (data) => {
+    return axios.post('/api/invoice-dept', data)
 }
 export {
     getAllInvoicesService,
-    getAllInvoicesDetail,
+    getAllInvoicesDetailService,
     CreateInvoiceSevice,
     CreateInvoiceDetailService,
     PayInvoiceImmediatelyService,
     PayInvoiceAfterService,
-    DeptInvoice
+    DeptInvoiceService
 }

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ModalOrder.scss"
+import "./ModalRental.scss"
 import { faPlus, faCheck } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import * as actions from "../../../store/actions/index"
@@ -13,7 +13,7 @@ import DatePicker from 'react-flatpickr';
 import AccordionItem from 'react-bootstrap/esm/AccordionItem';
 import { data } from 'jquery';
 import { collapseTextChangeRangesAcrossMultipleVersions } from 'typescript';
-class ModalOrder extends Component {
+class ModalRental extends Component {
 
     constructor(props) {
         super(props);
@@ -495,28 +495,29 @@ class ModalOrder extends Component {
                             </>
                         }
                         <div className='input-container'
-                            style={{ "width": "100%" }}
+                            style={{ "width": "49%" }}
                         >
                             <label>Discount code</label>
                             <div className='d-flex'>
                                 <input
                                     value={this.state.discountId}
                                     type='text'
-                                    style={{ "width": "49%" }}
+                                    style={{ "width": "100%" }}
                                     onChange={(e) => this.handleOnchangeInput(e, 'discountId')}
                                 />
-                                {
-                                    this.state.discountId &&
-                                    <span
-                                        className='d-flex ml-2'
-                                        style={this.state.isExistsDiscount ?
-                                            { "alignItems": "center", "height": "100%", "color": "green" }
-                                            :
-                                            { "alignItems": "center", "height": "100%", "color": "red" }
-                                        }
-                                    >{this.state.messageCheckDiscount}
-                                    </span>
-                                }
+                            </div>
+                        </div>
+                        <div className='input-container'
+                            style={{ "width": "49%" }}
+                        >
+                            <label>Discount code</label>
+                            <div className='d-flex'>
+                                <input
+                                    value={this.state.discountId}
+                                    type='text'
+                                    style={{ "width": "100%" }}
+                                    onChange={(e) => this.handleOnchangeInput(e, 'discountId')}
+                                />
                             </div>
                         </div>
 
@@ -638,4 +639,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalOrder);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalRental);
