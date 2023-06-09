@@ -85,7 +85,7 @@ async function PayInvoiceImmediately(req, res) {
         invoice.status = 1;
         await db.DeptReport.create({
             customerId: invoice.customerId,
-            beginningDept: 0,
+            beginningDept: invoice.totalPrice,
             phatSinh: invoice.totalPrice,
             endingDept: 0,
         })
@@ -151,7 +151,7 @@ async function PayInvoiceAfter(req, res) {
         })
     }
 }
-// req body has invoiceId
+// req body has invoiceId , customerPay
 async function DeptInvoice(req, res) {
     const t = await db.sequelize.transaction();
     try {
