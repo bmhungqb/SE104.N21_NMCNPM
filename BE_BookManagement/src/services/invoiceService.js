@@ -47,6 +47,7 @@ async function CalculateTotalPrice(id) {
     const customer = await db.Customer.findOne({
         where: { customerId: invoice.customerId }
     })
+    invoice.remaining = totalPrice;
     await invoice.save();
 }
 
