@@ -14,7 +14,7 @@ async function CreateInvoice(req, res) {
             status: 0,
         })
         invoiceRaw.invoiceDetailId = invoiceRaw.invoiceId
-        invoiceRaw.save();
+        await invoiceRaw.save();
         const invoice = invoiceRaw
         const [result] = await db.sequelize.query('SELECT LAST_INSERT_ID() as invoiceId');
         const invoiceId = result[0].invoiceId;
@@ -200,14 +200,14 @@ async function CreateInvoiceDetail(req, res) {
             invoiceDetailsArray,
             { transaction: t }
         )
-        invoiceServices.CalculateTotalPrice(invoiceDetail[0].invoiceDetailId)
-        t.commit()
+        await invoiceServices.CalculateTotalPrice(invoiceDetail[0].invoiceDetailId)
+        await t.commit()
         res.status(200).json({
             errCode: 0,
             invoiceDetail: invoiceDetail
         });
     } catch (e) {
-        t.rollback()
+        await t.rollback()
         res.status(400).json({
             errCode: 0,
             error: e.message
