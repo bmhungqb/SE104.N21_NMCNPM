@@ -8,10 +8,13 @@ async function getAllBookReport(month) {
     });
     let reportData = []
     // initial data bookreport for all bookId
-    const books = await db.Book.findAll({ attributes: ['bookId'] })
+    const books = await db.Book.findAll({ attributes: ['bookId','bookTitle'] })
+    console.log(books)
+    let i=1
     books.forEach(book => {
         reportData[book.bookId] = {
             bookId: book.bookId,
+            bookTitle: book.bookTitle,
             beginningStock: 0,
             endingStock: 0,
             phatSinh: 0
@@ -26,21 +29,34 @@ async function getAllBookReport(month) {
 }
 
 async function GetBookReport(req, res) {
-    let month = req.query.month
-    let currentDatas = await getAllBookReport(month)
-    if (month > 1) {
-        let prevDatas = await getAllBookReport(month - 1)
-        // Calculate endingStock for prevData
-        prevDatas.forEach(prevData => {
-            prevData.endingStock = prevData.beginningStock - prevData.phatSinh
-        })
-        // Calculate curruntData
-        currentDatas.forEach(currentData => {
-            currentData.beginningStock += prevDatas[currentData.bookId].endingStock
-            currentData.endingStock = currentData.beginningStock - currentData.phatSinh
+    try {
+        let month = req.query.month
+        if (month == undefined){
+            throw new Error("missing parameter")
+        }
+        let currentDatas = await getAllBookReport(month)
+        if (month > 1) {
+            let prevDatas = await getAllBookReport(month - 1)
+            // Calculate endingStock for prevData
+            prevDatas.forEach(prevData => {
+                prevData.endingStock = prevData.beginningStock - prevData.phatSinh
+            })
+            // Calculate curruntData
+            currentDatas.forEach(currentData => {
+                currentData.beginningStock += prevDatas[currentData.bookId].endingStock
+                currentData.endingStock = currentData.beginningStock - currentData.phatSinh
+            })
+        }
+        res.status(200).json({
+            errCode:0,
+            currentDatas: currentDatas 
+        });
+    } catch (e) {
+        res.status(400).json({
+            errCode:1,
+            errMessage : e.message
         })
     }
-    res.status(200).json({ currentDatas: currentDatas });
 }
 module.exports = {
     GetBookReport: GetBookReport
