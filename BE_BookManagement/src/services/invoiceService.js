@@ -47,12 +47,6 @@ async function CalculateTotalPrice(id) {
     const customer = await db.Customer.findOne({
         where: { customerId: invoice.customerId }
     })
-    await db.DeptReport.create({
-        customerId: customer.customerId,
-        beginningDept: invoice.totalPrice,
-        endingDept: 0,
-        phatSinh: 0,
-    })
     await invoice.save();
 }
 
