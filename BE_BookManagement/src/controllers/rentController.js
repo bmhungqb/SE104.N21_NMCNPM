@@ -2,23 +2,106 @@ import db from "../models/index"
 import { getAllRent, updateRent, deleteRentData, PriceEachRentDetailId } from "../services/rentService"
 
 let GetAllRent = async (req, res) => {
-    let rents = await getAllRent();
-    console.log(rents)
-    if (rents) {
-        return res.status(200).json({
-            errCode: 0,
-            errMessage: "OK",
-            rents
-        })
-    } else {
-        return res.status(400).json({
-            errCode: 1,
-            errMessage: "Missing required parameters",
-            rents: []
-        })
+    try {
+        let rentId = req.query.id;
+        if (!rentId) {
+            return res.status(200).json({
+                errCode: 1,
+                errMessage: "Missing required parameters",
+                customers: []
+            })
+        }
+        else {
+            if (rentId === "ALL") {
+                const rents = await db.Rent.findAll(
+                    {
+                        include: [
+                            {
+                                model: db.Customer,
+                                attributes: ['fullName'],
+                            },
+                            // {
+                            //     model: db.Book,
+                            //     attributes: ['bookTitle'],
+                            // },
+                        ],
+                        // attributes: ['id', 'bookId', 'customerId', 'quantity']
+                    });
+                res.status(200).json({
+                    errCode: 0,
+                    rents: rents
+                })
+            }
+            if (rentId && rentId !== 'ALL') {
+                const rents = await db.Rent.findOne({
+                    where: { rentId: rentId },
+                    include: [
+                        {
+                            model: db.Customer,
+                            attributes: ['fullName', "phoneNumber", "email", "address"],
+                        },
+                    ]
+                })
+                res.status(200).json({
+                    errCode: 0,
+                    rents: rents
+                })
+            }
+        }
+    } catch (e) {
+        res.status(400).json({ error: e.message })
+    }
+    // let rents = await getAllRent(req.query.id);
+    // if (rents) {
+    //     return res.status(200).json({
+    //         errCode: 0,
+    //         errMessage: "OK",
+    //         rents: rents
+    //     })
+    // } else {
+    //     return res.status(400).json({
+    //         errCode: 1,
+    //         errMessage: "Missing required parameters",
+    //         rents: []
+    //     })
+    // }
+}
+let GetAllRentDetail = async (req, res) => {
+    try {
+        let rentDetailId = req.query.id;
+        if (!rentDetailId) {
+            return res.status(200).json({
+                errCode: 1,
+                errMessage: "Missing required parameters",
+                customers: []
+            })
+        }
+        else {
+            if (rentDetailId === "ALL") {
+                const rentsDetail = await db.RentDetail.findAll(
+                    {
+                        include: [{ model: db.Book }]
+                    });
+                res.status(200).json({
+                    errCode: 0,
+                    rentsDetail: rentsDetail
+                })
+            }
+            if (rentDetailId && rentDetailId !== 'ALL') {
+                const rentsDetail = await db.RentDetail.findAll({
+                    where: { rentDetailId: rentDetailId },
+                    include: [{ model: db.Book }]
+                })
+                res.status(200).json({
+                    errCode: 0,
+                    rentsDetail: rentsDetail
+                })
+            }
+        }
+    } catch (e) {
+        res.status(400).json({ error: e.message })
     }
 }
-
 let CreateRent = async (req, res) => {
     try {
         if (Object.keys(req.body).length !== 0 && req.body !== null) {
@@ -94,6 +177,7 @@ let DeleteRent = async (req, res) => {
 }
 module.exports = {
     GetAllRent: GetAllRent,
+    GetAllRentDetail: GetAllRentDetail,
     CreateRent: CreateRent,
     CreateRentDetail: CreateRentDetail,
     EditRent: EditRent,

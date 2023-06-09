@@ -26,7 +26,6 @@ module.exports = (sequelize, DataTypes) => {
 
     birthDay: DataTypes.STRING,
     startWork: DataTypes.STRING
-
   }, {
     sequelize,
     modelName: 'User',

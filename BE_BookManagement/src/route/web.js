@@ -20,7 +20,7 @@ let initWebRoutes = (app) => {
     router.get('/', requireAuth, homeController.getHomePage);
 
     // // login
-    // router.post("/api/login", userController.handleLogin);
+    router.post("/api/login", userController.handleLogin);
     // router.post("/api/create-new-user", userController.handleSignup)
     // Book
     router.post("/api/create-new-book", bookController.handleCreateNewBook);
@@ -49,6 +49,7 @@ let initWebRoutes = (app) => {
     router.delete("/api/delete-discount", discountController.handleDeleteDiscount);
     // Rent
     router.get("/api/get-all-rents", rentController.GetAllRent);
+    router.get("/api/get-all-rentDetails", rentController.GetAllRentDetail);
     router.post("/api/create-new-rent", rentController.CreateRent);
     router.post("/api/create-new-rentDetail", rentController.CreateRentDetail);
     router.put("/api/edit-rent", rentController.EditRent)
