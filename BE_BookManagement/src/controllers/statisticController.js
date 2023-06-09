@@ -1,8 +1,7 @@
 import db, { sequelize } from "../models/index"
 
-async function GetMonthStatistic(req, res) {
-    const month = req.query.month
-    console.log(invoices)
+
+async function GetMonthStaticstic(month){
     let monthlyRevenue = 0
     let monthlyNewCustomer = 0
     let monthlyBookSoldQuantity = 0
@@ -29,10 +28,48 @@ async function GetMonthStatistic(req, res) {
         monthlyNewCustomer: monthlyNewCustomer,
         monthlyBookSoldQuantity: monthlyBookSoldQuantity,
     }
-    res.status(200).json({ monthlyStatistic: monthlyStatistic })
+    return monthlyStatistic
+}
+
+
+async function GetYearStatistic(req,res){
+    try{
+        let yearStatistic = []
+        for (let i=0;i<12;i++){
+            yearStatistic[i] =await GetMonthStaticstic(i)
+            yearStatistic[i].month=i+1
+        }
+        res.status(200).json({ 
+            errCode : 0,
+            yearStatistic: yearStatistic 
+        })
+    } catch (e) {   
+        res.status(400).json({
+            errCode :1,
+            errMess : e.message
+        })
+    }
+}
+
+
+async function GetCurrentMonthStatistic(req, res) {
+    try {
+        const month = (new Date()).getMonth()
+        let monthlyStatistic=await GetMonthStaticstic(month)
+        res.status(200).json({ 
+            errCode : 0,
+            monthlyStatistic: monthlyStatistic 
+        })
+    } catch (e) {
+        res.status(400).json({
+            errCode :1,
+            errMess : e.message
+        })
+    }
 }
 
 
 module.exports = {
-    GetMonthStatistic: GetMonthStatistic
+    GetCurrentMonthStatistic: GetCurrentMonthStatistic,
+    GetYearStatistic:GetYearStatistic,
 }

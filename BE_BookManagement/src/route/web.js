@@ -76,7 +76,8 @@ let initWebRoutes = (app) => {
     // Dept Report
     router.get("/api/get-all-deptReports", deptReportController.GetDeptReport)
     // Statistic
-    router.get("/api/get-statistic", staticsticController.GetMonthStatistic)
+    router.get("/api/get-currentStatistic", staticsticController.GetCurrentMonthStatistic)
+    router.get("/api/get-yearStatistic", staticsticController.GetYearStatistic)
     return app.use("/", router);
 }
 
