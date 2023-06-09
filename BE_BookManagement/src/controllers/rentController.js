@@ -109,7 +109,7 @@ let CreateRent = async (req, res) => {
                 customerId: req.body.customerId,
                 dateReturn: req.body.dateReturn,
                 dayRent: req.body.dayRent,
-
+                
                 rentPrice: 0,
                 createdAt: new Date(),
                 updatedAt: new Date(),

@@ -31,9 +31,14 @@ async function GetMonthStaticstic(month) {
     return monthlyStatistic
 }
 
+<<<<<<< HEAD
 
 async function GetYearStatistic(req, res) {
     try {
+=======
+async function GetYearStatistic(req,res){
+    try{
+>>>>>>> 1134cf5c1e015817f647917863b76cab6dd98eee
         let yearStatistic = []
         for (let i = 0; i < 12; i++) {
             yearStatistic[i] = await GetMonthStaticstic(i)

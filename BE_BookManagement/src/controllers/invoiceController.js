@@ -157,13 +157,22 @@ async function DeptInvoice(req, res) {
     try {
         let invoiceId = req.body.invoiceId
         const invoice = await db.Invoice.findOne({ where: { invoiceId: invoiceId } })
-        invoice.remaining = invoice.totalPrice;
+        invoice.customerPay += req.body.customerPay
+
         await db.DeptReport.create({
             customerId: invoice.customerId,
             beginningDept: invoice.totalPrice,
-            phatSinh: 0,
+            phatSinh: req.body.customerPay,
             endingDept: 0,
         }, { transaction: t })
+        // customerPay cannot be higer than remaining
+        if (req.body.customerPay > invoice.remaining) {
+            throw Error('customerPay cannot excess remaining,you cannot excess regulation')
+        }
+        invoice.remaining = invoice.remaining - req.body.customerPay
+        if (invoice.remaining == 0) {
+            invoice.status = 1
+        }
         await invoice.save()
         await t.commit();
         res.status(200).json({
