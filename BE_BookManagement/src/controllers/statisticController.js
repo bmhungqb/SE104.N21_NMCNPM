@@ -31,7 +31,6 @@ async function GetMonthStaticstic(month){
     return monthlyStatistic
 }
 
-
 async function GetYearStatistic(req,res){
     try{
         let yearStatistic = []
