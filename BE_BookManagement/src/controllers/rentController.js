@@ -109,7 +109,7 @@ let CreateRent = async (req, res) => {
                 customerId: req.body.customerId,
                 dateReturn: req.body.dateReturn,
                 dayRent: req.body.dayRent,
-                
+
                 rentPrice: 0,
                 createdAt: new Date(),
                 updatedAt: new Date(),
@@ -151,6 +151,27 @@ async function CreateRentDetail(req, res) {
         res.status(400).json({ error: e.message })
     }
 }
+// can req body la rentId
+async function SaveRentForDeptReport(req,res){
+    try {
+        const rent = await db.Rent.findOne({where:{rentId:req.body.rentId}})
+        const deptReport = await db.DeptReport.create({
+            customerId:rent.customerId,
+            beginningDept:rent.rentPrice,
+            endingDept:0,
+            phatSinh:rent.rentPrice,
+        })
+        res.status(200).json({
+            errCode:0,
+            message:'successfully'
+        })
+    } catch (e) {
+        res.status(400).json({
+            errCode: 1,
+            errMessage: e.message
+        })
+    }
+}
 let EditRent = async (req, res) => {
     const rent = await updateRentData(req.body);
     if (rent.errCode !== 0) {
@@ -181,5 +202,6 @@ module.exports = {
     CreateRent: CreateRent,
     CreateRentDetail: CreateRentDetail,
     EditRent: EditRent,
-    DeleteRent: DeleteRent
+    DeleteRent: DeleteRent,
+    SaveRentForDeptReport:SaveRentForDeptReport
 }

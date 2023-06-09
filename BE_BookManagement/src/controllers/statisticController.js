@@ -8,6 +8,9 @@ async function GetMonthStaticstic(month){
     const invoices = await db.Invoice.findAll({
         where: sequelize.where(sequelize.fn('month', sequelize.col('createdAt')), month)
     })
+    const rents = await db.Rent.findAll({
+        where: sequelize.where(sequelize.fn('month', sequelize.col('createdAt')), month)
+    })
     const customers = await db.Customer.findAll({
         where: sequelize.where(sequelize.fn('month', sequelize.col('createdAt')), month)
     })
@@ -16,6 +19,9 @@ async function GetMonthStaticstic(month){
     })
     invoices.forEach(invoice => {
         monthlyRevenue += invoice.customerPay
+    })
+    rents.forEach(rent => {
+        monthlyRevenue += rent.rentPrice
     })
     customers.forEach(customer => {
         monthlyNewCustomer++;
