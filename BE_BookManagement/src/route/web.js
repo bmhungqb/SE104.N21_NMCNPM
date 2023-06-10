@@ -52,6 +52,7 @@ let initWebRoutes = (app) => {
     router.get("/api/get-all-rentDetails", rentController.GetAllRentDetail);
     router.post("/api/create-new-rent", rentController.CreateRent);
     router.post("/api/create-new-rentDetail", rentController.CreateRentDetail);
+    router.post("/api/save-rent-dept-report",rentController.SaveRentForDeptReport)
     router.put("/api/edit-rent", rentController.EditRent)
     router.delete("/api/delete-rent", rentController.DeleteRent)
     // Invoice
