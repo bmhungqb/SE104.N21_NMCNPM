@@ -14,8 +14,8 @@ class TableBookRental extends Component {
         super(props);
         this.state = {
             columns: [{
-                name: "Invoice ID",
-                selector: "invoiceId",
+                name: "Rental ID",
+                selector: "rentId",
                 sortable: true,
             },
             {
@@ -27,24 +27,24 @@ class TableBookRental extends Component {
                 selector: "name",
             },
             {
-                name: "Total Amount",
-                selector: "totalAmount",
+                name: "Start Date",
+                selector: "startDate",
             },
             {
-                name: "Date",
-                selector: "createAt",
+                name: "Due Date",
+                selector: "dueDate",
             },
             {
-                name: "Status",
+                name: "Rental Status",
                 selector: "status",
                 cell: (row) =>
                     <button
                         className='border-0'
-                        onClick={() => { this.handleViewDetailOrder(row) }}
+                        onClick={() => { this.handleViewDetailRent(row) }}
                         data-tag="allowRowEvents"
-                        style={row.status == "Paid" ?
+                        style={row.status == "end" ?
                             { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#F0483E" } :
-                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#03A9F5" }
+                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" }
                         }
                     >
                         {row.status}
@@ -64,30 +64,29 @@ class TableBookRental extends Component {
         }
     }
 
-    handleViewDetailOrder = (row) => {
-        this.props.getInvoiceId(row.invoiceId)
-        if (row.status === "Paid") {
-            this.props.toggleFromParent("paid")
-        }
-        else {
-            this.props.toggleFromParent("debt")
-        }
+    handleViewDetailRent = (row) => {
+        this.props.getRentId(row.rentId)
+        this.props.toggleFromParent()
     }
     componentDidMount() {
-        this.props.fetchAllInvoicesStart("ALL")
+        this.props.fetchAllRents("ALL")
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
-        if (prevProps.listInvoices !== this.props.listInvoices) {
+        if (prevProps.listRents !== this.props.listRents) {
             let arr = []
-            this.props.listInvoices.map((item, index) => {
+            this.props.listRents.map((item) => {
                 let date = new Date(Date.parse(item.createdAt)).toLocaleDateString();
+                let dateReturn = new Date(Date.parse(item.dateReturn)).toLocaleDateString();
+                let currentDate = new Date().toLocaleDateString();
                 arr.push({
-                    "invoiceId": item.invoiceId,
+                    "rentId": item.rentId,
                     "customerId": item.customerId,
                     "name": item.Customers[0].fullName,
-                    "totalAmount": item.totalPrice,
-                    "createAt": date,
-                    "status": item.status ? "Paid" : "Debt"
+                    "totalAmount": item.rentPrice,
+                    "startDate": date,
+                    "dueDate": dateReturn,
+                    // "status": item.status ? "Paid" : "Debt"
+                    "status": new Date(dateReturn) < new Date(currentDate) ? "end" : "borrow"
                 })
             })
             this.setState({
@@ -97,12 +96,12 @@ class TableBookRental extends Component {
         if (prevProps.optionSearch != this.props.optionSearch) {
             if (this.props.optionSearch[0] === "") {
                 this.setState({
-                    dataTableInvoice: this.props.listInvoices,
+                    dataTableInvoice: this.props.listRents,
                     optionSearch: this.props.optionSearch
                 })
             }
             else {
-                const arr = this.props.listInvoices.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
+                const arr = this.props.listRents.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
                 this.setState({
                     dataTableInvoice: arr,
                     optionSearch: this.props.optionSearch
@@ -133,13 +132,13 @@ class TableBookRental extends Component {
 
 const mapStateToProps = state => {
     return {
-        listInvoices: state.invoice.listInvoices
+        listRents: state.rent.listRents
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllInvoicesStart: (id) => dispatch(actions.fetchAllInvoicesStart(id))
+        fetchAllRents: (id) => dispatch(actions.fetchAllRents(id))
     };
 };
 

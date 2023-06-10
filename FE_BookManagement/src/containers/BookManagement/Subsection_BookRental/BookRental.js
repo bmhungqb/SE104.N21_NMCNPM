@@ -12,46 +12,29 @@ class BookRental extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            isOpenModalOrder: false,
+            isOpenModalRent: false,
             isOpenModalViewRental: false,
-            isOpenModalDeleteBook: false,
-            isModalPaid: false,
-            invoiceId: undefined,
+            rentId: undefined,
         }
     }
-    getInvoiceId = (invoiceId) => {
+    getRentId = (rentId) => {
         this.setState({
-            invoiceId: invoiceId
+            rentId: rentId
         })
     }
-    handleCreateOrder = () => {
+    handleCreateRental = () => {
         this.setState({
-            isOpenModalOrder: true,
+            isOpenModalRent: true,
         })
     }
     toggleOrderModal = () => {
         this.setState({
-            isOpenModalOrder: !this.state.isOpenModalOrder,
+            isOpenModalRent: !this.state.isOpenModalRent,
         })
     }
     toggleViewRentalModal = (id) => {
         this.setState({
             isOpenModalViewRental: !this.state.isOpenModalViewRental,
-        })
-        if (id === "debt") {
-            this.setState({
-                isModalPaid: false
-            })
-        }
-        else {
-            this.setState({
-                isModalPaid: true
-            })
-        }
-    }
-    toggleBookDeleteModal = () => {
-        this.setState({
-            isOpenModalDeleteBook: !this.state.isOpenModalDeleteBook,
         })
     }
     handleOnchangeInputFilter = (e, id) => {
@@ -65,16 +48,15 @@ class BookRental extends Component {
         return (
             <div className="d-flex" id="wrapper">
                 <ModalRental
-                    isOpen={this.state.isOpenModalOrder}
+                    isOpen={this.state.isOpenModalRent}
                     toggleFromParent={this.toggleOrderModal}
                 />
                 {
                     this.state.isOpenModalViewRental &&
                     <ModalViewRental
-                        isModalPaid={this.state.isModalPaid}
                         isOpen={this.state.isOpenModalViewRental}
                         toggleFromParent={(id) => this.toggleViewRentalModal(id)}
-                        invoiceId={this.state.invoiceId}
+                        rentId={this.state.rentId}
                     />
                 }
                 <SideBar />
@@ -112,15 +94,14 @@ class BookRental extends Component {
                                 <div className='mx-1 button-add'>
                                     <button
                                         className='btn px-3'
-                                        onClick={() => this.handleCreateOrder()}
+                                        onClick={() => this.handleCreateRental()}
                                     ><i className="fa fa-plus"></i> Create Rent Receipt</button>
                                 </div>
                             </div>
                             <div className='datatable'>
                                 <TableBookRental
                                     toggleFromParent={this.toggleViewRentalModal}
-                                    toggleBookDeleteModal={this.toggleBookDeleteModal}
-                                    getInvoiceId={(invoiceId) => this.getInvoiceId(invoiceId)}
+                                    getRentId={(rentId) => this.getRentId(rentId)}
                                 />
                             </div>
 

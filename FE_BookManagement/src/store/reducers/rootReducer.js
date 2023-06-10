@@ -1,6 +1,5 @@
 import { combineReducers } from 'redux';
 import { connectRouter } from 'connected-react-router';
-
 import appReducer from "./appReducer";
 import userReducer from "./userReducer";
 import adminReducer from './adminReducer';
@@ -11,9 +10,11 @@ import usersReducer from '../reducers/usersReducer';
 import discountReducer from './discountReducer';
 import regulationReducer from './regulationReducer';
 import invoiceReducer from './invoiceReducer';
+import statisticReducer from './statisticReducer';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import storage from 'redux-persist/lib/storage';
 import { persistReducer } from 'redux-persist';
+import rentReducer from './rentReducer';
 
 const persistCommonConfig = {
     storage: storage,
@@ -44,4 +45,6 @@ export default (history) => combineReducers({
     discount: discountReducer,
     regulation: regulationReducer,
     invoice: invoiceReducer,
+    rent: rentReducer,
+    statistic: statisticReducer,
 })

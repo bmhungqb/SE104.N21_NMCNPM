@@ -3,22 +3,47 @@ import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalInventory.scss"
+import DataTable from 'react-data-table-component';
+import actionTypes from '../../../store/actions/actionTypes';
+import * as actions from '../../../store/actions/index'
 class ModalInventory extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: '',
-            firstName: '',
-            lastName: '',
-            address: ''
+            dataTableBookSelect: [],
+            columns: [
+                {
+                    name: "Book ID",
+                    selector: 'bookId',
+                    sortable: true,
+                },
+                {
+                    name: "Book Title",
+                    selector: "bookTitle",
+                },
+                {
+                    name: "Begin Inventory",
+                    selector: "beginningStock",
+                },
+                {
+                    name: "Sold Quantity",
+                    selector: "phatSinh",
+                },
+                {
+                    name: "End Inventory",
+                    selector: "endingStock",
+                },
+            ],
         }
     }
     componentDidMount() {
-
+        this.props.getBookReports(6)
     }
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.dataBookReport !== this.props.dataBookReport) {
+        }
+    }
     toggle = () => {
         this.props.toggleFromParent();
     }
@@ -30,73 +55,22 @@ class ModalInventory extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Book Information</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Inventory Report</ModalHeader>
                 <ModalBody>
-                    <div className='modal-book-body'>
-                        <div className='input-container'>
-                            <label>Book ID</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Quantity</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Book Title</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Genre</label>
-                            <select className='form-select'>
-                                <option >Action and Adventure</option>
-                                <option>Classics</option>
-                                <option>Detective and Mystery</option>
-                                <option>Fantasy</option>
-                                <option>Historical Fiction</option>
-                                <option>Horror</option>
-                            </select>
-                        </div>
-                        <div className='input-container'>
-                            <label>Author</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Publisher</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Selling Price</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Cost Price</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container max-width-input'>
-                            <label>Description</label>
-                            <div class="form-outline">
-                                <textarea class="form-control" id="textAreaExample2" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
+                    <DataTable
+                        columns={this.state.columns}
+                        data={this.state.dataTableBookSelect}
+                        fixedHeader
+                        fixedHeaderScrollHeight="330px"
+                    />
                 </ModalBody>
                 <ModalFooter>
-                    <Button className='px-5 border-0 bg-danger' >Clear</Button>
-                    <Button className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Save</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-danger' onClick={() => { this.handleDownload() }}>Download</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Cancel</Button>
                 </ModalFooter>
             </Modal >
         )
@@ -106,11 +80,13 @@ class ModalInventory extends Component {
 
 const mapStateToProps = state => {
     return {
+        dataBookReport: state.statistic.dataBookReport
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        getBookReports: (month) => dispatch(actions.getBookReports(month))
     };
 };
 

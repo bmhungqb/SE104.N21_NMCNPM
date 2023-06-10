@@ -25,13 +25,18 @@ import {
 } from 'chart.js';
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 import { Line } from 'react-chartjs-2';
+import actionTypes from '../../../store/actions/actionTypes';
+import * as actions from '../../../store/actions/index'
 class DataMonth extends Component {
     constructor(props) {
         super(props);
         this.state = {
             date: new Date(),
             isOpenModalInventory: false,
-            isOpenModalDebt: false
+            isOpenModalDebt: false,
+            listBook: [],
+            listCustomer: [],
+            listMoney: []
         };
     }
     handlebtnDebt = () => {
@@ -57,7 +62,27 @@ class DataMonth extends Component {
     changeLanguage = (language) => {
         this.props.changeLanguageAppRedux(language)
     }
+    componentDidMount() {
+        this.props.fetchAllMonthStatistics()
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.allMonthStatistic !== this.props.allMonthStatistic) {
+            let listBook = [];
+            let listCustomer = [];
+            let listMoney = [];
+            this.props.allMonthStatistic.forEach(element => {
+                listBook.push(element["monthlyBookSoldQuantity"])
+                listCustomer.push(element["monthlyNewCustomer"])
+                listMoney.push(element["monthlyRevenue"])
+            });
+            this.setState({
+                listBook: listBook,
+                listCustomer: listCustomer,
+                listMoney: listMoney
+            })
+        }
 
+    }
     render() {
         const { date } = this.state;
         let { language } = this.props.language;
@@ -80,21 +105,21 @@ class DataMonth extends Component {
                                     datasets: [
                                         {
                                             label: 'Money',
-                                            data: [12, 34, 56, 102, 676, 98, 46],
+                                            data: this.state.listMoney,
                                             borderColor: 'rgb(255, 99, 132)',
                                             backgroundColor: 'rgba(255, 99, 132, 0.5)',
                                             tension: 0.5
                                         },
                                         {
                                             label: 'Book',
-                                            data: [105, 134, 156, 12, 676, 98, 46],
+                                            data: this.state.listBook,
                                             borderColor: 'rgb(53, 162, 235)',
                                             backgroundColor: 'rgba(53, 162, 235, 0.5)',
                                             tension: 0.5
                                         },
                                         {
                                             label: 'Customer',
-                                            data: [505, 34, 56, 12, 100, 98, 46],
+                                            data: this.state.listCustomer,
                                             borderColor: 'rgb(53, 162, 100)',
                                             backgroundColor: 'rgba(53, 162, 100, 0.5)',
                                             tension: 0.5
@@ -190,12 +215,14 @@ const mapStateToProps = state => {
         isLoggedIn: state.user.isLoggedIn,
         language: state.app.language,
         userInfo: state.user.userInfo,
+        allMonthStatistic: state.statistic.allMonthStatistic
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
+        fetchAllMonthStatistics: () => dispatch(actions.fetchAllMonthStatistics())
     };
 };
 

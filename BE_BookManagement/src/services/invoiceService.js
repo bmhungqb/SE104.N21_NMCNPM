@@ -47,12 +47,7 @@ async function CalculateTotalPrice(id) {
     const customer = await db.Customer.findOne({
         where: { customerId: invoice.customerId }
     })
-    await db.DeptReport.create({
-        customerId: customer.customerId,
-        beginningDept: invoice.totalPrice,
-        endingDept: 0,
-        phatSinh: 0,
-    })
+    invoice.remaining = invoice.totalPrice;
     await invoice.save();
 }
 
@@ -60,7 +55,6 @@ async function CalculateTotalPrice(id) {
 
 
 async function UpdateBookStockAfterInvoiceAndCheckCustomer(datas) {
-    console.log(datas)
     for (const data of datas) {
         const book = await db.Book.findOne({ where: { bookId: data.bookId } })
         const invoice = await db.Invoice.findOne({ where: { invoiceId: data.invoiceDetailId } })

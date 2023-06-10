@@ -30,7 +30,7 @@ class ModalDebt extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Book Information</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Inventoru</ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'>

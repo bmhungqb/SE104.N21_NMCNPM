@@ -113,7 +113,6 @@ let createNewUser = (data) => {
                     errMessage: "Your username already in used, plz try another username"
                 })
             } else {
-                console.log(data)
                 await db.User.create({
                     name: data.name,
                     gender: data.gender,
@@ -145,13 +144,9 @@ let createNewUser = (data) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id || !data.name || !data.gender
-                || !data.role || !data.phonenumber || !data.email
-                || !data.username || !data.password
-                || !data.birthDay || !data.startWork || !data.address
-            ) {
+            if (!data.id) {
                 resolve({
-                    errCode: 2,
+                    errCode: 1,
                     errMessage: "Missing required parameters"
                 })
             }
@@ -175,13 +170,13 @@ let updateUserData = (data) => {
                 await user.save()
                 resolve({
                     errCode: 0,
-                    message: 'Update the book succeeds! '
+                    message: 'Update the user succeeds! '
                 });
             }
             else {
                 resolve({
                     errCode: 1,
-                    errMessage: "Book not found!"
+                    errMessage: "User not found!"
                 });
             }
         } catch (e) {

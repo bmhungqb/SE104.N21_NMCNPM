@@ -4,6 +4,7 @@ import {
     getAllRentsService,
     CreateRentSevice,
     CreateRentDetailService,
+    getAllRentDetailsService
 } from '../../services/rentService';
 import {
     createNewCustomerService,
@@ -59,8 +60,6 @@ export const CreateRentExistsCustomer = (dataRent, dataBook) => {
     };
 };
 
-
-
 export const saveRentSuccess = () => ({
     type: actionTypes.CREATE_RENT_SUCCESS
 })
@@ -92,95 +91,64 @@ export const saveRentDetailFailed = () => ({
     type: actionTypes.CREATE_RENT_DETAIL_FAILED
 })
 
-export const fetchAllInvoicesStart = (id) => {
+export const fetchAllRents = (id) => {
     return async (dispatch, getState) => {
         try {
-            let res = await getAllInvoicesService(id);
+            let res = await getAllRentsService(id);
             if (res && res.errCode === 0) {
                 if (id !== "ALL") {
-                    return res.invoices
+                    return res.rents
                 }
-                toast.success("Fetch all invoices succeed")
+                toast.success("Fetch all rents succeed")
                 dispatch(
-                    fetchAllInvoicesSuccess(res.invoices.reverse())
+                    fetchAllRentsSuccess(res.rents.reverse())
                 );
             } else {
-                toast.error("Fetch all invoices error")
-                dispatch(fetchAllInvoicesFailed());
+                toast.error("Fetch all rents error")
+                dispatch(fetchAllRentsFailed());
             }
         } catch (e) {
-            dispatch(fetchAllInvoicesFailed());
+            dispatch(fetchAllRentsFailed());
         }
     }
 }
 
-export const fetchAllInvoicesSuccess = (data) => ({
-    type: actionTypes.FETCH_ALL_INVOICES_SUCCESS,
-    dataInvoices: data
+export const fetchAllRentsSuccess = (data) => ({
+    type: actionTypes.FETCH_ALL_RENTS_SUCCESS,
+    dataRents: data
 })
 
-export const fetchAllInvoicesFailed = () => ({
-    type: actionTypes.FETCH_ALL_INVOICES_FAILED
+export const fetchAllRentsFailed = () => ({
+    type: actionTypes.FETCH_ALL_RENTS_FAILED
 })
 
-// export const fetchAllInvoicesDetailStart = (id) => {
-//     return async (dispatch, getState) => {
-//         try {
-//             let res = await getAllInvoicesDetailService(id);
-//             if (res && res.errCode === 0) {
-//                 if (id !== "ALL") {
-//                     return res.invoicesDetail
-//                 }
-//                 toast.success("Fetch all invoices detail succeed")
-//                 dispatch(
-//                     fetchAllInvoicesDetailSuccess(res.invoices.reverse())
-//                 );
-//             } else {
-//                 toast.error("Fetch all invoices detail error")
-//                 dispatch(fetchAllInvoicesDetailFailed());
-//             }
-//         } catch (e) {
-//             dispatch(fetchAllInvoicesDetailFailed());
-//         }
-//     }
-// }
-
-// export const fetchAllInvoicesDetailSuccess = (data) => ({
-//     type: actionTypes.FETCH_ALL_INVOICES_DETAIL_SUCCESS,
-//     dataInvoiceDetail: data
-// })
-
-// export const fetchAllInvoicesDetailFailed = () => ({
-//     type: actionTypes.FETCH_ALL_INVOICES_DETAIL_FAILED
-// })
-
-export const PayInvoiceImmediately = (invoiceId) => {
+export const fetchAllRentsDetail = (id) => {
     return async (dispatch, getState) => {
         try {
-            let res = await PayInvoiceImmediatelyService(invoiceId);
+            let res = await getAllRentDetailsService(id);
             if (res && res.errCode === 0) {
-                toast.success("Paid invoice succeed!")
+                if (id !== "ALL") {
+                    return res.rentsDetail
+                }
+                toast.success("Fetch all rents detail succeed")
+                dispatch(
+                    fetchAllRentsDetailSuccess(res.rents.reverse())
+                );
             } else {
-                toast.error("Paid invoice failed!")
+                toast.error("Fetch all rents detail error")
+                dispatch(fetchAllRentsDetailFailed());
             }
         } catch (e) {
-            reject(e)
+            dispatch(fetchAllRentsDetailFailed());
         }
     }
 }
-// export const DeptInvoice = (invoiceId) => {
-//     return async (dispatch, getState) => {
-//         try {
-//             let res = await DeptInvoiceService(invoiceId);
-//             if (res && res.errCode === 0) {
-//                 toast.success("Create debt first success!")
-//             }
-//             else {
-//                 toast.error("Create debt first failed!")
-//             }
-//         }
-//         catch (e) {
-//             reject(e)
-//         }
-//     }
-// }
+
+export const fetchAllRentsDetailSuccess = (data) => ({
+    type: actionTypes.FETCH_ALL_RENTS_DETAIL_SUCCESS,
+    dataRentDetail: data
+})
+
+export const fetchAllRentsDetailFailed = () => ({
+    type: actionTypes.FETCH_ALL_RENTS_DETAIL_FAILED
+})

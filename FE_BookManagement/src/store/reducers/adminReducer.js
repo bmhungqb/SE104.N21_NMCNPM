@@ -20,6 +20,9 @@ const initialState = {
     listBooks: [],
     listCustomers: [],
     listInvoices: [],
+    currentMonthStatistic: [],
+    allMonthStatistic: [],
+    dataBookReport: [],
 }
 
 const adminReducer = (state = initialState, action) => {

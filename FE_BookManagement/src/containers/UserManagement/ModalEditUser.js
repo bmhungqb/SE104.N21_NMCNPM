@@ -31,6 +31,19 @@ class ModalEditUser extends Component {
             isAllowEdit: false,
         }
     }
+    base64ToBlob = (base64, mimeType) => {
+        var binaryString = window.atob(base64);
+        var bytes = new Uint8Array(binaryString.length);
+        for (var i = 0; i < binaryString.length; i++) {
+            bytes[i] = binaryString.charCodeAt(i);
+        }
+        return new Blob([bytes], { type: mimeType });
+    }
+    base64ToImageUrl = (base64) => {
+        var mimeType = 'application/octet-stream';
+        let url = URL.createObjectURL(this.base64ToBlob(base64, mimeType));
+        return url
+    }
     componentDidMount() {
         let userInfor;
         this.props.listUsers.forEach(row => {
@@ -41,8 +54,10 @@ class ModalEditUser extends Component {
         });
         if (userInfor && !_.isEmpty(userInfor)) {
             let imageBase64 = "";
+            let objectUrl = undefined;
             if (userInfor.image) {
-                imageBase64 = Buffer.from(userInfor.image, 'base64').toString('binary');
+                imageBase64 = userInfor.image
+                // objectUrl = this.base64ToImageUrl(imageBase64);
             }
             this.setState({
                 id: userInfor.id,
@@ -57,7 +72,7 @@ class ModalEditUser extends Component {
                 startWork: userInfor.startWork,
                 address: userInfor.address,
                 image: userInfor.image,
-                previewImgURL: imageBase64
+                previewImgURL: objectUrl,
             })
         }
     }
@@ -110,7 +125,6 @@ class ModalEditUser extends Component {
     handleSaveUser = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
-            console.log("here is modelEdituser: ", this.state)
             this.toggleEdit();
             this.props.editAUser(this.state)
         }
@@ -162,7 +176,7 @@ class ModalEditUser extends Component {
                         <div className='content-right ml-3' style={{ "width": "30%" }} >
                             <div className='preview-img-container input-container'>
                                 <div className='preview-image'
-                                    style={{ backgroundImage: `url(${this.state.previewImgURL})`, "height": "100%" }}
+                                    style={{ "backgroundImage": `url(${this.state.previewImgURL})`, "height": "100%" }}
                                     onClick={() => { this.openPreviewImage() }}
                                 >
                                 </div>
