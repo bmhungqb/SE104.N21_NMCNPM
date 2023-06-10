@@ -68,14 +68,14 @@ class ModalSupplier extends Component {
                         className={'modal-supplier-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Add new supplier</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='supplier-management.add-new-supplier' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-supplier-body'>
                                 <div
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         type='text'
                                         style={{ "width": "90%" }}
@@ -101,7 +101,7 @@ class ModalSupplier extends Component {
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Phone Number</label>
+                                    <label><FormattedMessage id='modal.phone-number' /></label>
                                     <input
                                         type='text'
                                         style={{ "width": "90%" }}
@@ -125,7 +125,7 @@ class ModalSupplier extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Address</label>
+                                    <label><FormattedMessage id='modal.address' /></label>
                                     <input
                                         style={{ "width": "90%" }}
                                         type='text'
@@ -149,7 +149,7 @@ class ModalSupplier extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         style={{ "width": "90%" }}
                                         type='text'
@@ -175,13 +175,17 @@ class ModalSupplier extends Component {
                         <ModalFooter>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
-                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>
+                                <FormattedMessage id='modal.cancel' />
+                            </Button>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
                                 className='px-5 border-0 bg-primary'
                                 type='submit'
                                 onClick={handleSubmit}
-                            >Add</Button>
+                            >
+                                <FormattedMessage id='modal.add' />
+                            </Button>
                         </ModalFooter>
                     </Modal >
                 )
@@ -194,12 +198,14 @@ class ModalSupplier extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        createNewSupplier: (data) => dispatch(actions.createNewSupplier(data))
+        createNewSupplier: (data) => dispatch(actions.createNewSupplier(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

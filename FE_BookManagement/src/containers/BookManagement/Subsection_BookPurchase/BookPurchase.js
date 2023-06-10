@@ -8,6 +8,7 @@ import SideBar from '../../SideBar/sideBar';
 import TableBookPurchase from './TableBookPurchase';
 import ModalOrder from './ModalOrder';
 import ModalViewOrder from './ModalViewOrder';
+import { FormattedMessage } from 'react-intl';
 class BookPurchase extends Component {
     constructor(props) {
         super(props)
@@ -82,7 +83,7 @@ class BookPurchase extends Component {
                     <Header />
                     <div className='book-purchase-container'>
                         <div className='book-purchase-header'>
-                            <p className='title-header'>Book Purchase</p>
+                            <p className='title-header'><FormattedMessage id='book-purchase.book-purchase' /></p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='book-purchase-content'>
@@ -113,7 +114,7 @@ class BookPurchase extends Component {
                                     <button
                                         className='btn px-3'
                                         onClick={() => this.handleCreateOrder()}
-                                    ><i className="fa fa-plus"></i> Create order</button>
+                                    ><i className="fa fa-plus mr-1"></i><FormattedMessage id='book-purchase.btn-create-order' /></button>
                                 </div>
                             </div>
                             <div className='datatable'>
@@ -135,12 +136,14 @@ class BookPurchase extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

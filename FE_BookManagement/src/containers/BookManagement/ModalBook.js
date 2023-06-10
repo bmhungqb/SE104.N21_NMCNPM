@@ -81,14 +81,14 @@ class ModalBook extends Component {
                         className={'modal-book-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Add new book</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.add-new-book' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-book-body'>
                                 <div
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Book Title</label>
+                                    <label><FormattedMessage id='modal.booktitle' /></label>
                                     <input
                                         className='w-100'
                                         type='text'
@@ -114,7 +114,7 @@ class ModalBook extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Quantity</label>
+                                    <label><FormattedMessage id='modal.quantity' /></label>
                                     <input
                                         className='w-100'
                                         type='text'
@@ -136,7 +136,7 @@ class ModalBook extends Component {
                                         >{errors.quantity}</p>}
                                 </div>
                                 <div className='input-container d-flex w-100'>
-                                    <label>Genre</label>
+                                    <label><FormattedMessage id='modal.genre' /></label>
                                     <div className='select-genre d-flex'>
                                         <select
                                             disabled={this.state.isOpenInputGenre}
@@ -188,7 +188,7 @@ class ModalBook extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Author</label>
+                                    <label><FormattedMessage id='modal.author' /></label>
                                     <input
                                         type='text'
                                         name='author'
@@ -211,7 +211,7 @@ class ModalBook extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Cost Price</label>
+                                    <label><FormattedMessage id='modal.cost-price' /></label>
                                     <input
                                         type='text'
                                         name='costPrice'
@@ -236,11 +236,11 @@ class ModalBook extends Component {
                         <ModalFooter className='mt-3'>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
-                                className='px-5 border-0 bg-danger' onClick={this.toggle}>Cancel</Button>
+                                className='px-5 border-0 bg-danger' onClick={this.toggle}><FormattedMessage id='modal.cancel' /></Button>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
                                 className='px-5 border-0 bg-primary' type='submit' onClick={handleSubmit}>
-                                Add
+                                <FormattedMessage id='modal.add' />
                             </Button>
                         </ModalFooter>
                     </Modal >
@@ -254,12 +254,14 @@ class ModalBook extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        createNewBook: (data) => dispatch(actions.createNewBook(data))
+        createNewBook: (data) => dispatch(actions.createNewBook(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

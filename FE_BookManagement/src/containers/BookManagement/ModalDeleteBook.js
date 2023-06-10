@@ -28,10 +28,12 @@ class ModalDeleteBook extends Component {
                 size='ms'
             >
                 <ModalHeader
-                >Do you want to delete this book?</ModalHeader>
+                >
+                    <FormattedMessage id='modal.title-delete' />
+                </ModalHeader>
                 <ModalFooter>
-                    <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}>No</Button>
-                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteBook()}>Yes</Button>
+                    <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}><FormattedMessage id='modal.no' /></Button>
+                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteBook()}><FormattedMessage id='modal.yes' /></Button>
                 </ModalFooter>
             </Modal >
         )
@@ -41,12 +43,14 @@ class ModalDeleteBook extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteABook: (bookId) => dispatch(actions.deleteABook(bookId))
+        deleteABook: (bookId) => dispatch(actions.deleteABook(bookId)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

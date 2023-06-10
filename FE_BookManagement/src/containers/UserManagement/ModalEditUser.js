@@ -164,7 +164,7 @@ class ModalEditUser extends Component {
                 className={'modal-user-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Edit user information</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.title-edit-user' /></ModalHeader>
                 <ModalBody>
                     <div className='modal-user-body d-flex'>
                         <div className='content-right ml-3' style={{ "width": "30%" }} >
@@ -177,10 +177,10 @@ class ModalEditUser extends Component {
                                     disabled={!this.state.isAllowEdit} id='previewImg' type='file' hidden
                                     onChange={(event) => { this.handleOnchangeImage(event) }}
                                 />
-                                <label className='label-upload text-center' htmlFor='previewImg'>Tải ảnh <i className='fas fa-upload'></i></label>
+                                <label className='label-upload text-center' htmlFor='previewImg'><FormattedMessage id='modal.upload' /><i className='fas fa-upload'></i></label>
                             </div>
                             <div className='input-container'>
-                                <label>Day of birth</label>
+                                <label><FormattedMessage id='modal.birthday' /></label>
                                 <DatePicker
                                     disabled={!this.state.isAllowEdit}
                                     onChange={(e) => this.handleOnchangeDatePicker(e, 'birthDay')}
@@ -188,7 +188,7 @@ class ModalEditUser extends Component {
                                 />
                             </div>
                             <div className='input-container'>
-                                <label>Start Work</label>
+                                <label><FormattedMessage id='modal.start-work' /></label>
                                 <DatePicker
                                     disabled={!this.state.isAllowEdit}
                                     onChange={(e) => this.handleOnchangeDatePicker(e, 'startWork')}
@@ -198,7 +198,7 @@ class ModalEditUser extends Component {
                         </div>
                         <div className='content-left' style={{ "width": "60%" }}>
                             <div className='input-container'>
-                                <label>Name</label>
+                                <label><FormattedMessage id='modal.name' /></label>
                                 <input
                                     disabled={!this.state.isAllowEdit}
                                     type='text'
@@ -210,7 +210,7 @@ class ModalEditUser extends Component {
                                 className='d-flex'
                             >
                                 <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label>Gender</label>
+                                    <label><FormattedMessage id='modal.gender' /></label>
                                     <div className='select-genre'>
                                         <select
                                             disabled={!this.state.isAllowEdit}
@@ -225,7 +225,7 @@ class ModalEditUser extends Component {
                                     </div>
                                 </div>
                                 <div className='input-container' style={{ "width": "48%" }}>
-                                    <label>Role</label>
+                                    <label><FormattedMessage id='modal.role' /></label>
                                     <div className='select-genre'>
                                         <select
                                             disabled={!this.state.isAllowEdit}
@@ -242,7 +242,7 @@ class ModalEditUser extends Component {
                             </div>
                             <div className='d-flex'>
                                 <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label>Phone Number</label>
+                                    <label><FormattedMessage id='modalphone-number' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -251,7 +251,7 @@ class ModalEditUser extends Component {
                                     />
                                 </div>
                                 <div className='input-container' style={{ "width": "48%" }}>
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -262,7 +262,7 @@ class ModalEditUser extends Component {
                             </div>
                             <div className='d-flex'>
                                 <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label>User Name</label>
+                                    <label><FormattedMessage id='modal.username' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -271,7 +271,7 @@ class ModalEditUser extends Component {
                                     />
                                 </div>
                                 <div className='input-container' style={{ "width": "48%" }}>
-                                    <label>Password</label>
+                                    <label><FormattedMessage id='modal.password' /></label>
                                     <input
                                         disabled={true}
                                         type='password'
@@ -282,7 +282,7 @@ class ModalEditUser extends Component {
                             </div>
 
                             <div className='input-container'>
-                                <label>Address</label>
+                                <label><FormattedMessage id='modal.address' /></label>
                                 <input
                                     disabled={!this.state.isAllowEdit}
                                     type='text'
@@ -298,14 +298,14 @@ class ModalEditUser extends Component {
                         style={{ "height": "40px", "width": "150px" }}
                         className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
                         onClick={() => { this.toggleEdit() }}
-                    >Edit</Button>
+                    ><FormattedMessage id='modal.edit' /></Button>
                     {
                         this.state.isAllowEdit
                         &&
                         <Button
                             style={{ "height": "40px", "width": "150px" }}
                             className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                        >Cancel</Button>
+                        ><FormattedMessage id='modal.cancel' /></Button>
                     }
                     {
                         this.state.isAllowEdit &&
@@ -313,7 +313,7 @@ class ModalEditUser extends Component {
                             style={{ "height": "40px", "width": "150px" }}
                             className='px-5 border-0 bg-primary'
                             onClick={() => this.handleSaveUser()}
-                        >Save</Button>
+                        ><FormattedMessage id='modal.save' /></Button>
                     }
                 </ModalFooter>
             </Modal >
@@ -325,12 +325,14 @@ class ModalEditUser extends Component {
 const mapStateToProps = state => {
     return {
         listUsers: state.users.listUsers,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        editAUser: (data) => dispatch(actions.editAUser(data))
+        editAUser: (data) => dispatch(actions.editAUser(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

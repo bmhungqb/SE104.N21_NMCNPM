@@ -13,47 +13,6 @@ class TableBookPurchase extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns: [{
-                name: "Invoice ID",
-                selector: "invoiceId",
-                sortable: true,
-            },
-            {
-                name: "Customer ID",
-                selector: "customerId",
-            },
-            {
-                name: "Name",
-                selector: "name",
-            },
-            {
-                name: "Total Amount",
-                selector: "totalAmount",
-            },
-            {
-                name: "Date",
-                selector: "createAt",
-            },
-            {
-                name: "Status",
-                selector: "status",
-                cell: (row) =>
-                    <button
-                        className='border-0'
-                        onClick={() => { this.handleViewDetailOrder(row) }}
-                        data-tag="allowRowEvents"
-                        style={row.status == "Paid" ?
-                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#F0483E" } :
-                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#03A9F5" }
-                        }
-                    >
-                        {row.status}
-                    </button>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
             dataTableInvoice: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
@@ -117,7 +76,49 @@ class TableBookPurchase extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={
+                        [{
+                            name: this.props.language === "en" ? "Invoice ID" : "Mã đơn hàng",
+                            selector: "invoiceId",
+                            sortable: true,
+                        },
+                        {
+                            name: this.props.language === "en" ? "Customer ID" : "Mã khách hàng",
+                            selector: "customerId",
+                        },
+                        {
+                            name: this.props.language === "en" ? "Name" : "Tên khách hàng",
+                            selector: "name",
+                        },
+                        {
+                            name: this.props.language === "en" ? "Total Amount" : "Tổng tiền",
+                            selector: "totalAmount",
+                        },
+                        {
+                            name: this.props.language === "en" ? "Date" : "Ngày",
+                            selector: "createAt",
+                        },
+                        {
+                            name: this.props.language === "en" ? "Status" : "Trạng thái",
+                            selector: "status",
+                            cell: (row) =>
+                                <button
+                                    className='border-0'
+                                    onClick={() => { this.handleViewDetailOrder(row) }}
+                                    data-tag="allowRowEvents"
+                                    style={row.status == "Paid" ?
+                                        { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#F0483E" } :
+                                        { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#03A9F5" }
+                                    }
+                                >
+                                    {row.status}
+                                </button>,
+                            ignoreRowClick: true,
+                            allowOverflow: true,
+                            button: true,
+                        },
+                        ]
+                    }
                     data={this.state.dataTableInvoice}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -133,13 +134,15 @@ class TableBookPurchase extends Component {
 
 const mapStateToProps = state => {
     return {
-        listInvoices: state.invoice.listInvoices
+        listInvoices: state.invoice.listInvoices,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllInvoicesStart: (id) => dispatch(actions.fetchAllInvoicesStart(id))
+        fetchAllInvoicesStart: (id) => dispatch(actions.fetchAllInvoicesStart(id)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

@@ -77,7 +77,8 @@ class SideBar extends Component {
                                     onClick={() => { this.toggle() }}
                                 >
                                     <FontAwesomeIcon icon={faCircleUser} className='mr-2' fontSize={'17px'} />
-                                    My Profile
+                                    {/* My Profile */}
+                                    <FormattedMessage id='sidebar.profile' />
                                 </a>
                                 <NavLink
                                     className="dropdown-item text-danger"
@@ -85,7 +86,8 @@ class SideBar extends Component {
                                     onClick={processLogout}
                                 >
                                     <FontAwesomeIcon icon={faRightFromBracket} color='red' className='mr-2' fontSize={'17px'} />
-                                    Logout
+                                    {/* Logout */}
+                                    <FormattedMessage id='sidebar.logout' />
                                 </NavLink>
                             </div>
                         </div>
@@ -96,57 +98,57 @@ class SideBar extends Component {
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faHome} />
-                                <p>Home</p>
+                                <p><FormattedMessage id='sidebar.home' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to='/book-management'>
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faBook} />
-                                <p>Book Management</p>
+                                <p><FormattedMessage id='sidebar.book-management' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faCartShopping}
                                 />
-                                <p>Book Purchase</p>
+                                <p><FormattedMessage id='sidebar.book-purchase' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faRetweet}
                                 />
-                                <p>Book Rental</p>
+                                <p><FormattedMessage id='sidebar.book-rental' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faUserCircle} />
-                                <p>Customer Management</p>
+                                <p><FormattedMessage id='sidebar.customer-management' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/supplier-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faBoxesStacked} />
-                                <p>Supplier Management</p>
+                                <p><FormattedMessage id='sidebar.supplier-management' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/user-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faUserAlt} />
-                                <p>User Management</p>
+                                <p><FormattedMessage id='sidebar.user-management' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/discount-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faTags} />
-                                <p>Discount code</p>
+                                <p><FormattedMessage id='sidebar.discount' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/regulation-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faBan} />
-                                <p>Regulations</p>
+                                <p><FormattedMessage id='sidebar.regulations' /></p>
                             </NavLink>
                         </div>
                     }
@@ -156,33 +158,33 @@ class SideBar extends Component {
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faHome} />
-                                <p>Home</p>
+                                <p><FormattedMessage id='sidebar.home' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to='/book-management'>
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faBook} />
-                                <p>Book Management</p>
+                                <p><FormattedMessage id='sidebar.book-management' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faCartShopping}
                                 />
-                                <p>Book Purchase</p>
+                                <p><FormattedMessage id='sidebar.book-purchase' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faRetweet}
                                 />
-                                <p>Book Rental</p>
+                                <p><FormattedMessage id='sidebar.book-rental' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faUserCircle} />
-                                <p>Customer Management</p>
+                                <p><FormattedMessage id='sidebar.customer-management' /></p>
                             </NavLink>
                         </div>
                     }
@@ -192,13 +194,13 @@ class SideBar extends Component {
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faHome} />
-                                <p>Home</p>
+                                <p><FormattedMessage id='sidebar.home' /></p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/user-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faUserAlt} />
-                                <p>User Management</p>
+                                <p><FormattedMessage id='sidebar.user-management' /></p>
                             </NavLink>
                         </div>
                     }

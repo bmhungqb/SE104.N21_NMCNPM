@@ -28,6 +28,7 @@ import { Line } from 'react-chartjs-2';
 import actionTypes from '../../../store/actions/actionTypes';
 import * as actions from '../../../store/actions/index';
 import DatePicker from 'react-flatpickr';
+import { Fragment } from 'react';
 class DataMonth extends Component {
     constructor(props) {
         super(props);
@@ -75,6 +76,7 @@ class DataMonth extends Component {
         }
     }
     render() {
+        const { language } = this.props
         return (
             <React.Fragment>
                 <div className='data-month-container'>
@@ -92,24 +94,27 @@ class DataMonth extends Component {
                         <div className="chart-data">
                             <Line
                                 data={{
-                                    labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July'],
+                                    labels: language === "en" ? ['January', 'February', 'March', 'April', 'May', 'June', 'July', "August", "September", "October", "November", "December"]
+                                        :
+                                        ['Tháng 1', 'Tháng 2', 'Tháng 3', 'Tháng 4', 'Tháng 5', 'Tháng 6', 'Tháng 7', "Tháng 8", "Tháng 9", "Tháng 10", "Tháng 11", "Tháng 12"]
+                                    ,
                                     datasets: [
                                         {
-                                            label: 'Money',
+                                            label: language === "en" ? 'Money' : "Tiền",
                                             data: this.state.listMoney,
                                             borderColor: 'rgb(255, 99, 132)',
                                             backgroundColor: 'rgba(255, 99, 132, 0.5)',
                                             tension: 0.5
                                         },
                                         {
-                                            label: 'Book',
+                                            label: language === "en" ? 'Book' : "Sách",
                                             data: this.state.listBook,
                                             borderColor: 'rgb(53, 162, 235)',
                                             backgroundColor: 'rgba(53, 162, 235, 0.5)',
                                             tension: 0.5
                                         },
                                         {
-                                            label: 'Customer',
+                                            label: language === "en" ? 'Customer' : "Khách hàng",
                                             data: this.state.listCustomer,
                                             borderColor: 'rgb(53, 162, 100)',
                                             backgroundColor: 'rgba(53, 162, 100, 0.5)',
@@ -126,7 +131,7 @@ class DataMonth extends Component {
                                         },
                                         title: {
                                             display: true,
-                                            text: 'Statistic',
+                                            text: language == "vi" ? "Thống kê" : "Statistic",
                                             font: { size: 25 }
                                         },
                                     },
@@ -149,7 +154,7 @@ class DataMonth extends Component {
                     <div className='content-right'>
                         <div className='box box-up'>
                             <div className='content-up'>
-                                <p>Inventory Report</p>
+                                <p><FormattedMessage id='homepage.inventory-report' /></p>
                                 <select
                                     className="form-select w-25 brounded-0"
                                     value={this.state.dateInventory}
@@ -160,18 +165,18 @@ class DataMonth extends Component {
                                     }}
                                     style={{ "cursor": "pointer" }}
                                 >
-                                    <option value={1}>January</option>
-                                    <option value={2}>February</option>
-                                    <option value={3}>March</option>
-                                    <option value={4}>April</option>
-                                    <option value={5}>May</option>
-                                    <option value={6}>June</option>
-                                    <option value={7}>July</option>
-                                    <option value={8}>August</option>
-                                    <option value={9}>September</option>
-                                    <option value={10}>October</option>
-                                    <option value={11}>November</option>
-                                    <option value={12}>December</option>
+                                    <option value={1}>{language === "en" ? "January" : "Tháng 1"}</option>
+                                    <option value={2}>{language === "en" ? "February" : "Tháng 2"}</option>
+                                    <option value={3}>{language === "en" ? "March" : "Tháng 3"}</option>
+                                    <option value={4}>{language === "en" ? "April" : "Tháng 4"}</option>
+                                    <option value={5}>{language === "en" ? "May" : "Tháng 5"}</option>
+                                    <option value={6}>{language === "en" ? "June" : "Tháng 6"}</option>
+                                    <option value={7}>{language === "en" ? "July" : "Tháng 7"}</option>
+                                    <option value={8}>{language === "en" ? "August" : "Tháng 8"}</option>
+                                    <option value={9}>{language === "en" ? "September" : "Tháng 9"}</option>
+                                    <option value={10}>{language === "en" ? "October" : "Tháng 10"}</option>
+                                    <option value={11}>{language === "en" ? "November" : "Tháng 11"}</option>
+                                    <option value={12}>{language === "en" ? "December" : "Tháng 12"}</option>
                                 </select>
                             </div>
                             <div className='content-down'>
@@ -181,13 +186,13 @@ class DataMonth extends Component {
                                     onClick={() => this.toggleInventoryModal()}
                                 >
                                     <FontAwesomeIcon icon={faPlus} />
-                                    Report
+                                    <FormattedMessage id='homepage.btn-report' />
                                 </button>
                             </div>
                         </div>
                         <div className='box box-down'>
                             <div className='content-up'>
-                                <p>Debt Report</p>
+                                <p><FormattedMessage id='homepage.debt-report' /></p>
                                 <select
                                     className="form-select w-25 brounded-0"
                                     value={this.state.dateDept}
@@ -198,18 +203,18 @@ class DataMonth extends Component {
                                     }}
                                     style={{ "cursor": "pointer" }}
                                 >
-                                    <option value={1}>January</option>
-                                    <option value={2}>February</option>
-                                    <option value={3}>March</option>
-                                    <option value={4}>April</option>
-                                    <option value={5}>May</option>
-                                    <option value={6}>June</option>
-                                    <option value={7}>July</option>
-                                    <option value={8}>August</option>
-                                    <option value={9}>September</option>
-                                    <option value={10}>October</option>
-                                    <option value={11}>November</option>
-                                    <option value={12}>December</option>
+                                    <option value={1}>{language === "en" ? "January" : "Tháng 1"}</option>
+                                    <option value={2}>{language === "en" ? "February" : "Tháng 2"}</option>
+                                    <option value={3}>{language === "en" ? "March" : "Tháng 3"}</option>
+                                    <option value={4}>{language === "en" ? "April" : "Tháng 4"}</option>
+                                    <option value={5}>{language === "en" ? "May" : "Tháng 5"}</option>
+                                    <option value={6}>{language === "en" ? "June" : "Tháng 6"}</option>
+                                    <option value={7}>{language === "en" ? "July" : "Tháng 7"}</option>
+                                    <option value={8}>{language === "en" ? "August" : "Tháng 8"}</option>
+                                    <option value={9}>{language === "en" ? "September" : "Tháng 9"}</option>
+                                    <option value={10}>{language === "en" ? "October" : "Tháng 10"}</option>
+                                    <option value={11}>{language === "en" ? "November" : "Tháng 11"}</option>
+                                    <option value={12}>{language === "en" ? "December" : "Tháng 12"}</option>
                                 </select>
                             </div>
                             <div className='content-down'>
@@ -219,7 +224,7 @@ class DataMonth extends Component {
                                     onClick={() => this.toggleDebtModal()}
                                 >
                                     <FontAwesomeIcon icon={faPlus} />
-                                    Report
+                                    <FormattedMessage id='homepage.btn-report' />
                                 </button>
                             </div>
                         </div>

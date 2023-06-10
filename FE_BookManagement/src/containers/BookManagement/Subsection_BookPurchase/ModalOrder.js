@@ -370,13 +370,13 @@ class ModalOrder extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Create order</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='book-purchase.btn-create-order' /></ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Phone Number</label>
+                            <label><FormattedMessage id='modal.phone-number' /></label>
                             <div className='d-flex'>
                                 <input
                                     value={this.state.phoneNumber}
@@ -394,7 +394,7 @@ class ModalOrder extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Full Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         disabled={true}
                                         type='text'
@@ -405,7 +405,7 @@ class ModalOrder extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         disabled={true}
                                         type='text'
@@ -416,7 +416,7 @@ class ModalOrder extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Address</label>
+                                    <label><FormattedMessage id='modal.address' /></label>
                                     <input
                                         disabled={true}
                                         type='text'
@@ -432,7 +432,7 @@ class ModalOrder extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Full Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         type='text'
                                         value={this.state.fullName}
@@ -443,7 +443,7 @@ class ModalOrder extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Gender</label>
+                                    <label><FormattedMessage id='modal.gender' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -459,7 +459,7 @@ class ModalOrder extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Customer State</label>
+                                    <label><FormattedMessage id='modal.customer-state' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -475,7 +475,7 @@ class ModalOrder extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         type='text'
                                         value={this.state.email}
@@ -485,7 +485,7 @@ class ModalOrder extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Address</label>
+                                    <label><FormattedMessage id='modal.address' /></label>
                                     <input
                                         type='text'
                                         value={this.state.address}
@@ -497,7 +497,7 @@ class ModalOrder extends Component {
                         <div className='input-container'
                             style={{ "width": "100%" }}
                         >
-                            <label>Discount code</label>
+                            <label><FormattedMessage id='modal.discount' /></label>
                             <div className='d-flex'>
                                 <input
                                     value={this.state.discountId}
@@ -536,7 +536,7 @@ class ModalOrder extends Component {
                             onClick={this.handleInsertBookSelect}
                         >
                             <FontAwesomeIcon icon={faPlus} />
-                            Insert
+                            <FormattedMessage id='modal.insert' />
                         </button>
                     </div>
                     {
@@ -604,13 +604,13 @@ class ModalOrder extends Component {
                         style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-danger'
                         onClick={() => { this.handleDept() }}
-                    >Debt</Button>
+                    ><FormattedMessage id='modal.debt' /></Button>
                     <Button
                         disabled={this.state.isDebt}
                         style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary'
                         onClick={() => this.handlePaid()}
-                    >Paid</Button>
+                    ><FormattedMessage id='modal.paid' /></Button>
                 </ModalFooter>
             </Modal >
         )
@@ -622,12 +622,14 @@ const mapStateToProps = state => {
     return {
         listCustomers: state.customer.listCustomers,
         listBooks: state.book.listBooks,
-        listDiscounts: state.discount.listDiscounts
+        listDiscounts: state.discount.listDiscounts,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
         fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart()),
         createNewCustomer: (data) => dispatch(actions.createNewCutomer(data)),
         fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),

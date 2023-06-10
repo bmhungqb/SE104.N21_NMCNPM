@@ -172,12 +172,12 @@ class ModalEditBook extends Component {
                         <ModalHeader toggle={() => { this.toggle() }}>
                             {this.props.editAction === 'edit' &&
                                 <>
-                                    Book Information
+                                    <FormattedMessage id='modal.title-edit-book' />
                                 </>
                             }
                             {this.props.editAction === 'input' &&
                                 <>
-                                    Add Book
+                                    <FormattedMessage id='modal.add-book' />
                                 </>
                             }
                         </ModalHeader>
@@ -188,7 +188,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "10%" }}
                                     >
-                                        <label>Book ID</label>
+                                        <label><FormattedMessage id='modal.bookid' /></label>
                                         <input
                                             disabled={true}
                                             type='text'
@@ -198,7 +198,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "50%" }}
                                     >
-                                        <label>Book Title</label>
+                                        <label><FormattedMessage id='modal.booktitle' /></label>
                                         <input
                                             disabled={!this.state.isAllowEdit}
                                             type='text'
@@ -223,7 +223,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "36.1%" }}
                                     >
-                                        <label>Author</label>
+                                        <label><FormattedMessage id='modal.author' /></label>
                                         <input
                                             disabled={!this.state.isAllowEdit}
                                             type='text'
@@ -249,7 +249,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "100%" }}
                                     >
-                                        <label>Genre</label>
+                                        <label><FormattedMessage id='modal.genre' /></label>
                                         <div className='select-genre d-flex w-100'>
                                             <select
                                                 style={this.state.isOpenInputGenre ? { "display": "none", "width": "49%" } : { "width": "49%" }}
@@ -306,7 +306,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "49%" }}
                                     >
-                                        <label>Selling Price</label>
+                                        <label><FormattedMessage id='modal.selling-price' /></label>
                                         <input
                                             disabled={true}
                                             type='text'
@@ -317,7 +317,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "49%" }}
                                     >
-                                        <label>Cost Price</label>
+                                        <label><FormattedMessage id='modal.cost-price' /></label>
                                         <input
                                             disabled={!this.state.isAllowEdit}
                                             type='text'
@@ -343,7 +343,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "49%" }}
                                     >
-                                        <label>Quantity</label>
+                                        <label><FormattedMessage id='modal.quantity' /></label>
                                         <input
                                             disabled={true}
                                             type='text'
@@ -353,7 +353,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "49%" }}
                                     >
-                                        <label>Last Update</label>
+                                        <label><FormattedMessage id='modal.last-update' /></label>
                                         <DatePicker
                                             value={new Date()}
                                             disabled={true}
@@ -367,7 +367,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "10%" }}
                                     >
-                                        <label>Book ID</label>
+                                        <label><FormattedMessage id='modal.bookid' /></label>
                                         <input
                                             disabled={true}
                                             type='text'
@@ -377,7 +377,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "88%" }}
                                     >
-                                        <label>Book Title</label>
+                                        <label><FormattedMessage id='modal.booktitle' /></label>
                                         <input
                                             disabled={true}
                                             type='text'
@@ -387,7 +387,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "49%" }}
                                     >
-                                        <label>Current quantity</label>
+                                        <label><FormattedMessage id='modal.current-quantity' /></label>
                                         <input
                                             disabled={true}
                                             type='text'
@@ -397,7 +397,7 @@ class ModalEditBook extends Component {
                                     <div className='input-container'
                                         style={{ "width": "49%" }}
                                     >
-                                        <label>Input quantity</label>
+                                        <label><FormattedMessage id='modal.input-quantity' /></label>
                                         <input
                                             type='text'
                                             value={values.quantity}
@@ -419,16 +419,6 @@ class ModalEditBook extends Component {
                                             >{errors.quantity}</p>
                                         }
                                     </div>
-                                    <div className='input-container'
-                                        style={{ "width": "100%" }}
-                                    >
-                                        <label>Constraint description</label>
-                                        <textarea
-                                            disabled={!this.state.isAllowEdit}
-                                            type='text'
-                                            value={this.state.constraint}
-                                        />
-                                    </div>
                                 </div>
                             }
                         </ModalBody>
@@ -439,7 +429,7 @@ class ModalEditBook extends Component {
                                     style={{ "height": "40px", "width": "150px" }}
                                     className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
                                     onClick={() => { this.toggleEdit() }}
-                                >Edit</Button>
+                                ><FormattedMessage id='modal.edit' /></Button>
                             }
                             {
                                 this.props.editAction === 'edit' && this.state.isAllowEdit
@@ -447,7 +437,7 @@ class ModalEditBook extends Component {
                                 <Button
                                     style={{ "height": "40px", "width": "150px" }}
                                     className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                                >Cancel</Button>
+                                ><FormattedMessage id='modal.cancel' /></Button>
                             }
                             {
                                 this.props.editAction === 'edit' && this.state.isAllowEdit &&
@@ -455,7 +445,7 @@ class ModalEditBook extends Component {
                                     style={{ "height": "40px", "width": "150px" }}
                                     className='px-5 border-0 bg-primary'
                                     onClick={() => this.handleSaveBook('edit')}
-                                >Save</Button>
+                                ><FormattedMessage id='modal.save' /></Button>
                             }
                             {
                                 this.props.editAction === 'input' &&
@@ -463,14 +453,15 @@ class ModalEditBook extends Component {
                                     <Button
                                         style={{ "height": "40px", "width": "150px" }}
                                         className='px-5 border-0 bg-danger' onClick={() => { this.props.toggleFromParent() }}
-                                    >Cancel
+                                    >
+                                        <FormattedMessage id='modal.cancel' />
                                     </Button>
                                     <Button
                                         style={{ "height": "40px", "width": "150px" }}
                                         className='px-5 border-0 bg-primary'
                                         type='submit'
                                         onClick={handleSubmit}
-                                    >Add</Button></>
+                                    ><FormattedMessage id='modal.add' /></Button></>
                             }
                         </ModalFooter>
                     </Modal >
@@ -485,12 +476,14 @@ class ModalEditBook extends Component {
 const mapStateToProps = state => {
     return {
         listBooks: state.book.listBooks,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        editABook: (data) => dispatch(actions.editABook(data))
+        editABook: (data) => dispatch(actions.editABook(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

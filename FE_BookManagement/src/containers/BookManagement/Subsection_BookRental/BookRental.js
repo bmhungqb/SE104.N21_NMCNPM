@@ -8,6 +8,7 @@ import SideBar from '../../SideBar/sideBar';
 import TableBookRental from './TableBookRental';
 import ModalRental from './ModalRental';
 import ModalViewRental from './ModalViewRental';
+import { FormattedMessage } from 'react-intl';
 class BookRental extends Component {
     constructor(props) {
         super(props)
@@ -64,7 +65,7 @@ class BookRental extends Component {
                     <Header />
                     <div className='book-purchase-container'>
                         <div className='book-purchase-header'>
-                            <p className='title-header'>Book Rental</p>
+                            <p className='title-header'> <FormattedMessage id='modal.book-rental-title' /></p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='book-purchase-content'>
@@ -95,7 +96,7 @@ class BookRental extends Component {
                                     <button
                                         className='btn px-3'
                                         onClick={() => this.handleCreateRental()}
-                                    ><i className="fa fa-plus"></i> Create Rent Receipt</button>
+                                    ><i className="fa fa-plus"></i> <FormattedMessage id='modal.create-rent-receipt' /></button>
                                 </div>
                             </div>
                             <div className='datatable'>
@@ -116,12 +117,14 @@ class BookRental extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

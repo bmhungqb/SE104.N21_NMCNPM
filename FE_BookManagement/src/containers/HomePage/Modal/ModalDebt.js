@@ -13,25 +13,6 @@ class ModalInventory extends Component {
         this.state = {
             dateDept: undefined,
             dataTableBookSelect: [],
-            columns: [
-                {
-                    name: "Customer ID",
-                    selector: 'customerId',
-                    sortable: true,
-                },
-                {
-                    name: "Begin Debt",
-                    selector: "beginningDept",
-                },
-                {
-                    name: "Debt",
-                    selector: "phatSinh",
-                },
-                {
-                    name: "End Debt",
-                    selector: "endingDept",
-                },
-            ],
         }
     }
     componentDidMount() {
@@ -58,7 +39,6 @@ class ModalInventory extends Component {
         this.props.toggleFromParent();
     }
     render() {
-        console.log("check upadte: ", this.props.dataDebtReport)
         return (
             <Modal
                 isOpen={this.props.isOpen}
@@ -66,10 +46,30 @@ class ModalInventory extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Debt Report</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>
+                    {<FormattedMessage id='homepage.debt-report' />}
+                </ModalHeader>
                 <ModalBody>
                     <DataTable
-                        columns={this.state.columns}
+                        columns={[
+                            {
+                                name: this.props.language === "en" ? "Customer ID" : "Mã khách hàng",
+                                selector: 'customerId',
+                                sortable: true,
+                            },
+                            {
+                                name: this.props.language === "en" ? "Begin Debt" : "Nợ đầu",
+                                selector: "beginningDept",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Debt" : "Phát sinh",
+                                selector: "phatSinh",
+                            },
+                            {
+                                name: this.props.language === "en" ? "End Debt" : "Nợ cuối",
+                                selector: "endingDept",
+                            },
+                        ]}
                         data={this.state.dataTableBookSelect}
                         fixedHeader
                         fixedHeaderScrollHeight="330px"
@@ -78,10 +78,10 @@ class ModalInventory extends Component {
                 <ModalFooter>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-danger' onClick={() => { this.handleDownload() }}>Download</Button>
+                        className='px-5 border-0 bg-danger' onClick={() => { this.handleDownload() }}>{<FormattedMessage id='homepage.download' />}</Button>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Cancel</Button>
+                        className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>{<FormattedMessage id='homepage.cancel' />}</Button>
                 </ModalFooter>
             </Modal >
         )
@@ -91,12 +91,14 @@ class ModalInventory extends Component {
 
 const mapStateToProps = state => {
     return {
-        dataRentReport: state.statistic.dataRentReport
+        dataRentReport: state.statistic.dataRentReport,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

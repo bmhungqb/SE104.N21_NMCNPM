@@ -13,57 +13,6 @@ class TableSupplierManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns: [{
-                name: "Supplier ID",
-                selector: 'id',
-                sortable: true,
-                sortFunction: this.caseInsensitiveSort,
-            },
-            {
-                name: "Name",
-                selector: 'name',
-            },
-            {
-                name: "Phone Number",
-                selector: "phoneNumber",
-            },
-            {
-                name: "Email",
-                selector: "email",
-            },
-            {
-                name: "Actions",
-                cell:
-                    (row) =>
-                        <div
-                            className='d-flex justify-content-between w-75'>
-
-                            < button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleEditSupplier(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-primary'
-                                    icon={faPenToSquare}
-                                />
-                            </button >
-                            <button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleDeleteSupplier(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-danger'
-                                    icon={faTrash}
-                                />
-                            </button>
-                        </div>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
             optionSearch: [],
             dataTableSupplier: [],
             paginationComponentOptions: {
@@ -158,7 +107,59 @@ class TableSupplierManage extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={
+                        [
+                            {
+                                name: this.props.language === "en" ? "Supplier ID" : "Mã nhà cung cấp",
+                                selector: 'id',
+                                sortable: true,
+                                sortFunction: this.caseInsensitiveSort,
+                            },
+                            {
+                                name: this.props.language === "en" ? "Name" : "Tên nhà cung cấp",
+                                selector: 'name',
+                            },
+                            {
+                                name: this.props.language === "end" ? "Phone Number" : "Số điện thoại",
+                                selector: "phoneNumber",
+                            },
+                            {
+                                name: "Email",
+                                selector: "email",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Actions" : "Chức năng",
+                                cell:
+                                    (row) =>
+                                        <div
+                                            className='d-flex justify-content-between w-75'>
+
+                                            < button
+                                                className='border-0 bg-transparent'
+                                                onClick={() => { this.handleEditSupplier(row) }}
+                                                data-tag="allowRowEvents"
+                                            >
+                                                <FontAwesomeIcon
+                                                    className='icon-right text-primary'
+                                                    icon={faPenToSquare}
+                                                />
+                                            </button >
+                                            <button
+                                                className='border-0 bg-transparent'
+                                                onClick={() => { this.handleDeleteSupplier(row) }}
+                                                data-tag="allowRowEvents"
+                                            >
+                                                <FontAwesomeIcon
+                                                    className='icon-right text-danger'
+                                                    icon={faTrash}
+                                                />
+                                            </button>
+                                        </div>,
+                                ignoreRowClick: true,
+                                allowOverflow: true,
+                                button: true,
+                            },
+                        ]}
                     data={this.state.dataTableSupplier}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -174,13 +175,15 @@ class TableSupplierManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        listSuppliers: state.supplier.listSuppliers
+        listSuppliers: state.supplier.listSuppliers,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllSuppliers: () => dispatch(actions.fetchAllSuppliersStart())
+        fetchAllSuppliers: () => dispatch(actions.fetchAllSuppliersStart()),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

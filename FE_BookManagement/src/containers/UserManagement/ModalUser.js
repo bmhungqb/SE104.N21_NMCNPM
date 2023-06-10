@@ -278,12 +278,14 @@ class ModalUser extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        createNewUser: (data) => dispatch(actions.createNewUser(data))
+        createNewUser: (data) => dispatch(actions.createNewUser(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

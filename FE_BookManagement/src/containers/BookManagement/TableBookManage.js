@@ -14,69 +14,7 @@ class TableBookManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns: [{
-                name: "BookID",
-                selector: 'bookId',
-                sortable: true,
-            },
-            {
-                name: "BookTitle",
-                selector: 'bookTitle',
-            },
-            {
-                name: "Author",
-                selector: "authorName",
-            },
-            {
-                name: "Genre",
-                selector: "genre",
-            },
-            {
-                name: "Quantity",
-                selector: "stock",
-            },
-            {
-                cell:
-                    (row) =>
-                        <>
-                            < button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleEditBook(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-primary'
-                                    icon={faPenToSquare}
-                                />
-                            </button >
-                            < button
-                                style={{ "margin": "0 10px" }}
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleInputBook(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-success'
-                                    icon={faPlusCircle}
-                                />
-                            </button >
-                            <button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleDeleteBook(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-danger'
-                                    icon={faTrash}
-                                />
-                            </button>
-                        </>
-                ,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            }
-            ],
+
             optionSearch: [],
             dataTableBook: [],
             dataFull: [],
@@ -140,7 +78,70 @@ class TableBookManage extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={[{
+                        name: this.props.language === "en" ? "Book ID" : "Mã sách",
+                        selector: 'bookId',
+                        sortable: true,
+                    },
+                    {
+                        name: this.props.language === "en" ? "Book Title" : "Tên sách",
+                        selector: 'bookTitle',
+                    },
+                    {
+                        name: this.props.language === "en" ? "Author" : "Tác giả",
+                        selector: "authorName",
+                    },
+                    {
+                        name: this.props.language === "en" ? "Genre" : "Thể loại",
+                        selector: "genre",
+                    },
+                    {
+                        name: this.props.language === "en" ? "Quantity" : "Số lượng",
+                        selector: "stock",
+                    },
+                    {
+                        name: this.props.language === "en" ? "Actions" : "Chức năng",
+                        cell:
+                            (row) =>
+                                <>
+                                    < button
+                                        className='border-0 bg-transparent'
+                                        onClick={() => { this.handleEditBook(row) }}
+                                        data-tag="allowRowEvents"
+                                    >
+                                        <FontAwesomeIcon
+                                            className='icon-right text-primary'
+                                            icon={faPenToSquare}
+                                        />
+                                    </button >
+                                    < button
+                                        style={{ "margin": "0 10px" }}
+                                        className='border-0 bg-transparent'
+                                        onClick={() => { this.handleInputBook(row) }}
+                                        data-tag="allowRowEvents"
+                                    >
+                                        <FontAwesomeIcon
+                                            className='icon-right text-success'
+                                            icon={faPlusCircle}
+                                        />
+                                    </button >
+                                    <button
+                                        className='border-0 bg-transparent'
+                                        onClick={() => { this.handleDeleteBook(row) }}
+                                        data-tag="allowRowEvents"
+                                    >
+                                        <FontAwesomeIcon
+                                            className='icon-right text-danger'
+                                            icon={faTrash}
+                                        />
+                                    </button>
+                                </>
+                        ,
+                        ignoreRowClick: true,
+                        allowOverflow: true,
+                        button: true,
+                    }
+                    ]}
                     data={this.state.dataTableBook}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -156,13 +157,15 @@ class TableBookManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        listBooks: state.admin.listBooks
+        listBooks: state.admin.listBooks,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllBooks: () => dispatch(actions.fetchAllBooksStart())
+        fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

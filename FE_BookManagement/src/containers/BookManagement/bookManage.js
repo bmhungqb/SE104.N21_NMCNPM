@@ -10,6 +10,7 @@ import {
     editBookService,
     deleteBookService
 } from '../../services/bookService'
+import { FormattedMessage } from 'react-intl';
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
 import ModalBook from './ModalBook';
@@ -109,8 +110,8 @@ class BookManage extends Component {
                     <Header />
                     <div className='book-manage-container'>
                         <div className='book-manage-header'>
-                            <p className='title-header'>Book Management</p>
-                            <p className='infor-header'>Book information of the store</p>
+                            <p className='title-header'> <FormattedMessage id='book-management.book-management' /></p>
+                            <p className='infor-header'> <FormattedMessage id='book-management.title' /></p>
                         </div>
                         <div className='book-manage-content'>
                             <div className='action'>
@@ -140,7 +141,9 @@ class BookManage extends Component {
                                     <button
                                         className='btn px-3'
                                         onClick={() => this.handleAddNewBook()}
-                                    ><i className="fa fa-plus"></i> Add New Book</button>
+                                    ><i className="fa fa-plus mr-1"></i>
+                                        <FormattedMessage id='book-management.btn-add-new-book' />
+                                    </button>
                                 </div>
                             </div>
                             <div className='datatable'>
@@ -164,12 +167,14 @@ class BookManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

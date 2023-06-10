@@ -37,61 +37,6 @@ class ModalRental extends Component {
             options: [],
             selectedOption: "",
             dataTableBookSelect: [],
-            columns: [{
-                name: "Book Title",
-                selector: 'title',
-                sortable: true,
-            },
-            {
-                name: "Quantity",
-                selector: 'quantity',
-                cell:
-                    (row) =>
-                        <input
-                            defaultValue={row.quantity}
-                            type="number"
-                            min={1}
-                            max={10000}
-                            style={{
-                                "width": "80px",
-                                "border": "none",
-                                "height": "20px",
-                                'background': "#c6c5c52e",
-                                "border-radius": "3px"
-                            }}
-                            onChange={(e) => { this.handleOnchangeQuantity(row, e) }}
-                        />
-            },
-            {
-                name: "Net Amount",
-                selector: "netAmount",
-            },
-            {
-                name: "Total Amount",
-                selector: "totalAmount",
-            },
-            {
-                name: "Actions",
-                cell:
-                    (row) =>
-                        <div
-                            className='d-flex justify-content-between w-75'>
-                            <button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleDeleteItem(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-danger'
-                                    icon={faTrash}
-                                />
-                            </button>
-                        </div>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
         }
     }
 
@@ -319,13 +264,13 @@ class ModalRental extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Create Rent Receipt</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.create-rent-receipt' /></ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Phone Number</label>
+                            <label><FormattedMessage id='modal.phone-number' /></label>
                             <div className='d-flex'>
                                 <input
                                     value={this.state.phoneNumber}
@@ -343,7 +288,7 @@ class ModalRental extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Full Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         disabled={true}
                                         type='text'
@@ -354,7 +299,7 @@ class ModalRental extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         disabled={true}
                                         type='text'
@@ -365,7 +310,7 @@ class ModalRental extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Address</label>
+                                    <label><FormattedMessage id='modal.address' /></label>
                                     <input
                                         disabled={true}
                                         type='text'
@@ -381,7 +326,7 @@ class ModalRental extends Component {
                                     className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Full Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         type='text'
                                         value={this.state.fullName}
@@ -392,7 +337,7 @@ class ModalRental extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Gender</label>
+                                    <label><FormattedMessage id='modal.gender' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -408,7 +353,7 @@ class ModalRental extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Customer State</label>
+                                    <label><FormattedMessage id='modal.customer-state' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -424,7 +369,7 @@ class ModalRental extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         type='text'
                                         value={this.state.email}
@@ -434,7 +379,7 @@ class ModalRental extends Component {
                                 <div className='input-container'
                                     style={{ "width": "49%" }}
                                 >
-                                    <label>Address</label>
+                                    <label><FormattedMessage id='modal.address' /></label>
                                     <input
                                         type='text'
                                         value={this.state.address}
@@ -446,7 +391,7 @@ class ModalRental extends Component {
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Lease Start Date</label>
+                            <label><FormattedMessage id='modal.lease-start-date' /></label>
                             <DatePicker
                                 value={this.state.leaseDate}
                                 name='leaseDate'
@@ -459,7 +404,7 @@ class ModalRental extends Component {
                             />
                         </div>
                         <div className='input-container' style={{ width: "49%" }}>
-                            <label>Due Date</label>
+                            <label><FormattedMessage id='modal.due-date' /></label>
                             <DatePicker
                                 selected={this.state.dueDate}
                                 name='dueDate'
@@ -487,8 +432,8 @@ class ModalRental extends Component {
                             type="button"
                             onClick={this.handleInsertBookSelect}
                         >
-                            <FontAwesomeIcon icon={faPlus} />
-                            Insert
+                            <FontAwesomeIcon icon={faPlus} className='mr-1' />
+                            <FormattedMessage id='modal.insert' />
                         </button>
                     </div>
                     {
@@ -501,7 +446,64 @@ class ModalRental extends Component {
                     }
                     {
                         <DataTable
-                            columns={this.state.columns}
+                            columns={
+                                [
+                                    {
+                                        name: this.props.language === "en" ? "Book Title" : "Tên sách",
+                                        selector: 'title',
+                                        sortable: true,
+                                    },
+                                    {
+                                        name: this.props.language === "en" ? "Quantity" : "Số lượng",
+                                        selector: 'quantity',
+                                        cell:
+                                            (row) =>
+                                                <input
+                                                    defaultValue={row.quantity}
+                                                    type="number"
+                                                    min={1}
+                                                    max={10000}
+                                                    style={{
+                                                        "width": "80px",
+                                                        "border": "none",
+                                                        "height": "20px",
+                                                        'background': "#c6c5c52e",
+                                                        "border-radius": "3px"
+                                                    }}
+                                                    onChange={(e) => { this.handleOnchangeQuantity(row, e) }}
+                                                />
+                                    },
+                                    {
+                                        name: this.props.language === "en" ? "Net Amount" : "Giá thuê",
+                                        selector: "netAmount",
+                                    },
+                                    {
+                                        name: this.props.language === "en" ? "Total Amount" : "Tổng tiền",
+                                        selector: "totalAmount",
+                                    },
+                                    {
+                                        name: this.props.language === "en" ? "Delete" : "Xóa",
+                                        cell:
+                                            (row) =>
+                                                <div
+                                                    className='d-flex justify-content-between w-75'>
+                                                    <button
+                                                        className='border-0 bg-transparent'
+                                                        onClick={() => { this.handleDeleteItem(row) }}
+                                                        data-tag="allowRowEvents"
+                                                    >
+                                                        <FontAwesomeIcon
+                                                            className='icon-right text-danger'
+                                                            icon={faTrash}
+                                                        />
+                                                    </button>
+                                                </div>,
+                                        ignoreRowClick: true,
+                                        allowOverflow: true,
+                                        button: true,
+                                    },
+                                ]
+                            }
                             data={this.state.dataTableBookSelect}
                             fixedHeader
                             fixedHeaderScrollHeight="330px"
@@ -513,7 +515,7 @@ class ModalRental extends Component {
                             <div className='d-flex'
                                 style={{ "align-items": "center", "justifyContent": "left" }}
                             >
-                                <label className='mr-2'>Total Amount: {this.state.totalPrice}</label>
+                                <label className='mr-2'>{this.props.language === "end" ? "Total Amount: " : "Tổng tiền: "} {this.state.totalPrice}</label>
                             </div>
                         </div>
                     }
@@ -523,12 +525,12 @@ class ModalRental extends Component {
                         style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-danger'
                         onClick={() => { this.handlePaid() }}
-                    >Paid</Button>
+                    ><FormattedMessage id='modal.paid' /></Button>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary'
                         onClick={() => this.toggle()}
-                    >Cancel</Button>
+                    ><FormattedMessage id='modal.cancel' /></Button>
                 </ModalFooter>
             </Modal >
         )
@@ -539,11 +541,13 @@ const mapStateToProps = state => {
     return {
         listCustomers: state.customer.listCustomers,
         listBooks: state.book.listBooks,
-        listDiscounts: state.discount.listDiscounts
+        listDiscounts: state.discount.listDiscounts,
+        language: state.app.language,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
         fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart()),
         createNewCustomer: (data) => dispatch(actions.createNewCutomer(data)),
         fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),

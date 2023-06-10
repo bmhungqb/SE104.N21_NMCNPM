@@ -12,6 +12,7 @@ import ModalSupplier from './ModalSupplier';
 import TableSupplierManage from './TableSupplierManage';
 import ModalEditSupplier from './ModalEditSupplier';
 import ModalDeleteSupplier from './ModalDeleteSupplier';
+import { FormattedMessage } from 'react-intl';
 class SupplierManage extends Component {
     constructor(props) {
         super(props)
@@ -92,7 +93,7 @@ class SupplierManage extends Component {
                     <Header />
                     <div className='supplier-manage-container'>
                         <div className='supplier-manage-header'>
-                            <p className='title-header'>Supplier Management</p>
+                            <p className='title-header'><FormattedMessage id='supplier-management.supplier-management' /></p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='supplier-manage-content'>
@@ -124,7 +125,7 @@ class SupplierManage extends Component {
                                         onClick={() => this.handleAddSupplier()}
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
-                                        Add Supplier</button>
+                                        <FormattedMessage id='supplier-management.add-new-supplier' /></button>
                                 </div>
                             </div>
                             <div className='datatable'>
@@ -148,12 +149,14 @@ class SupplierManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

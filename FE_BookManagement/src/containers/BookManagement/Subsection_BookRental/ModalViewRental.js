@@ -39,24 +39,6 @@ class ModalRental extends Component {
             options: [],
             selectedOption: "",
             dataTableBookSelect: [],
-            columns: [{
-                name: "Book Title",
-                selector: 'title',
-                sortable: true,
-            },
-            {
-                name: "Quantity",
-                selector: 'quantity',
-            },
-            {
-                name: "Net Amount",
-                selector: "netAmount",
-            },
-            {
-                name: "Total Amount",
-                selector: "totalAmount",
-            },
-            ],
         }
     }
 
@@ -191,13 +173,13 @@ class ModalRental extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Detail Rent Receipt</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.detail-rent-receipt' /></ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Phone Number</label>
+                            <label><FormattedMessage id='modal.phone-number' /></label>
                             <div className='d-flex'>
                                 <input
                                     disabled={true}
@@ -211,7 +193,7 @@ class ModalRental extends Component {
                             className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Full Name</label>
+                            <label><FormattedMessage id='modal.name' /></label>
                             <input
                                 disabled={true}
                                 type='text'
@@ -222,7 +204,7 @@ class ModalRental extends Component {
                             className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Email</label>
+                            <label><FormattedMessage id='modal.email' /></label>
                             <input
                                 disabled={true}
                                 type='text'
@@ -233,7 +215,7 @@ class ModalRental extends Component {
                             className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Address</label>
+                            <label><FormattedMessage id='modal.address' /></label>
                             <input
                                 disabled={true}
                                 type='text'
@@ -243,14 +225,14 @@ class ModalRental extends Component {
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Lease Start Date</label>
+                            <label><FormattedMessage id='modal.lease-start-date' /></label>
                             <DatePicker
                                 disabled={true}
                                 value={this.state.leaseDate}
                             />
                         </div>
                         <div className='input-container' style={{ width: "49%" }}>
-                            <label>Due Date</label>
+                            <label><FormattedMessage id='modal.due-date' /></label>
                             <DatePicker
                                 disabled={true}
                                 selected={this.state.dueDate}
@@ -259,7 +241,24 @@ class ModalRental extends Component {
 
                     </div>
                     <DataTable
-                        columns={this.state.columns}
+                        columns={[{
+                            name: this.props.language === "en" ? "Book Title" : "Tên sách",
+                            selector: 'title',
+                            sortable: true,
+                        },
+                        {
+                            name: this.props.language === "en" ? "Quantity" : "Số lượng",
+                            selector: 'quantity',
+                        },
+                        {
+                            name: this.props.language === "en" ? "Net Amount" : "Giá mượn",
+                            selector: "netAmount",
+                        },
+                        {
+                            name: this.props.language === "en" ? "Total Amount" : "Tổng tiền",
+                            selector: "totalAmount",
+                        },
+                        ]}
                         data={this.state.dataTableBookSelect}
                         fixedHeader
                         fixedHeaderScrollHeight="330px"
@@ -268,7 +267,7 @@ class ModalRental extends Component {
                         <div className='d-flex'
                             style={{ "align-items": "center", "justifyContent": "left" }}
                         >
-                            <label className='mr-2 mt-3'>Total Amount: {this.state.rentPrice}</label>
+                            <label className='mr-2 mt-3'>{this.props.language === "en" ? "Total Amount: " : "Tổng tiền: "} {this.state.rentPrice}</label>
                         </div>
                     </div>
                 </ModalBody>
@@ -288,11 +287,13 @@ const mapStateToProps = state => {
     return {
         listCustomers: state.customer.listCustomers,
         listBooks: state.book.listBooks,
-        listDiscounts: state.discount.listDiscounts
+        listDiscounts: state.discount.listDiscounts,
+        language: state.app.language,
     };
 };
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
         fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart()),
         createNewCustomer: (data) => dispatch(actions.createNewCutomer(data)),
         fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),

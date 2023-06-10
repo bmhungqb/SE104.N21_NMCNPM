@@ -128,14 +128,14 @@ class ModalEditCustomer extends Component {
                         className={'modal-customer-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Edit customer information</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.title-edit-customer' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-customer-body'>
                                 <div
                                     className='input-container'
                                     style={{ "width": "100%" }}
                                 >
-                                    <label>Customer ID</label>
+                                    <label><FormattedMessage id='modal.customerId' /></label>
                                     <input
                                         disabled={true}
                                         type='text'
@@ -147,7 +147,7 @@ class ModalEditCustomer extends Component {
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>First Name</label>
+                                    <label><FormattedMessage id='modal.firstname' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -174,7 +174,7 @@ class ModalEditCustomer extends Component {
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Last Name</label>
+                                    <label><FormattedMessage id='modal.lastname' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -201,7 +201,7 @@ class ModalEditCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Gender</label>
+                                    <label><FormattedMessage id='modal.gender' /></label>
                                     <div className='select-genre'>
                                         <select
                                             disabled={!this.state.isAllowEdit}
@@ -233,7 +233,7 @@ class ModalEditCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Phone Number</label>
+                                    <label><FormattedMessage id='modal.phone-number' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -259,7 +259,7 @@ class ModalEditCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Address</label>
+                                    <label><FormattedMessage id='modal.address' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -285,7 +285,7 @@ class ModalEditCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -311,7 +311,7 @@ class ModalEditCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Customer State</label>
+                                    <label><FormattedMessage id='modal.customer-state' /></label>
                                     <div className='select-genre'>
                                         <select
                                             disabled={!this.state.isAllowEdit}
@@ -347,23 +347,23 @@ class ModalEditCustomer extends Component {
                                 style={{ "height": "40px", "width": "150px" }}
                                 className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
                                 onClick={(values) => { this.toggleEdit(values) }}
-                            >Edit</Button>
+                            ><FormattedMessage id='modal.edit' /></Button>
                             {
                                 this.state.isAllowEdit
                                 &&
                                 <Button
                                     style={{ "height": "40px", "width": "150px" }}
                                     className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                                >Cancel</Button>
+                                ><FormattedMessage id='modal.cancel' /></Button>
                             }
                             {
                                 this.state.isAllowEdit &&
                                 <Button
-                                    style={{ "height": "40px", "width": "150px" }}
+                                    style={{ "height": "40px", "width": "170px" }}
                                     className='px-5 border-0 bg-primary'
                                     type='submit'
                                     onClick={handleSubmit}
-                                >Save</Button>
+                                ><FormattedMessage id='modal.save' /></Button>
                             }
                         </ModalFooter>
                     </Modal >
@@ -378,12 +378,14 @@ class ModalEditCustomer extends Component {
 const mapStateToProps = state => {
     return {
         listCustomers: state.customer.listCustomers,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        editACustomer: (data) => dispatch(actions.editACustomer(data))
+        editACustomer: (data) => dispatch(actions.editACustomer(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

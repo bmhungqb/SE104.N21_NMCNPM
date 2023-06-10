@@ -12,6 +12,7 @@ import ModalCustomer from './ModalCustomer';
 import TableCustomerManage from './TableCustomerManage';
 import ModalEditCustomer from './ModalEditCustomer';
 import ModalDeleteCustomer from './ModalDeleteCustomer';
+import { FormattedMessage } from 'react-intl';
 class CustomerManage extends Component {
     constructor(props) {
         super(props)
@@ -90,7 +91,7 @@ class CustomerManage extends Component {
                     <Header />
                     <div className='customer-manage-container'>
                         <div className='customer-manage-header'>
-                            <p className='title-header'>Customer Management</p>
+                            <p className='title-header'><FormattedMessage id='customer-management.customer-management' /></p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='customer-manage-content'>
@@ -123,7 +124,7 @@ class CustomerManage extends Component {
                                         onClick={() => this.handleAddCustomer()}
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
-                                        Add Customer</button>
+                                        <FormattedMessage id='customer-management.add-customer' /></button>
                                 </div>
                             </div>
                             <div className='datatable'>
@@ -147,12 +148,14 @@ class CustomerManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

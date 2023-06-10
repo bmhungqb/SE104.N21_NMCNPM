@@ -8,7 +8,7 @@ import { withRouter } from 'react-router';
 import 'bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
-import { faMoneyCheckDollar } from '@fortawesome/free-solid-svg-icons';
+import { faBook, faMoneyCheckDollar, faPeopleGroup } from '@fortawesome/free-solid-svg-icons';
 import { faArrowUp } from '@fortawesome/free-solid-svg-icons';
 import { faArrowUpLong } from '@fortawesome/free-solid-svg-icons';
 import * as actions from "../../../store/actions/index"
@@ -54,8 +54,8 @@ class DataDay extends Component {
                 <div className='data-day-container'>
                     <div className='data-day-header'>
                         <div className='content-left'>
-                            <p className='text-up'>Home</p>
-                            <p className='text-down'>A quick data overview of the store</p>
+                            <p className='text-up'><FormattedMessage id='homepage.title' /></p>
+                            <p className='text-down'><FormattedMessage id='homepage.quote' /></p>
                         </div>
                     </div>
                     <div className='data-day-content'>
@@ -69,29 +69,29 @@ class DataDay extends Component {
                                         <p className='text-percent'>{this.state.percentageRevenue}%</p>
                                     </span>
                                 </div>
-                                <p>Monthly revenue</p>
+                                <p><FormattedMessage id='homepage.revenue' /></p>
                             </div>
                             <div className='box-data data-purchase-book'>
                                 <div className='content-up'>
-                                    <FontAwesomeIcon className='icon-left' icon={faMoneyCheckDollar} size='lg' />
+                                    <FontAwesomeIcon className='icon-left' icon={faBook} size='lg' />
                                     <p className='text-data'>{this.state.monthlyBookSoldQuantity}</p>
                                     <span className='percent'>
                                         <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
                                         <p className='text-percent'>{this.state.percentageBookSoldQuantity}%</p>
                                     </span>
                                 </div>
-                                <p>Month's sold books</p>
+                                <p><FormattedMessage id='homepage.sold' /></p>
                             </div>
                             <div className='box-data data-customer'>
                                 <div className='content-up'>
-                                    <FontAwesomeIcon className='icon-left' icon={faMoneyCheckDollar} size='lg' />
+                                    <FontAwesomeIcon className='icon-left' icon={faPeopleGroup} size='lg' />
                                     <p className='text-data'>{this.state.monthlyNewCustomer}</p>
                                     <span className='percent'>
                                         <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
                                         <p className='text-percent'>{this.state.percentageNewCustomer}%</p>
                                     </span>
                                 </div>
-                                <p>Month's customers</p>
+                                <p><FormattedMessage id='homepage.customer' /></p>
                             </div>
                         </div>
                     </div>

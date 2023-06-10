@@ -63,25 +63,10 @@ class Header extends Component {
     render() {
         const { time, sessionEN, sessionVI } = this.state;
         let language = this.props.language;
-        let placeholder = FormattedMessage.id
         return (
             <React.Fragment>
                 <div className='home-header-container'>
                     <div className='left-content'>
-                        {/* <div className="input-group mb-3 top-50 start-50 translate-middle">
-                            <FormattedMessage id='header.placeholder-search'>
-                                {(msg) => (
-                                    <input
-                                        type="text"
-                                        className="form-control search-box"
-                                        placeholder={msg}
-                                    />
-                                )}
-                            </FormattedMessage>
-                            <button className="btn btn-outline-secondary" type="button" id="button-addon2">
-                                <FontAwesomeIcon icon={faMagnifyingGlass} />
-                            </button>
-                        </div> */}
                     </div>
                     <div className='right-content'>
                         <div className='language'>

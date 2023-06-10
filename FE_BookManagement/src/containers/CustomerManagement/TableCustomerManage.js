@@ -14,60 +14,6 @@ class TableCustomerManage extends Component {
         super(props);
         this.state = {
             dataTableCustomer: [],
-            columns: [{
-                name: "Customer ID",
-                selector: 'customerId',
-                sortable: true,
-            },
-            {
-                name: "Full Name",
-                selector: 'fullName',
-            },
-            {
-                name: "Address",
-                selector: "address",
-            },
-            {
-                name: "Phone Number",
-                selector: "phoneNumber",
-            },
-            {
-                name: "State",
-                selector: "rank",
-            },
-            {
-                name: "Actions",
-                cell:
-                    (row) =>
-                        <div
-                            className='d-flex justify-content-between w-75'>
-
-                            < button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleEditCustomer(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-primary'
-                                    icon={faPenToSquare}
-                                />
-                            </button >
-                            <button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleDeleteCustomer(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-danger'
-                                    icon={faTrash}
-                                />
-                            </button>
-                        </div>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
             optionSearch: [],
             dataTableCustomer: [],
             paginationComponentOptions: {
@@ -157,7 +103,62 @@ class TableCustomerManage extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={
+                        [
+                            {
+                                name: this.props.language === "en" ? "Customer ID" : "Mã khách hàng",
+                                selector: 'customerId',
+                                sortable: true,
+                            },
+                            {
+                                name: this.props.language === "en" ? "Full Name" : "Tên khách hàng",
+                                selector: 'fullName',
+                            },
+                            {
+                                name: this.props.language === "en" ? "Address" : "Địa chỉ",
+                                selector: "address",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Phone Number" : "Số điện thoại",
+                                selector: "phoneNumber",
+                            },
+                            {
+                                name: this.props.language === "en" ? "State" : "Trạng thái",
+                                selector: "rank",
+                            },
+                            {
+                                name: this.state.language === "en" ? "Actions" : "Chức năng",
+                                cell:
+                                    (row) =>
+                                        <div
+                                            className='d-flex justify-content-between w-75'>
+
+                                            < button
+                                                className='border-0 bg-transparent'
+                                                onClick={() => { this.handleEditCustomer(row) }}
+                                                data-tag="allowRowEvents"
+                                            >
+                                                <FontAwesomeIcon
+                                                    className='icon-right text-primary'
+                                                    icon={faPenToSquare}
+                                                />
+                                            </button >
+                                            <button
+                                                className='border-0 bg-transparent'
+                                                onClick={() => { this.handleDeleteCustomer(row) }}
+                                                data-tag="allowRowEvents"
+                                            >
+                                                <FontAwesomeIcon
+                                                    className='icon-right text-danger'
+                                                    icon={faTrash}
+                                                />
+                                            </button>
+                                        </div>,
+                                ignoreRowClick: true,
+                                allowOverflow: true,
+                                button: true,
+                            },
+                        ]}
                     data={this.state.dataTableCustomer}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -173,13 +174,15 @@ class TableCustomerManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        listCustomers: state.customer.listCustomers
+        listCustomers: state.customer.listCustomers,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart())
+        fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart()),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
+import { LANGUAGES } from '../../../utils'
+import { changeLanguageApp } from '../../../store/actions/appActions';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 import "./ModalInventory.scss"
@@ -14,29 +16,7 @@ class ModalInventory extends Component {
         this.state = {
             dateInventory: undefined,
             dataTableBookSelect: [],
-            columns: [
-                {
-                    name: "Book ID",
-                    selector: 'bookId',
-                    sortable: true,
-                },
-                {
-                    name: "Book Title",
-                    selector: "bookTitle",
-                },
-                {
-                    name: "Begin Inventory",
-                    selector: "beginningStock",
-                },
-                {
-                    name: "Sold Quantity",
-                    selector: "phatSinh",
-                },
-                {
-                    name: "End Inventory",
-                    selector: "endingStock",
-                },
-            ],
+
         }
     }
     componentDidMount() {
@@ -78,10 +58,34 @@ class ModalInventory extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Inventory Report</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>
+                    {<FormattedMessage id='homepage.inventory-report' />}
+                </ModalHeader>
                 <ModalBody>
                     <DataTable
-                        columns={this.state.columns}
+                        columns={[
+                            {
+                                name: this.props.language === "en" ? "Book ID" : "Mã sách",
+                                selector: 'bookId',
+                                sortable: true,
+                            },
+                            {
+                                name: this.props.language === "en" ? "Book Title" : "Tên sách",
+                                selector: "bookTitle",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Begin Inventory" : "Tồn đầu",
+                                selector: "beginningStock",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Sold Quantity" : "Phát sinh",
+                                selector: "phatSinh",
+                            },
+                            {
+                                name: this.props.language === "en" ? "End Inventory" : "Tồn cuối",
+                                selector: "endingStock",
+                            },
+                        ]}
                         data={this.state.dataTableBookSelect}
                         fixedHeader
                         fixedHeaderScrollHeight="330px"
@@ -90,10 +94,10 @@ class ModalInventory extends Component {
                 <ModalFooter>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-danger' onClick={() => { this.handleDownload() }}>Download</Button>
+                        className='px-5 border-0 bg-danger' onClick={() => { this.handleDownload() }}>{<FormattedMessage id='homepage.download' />}</Button>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Cancel</Button>
+                        className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>{<FormattedMessage id='homepage.cancel' />}</Button>
                 </ModalFooter>
             </Modal >
         )
@@ -103,13 +107,15 @@ class ModalInventory extends Component {
 
 const mapStateToProps = state => {
     return {
-        dataBookReport: state.statistic.dataBookReport
+        dataBookReport: state.statistic.dataBookReport,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        getBookReports: (month) => dispatch(actions.getBookReports(month))
+        getBookReports: (month) => dispatch(actions.getBookReports(month)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

@@ -13,47 +13,6 @@ class TableBookRental extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns: [{
-                name: "Rental ID",
-                selector: "rentId",
-                sortable: true,
-            },
-            {
-                name: "Customer ID",
-                selector: "customerId",
-            },
-            {
-                name: "Name",
-                selector: "name",
-            },
-            {
-                name: "Start Date",
-                selector: "startDate",
-            },
-            {
-                name: "Due Date",
-                selector: "dueDate",
-            },
-            {
-                name: "Rental Status",
-                selector: "status",
-                cell: (row) =>
-                    <button
-                        className='border-0'
-                        onClick={() => { this.handleViewDetailRent(row) }}
-                        data-tag="allowRowEvents"
-                        style={row.status == "end" ?
-                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#F0483E" } :
-                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" }
-                        }
-                    >
-                        {row.status}
-                    </button>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
             dataTableInvoice: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
@@ -116,7 +75,49 @@ class TableBookRental extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={
+                        [
+                            {
+                                name: this.props.language === "en" ? "Rental ID" : "Mã mượn sách",
+                                selector: "rentId",
+                                sortable: true,
+                            },
+                            {
+                                name: this.props.language === "en" ? "Customer ID" : "Mã khách hàng",
+                                selector: "customerId",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Name" : "Tên khách hàng",
+                                selector: "name",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Start Date" : "Ngày bắt đầu mượn",
+                                selector: "startDate",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Due Date" : "Hạn trả",
+                                selector: "dueDate",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Rental Status" : "Trạng thái",
+                                selector: "status",
+                                cell: (row) =>
+                                    <button
+                                        className='border-0'
+                                        onClick={() => { this.handleViewDetailRent(row) }}
+                                        data-tag="allowRowEvents"
+                                        style={row.status == "end" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "25px", "width": "90px", "background": "#F0483E" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "25px", "width": "90px", "background": "green" }
+                                        }
+                                    >
+                                        {row.status === "end" ? this.props.language === "en" ? "End" : "Kết thúc" : this.props.language === "en" ? "Borrow" : "Đang mượn"}
+                                    </button>,
+                                ignoreRowClick: true,
+                                allowOverflow: true,
+                                button: true,
+                            },
+                        ]}
                     data={this.state.dataTableInvoice}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -132,13 +133,15 @@ class TableBookRental extends Component {
 
 const mapStateToProps = state => {
     return {
-        listRents: state.rent.listRents
+        listRents: state.rent.listRents,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllRents: (id) => dispatch(actions.fetchAllRents(id))
+        fetchAllRents: (id) => dispatch(actions.fetchAllRents(id)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

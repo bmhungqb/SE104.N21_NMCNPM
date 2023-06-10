@@ -87,14 +87,14 @@ class ModalCustomer extends Component {
                         className={'modal-customer-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Add new customer</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='customer-management.add-customer' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-customer-body'>
                                 <div
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>First Name</label>
+                                    <label><FormattedMessage id='modal.firstname' /></label>
                                     <input
                                         type='text'
                                         value={this.state.firstName}
@@ -119,7 +119,7 @@ class ModalCustomer extends Component {
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Last Name</label>
+                                    <label><FormattedMessage id='modal.lastname' /></label>
                                     <input
                                         type='text'
                                         value={this.state.lastName}
@@ -146,7 +146,7 @@ class ModalCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Gender</label>
+                                    <label><FormattedMessage id='modal.gender' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -176,7 +176,7 @@ class ModalCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Phone Number</label>
+                                    <label><FormattedMessage id='modal.phone-number' /></label>
                                     <input
                                         type='text'
                                         value={this.state.phoneNumber}
@@ -200,7 +200,7 @@ class ModalCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Address</label>
+                                    <label><FormattedMessage id='modal.address' /></label>
                                     <input
                                         type='text'
                                         value={this.state.address}
@@ -224,7 +224,7 @@ class ModalCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Email</label>
+                                    <label><FormattedMessage id='modal.email' /></label>
                                     <input
                                         type='text'
                                         value={this.state.email}
@@ -248,7 +248,7 @@ class ModalCustomer extends Component {
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label>Customer State</label>
+                                    <label><FormattedMessage id='modal.customer-state' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -280,13 +280,15 @@ class ModalCustomer extends Component {
                         <ModalFooter>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
-                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>
+                                <FormattedMessage id='modal.cancel' />
+                            </Button>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
                                 className='px-5 border-0 bg-primary'
                                 type='submit'
                                 onClick={handleSubmit}
-                            >Add</Button>
+                            ><FormattedMessage id='modal.add' /></Button>
                         </ModalFooter>
                     </Modal >
                 )
@@ -299,12 +301,14 @@ class ModalCustomer extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        createNewCustomer: (data) => dispatch(actions.createNewCutomer(data))
+        createNewCustomer: (data) => dispatch(actions.createNewCutomer(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

@@ -30,10 +30,10 @@ class ModalDeleteUser extends Component {
                 size='ms'
             >
                 <ModalHeader
-                >Do you want to delete this user?</ModalHeader>
+                ><FormattedMessage id='modal.title-delete-user' /></ModalHeader>
                 <ModalFooter>
-                    <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}>No</Button>
-                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteUser()}>Yes</Button>
+                    <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}><FormattedMessage id='modal.no' /></Button>
+                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteUser()}><FormattedMessage id='modal.yes' /></Button>
                 </ModalFooter>
             </Modal >
         )
@@ -43,12 +43,14 @@ class ModalDeleteUser extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteAUser: (userId) => dispatch(actions.deleteAUser(userId))
+        deleteAUser: (userId) => dispatch(actions.deleteAUser(userId)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

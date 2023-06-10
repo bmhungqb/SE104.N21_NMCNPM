@@ -49,24 +49,6 @@ class ModalOrder extends Component {
             options: [],
             selectedOption: "",
             dataTableBookSelect: [],
-            columns: [{
-                name: "Book Title",
-                selector: 'title',
-                sortable: true,
-            },
-            {
-                name: "Quantity",
-                selector: 'quantity',
-            },
-            {
-                name: "Net Amount",
-                selector: "netAmount",
-            },
-            {
-                name: "Total Amount",
-                selector: "totalAmount",
-            },
-            ],
         }
     }
     componentDidMount() {
@@ -156,14 +138,14 @@ class ModalOrder extends Component {
                 size='lg'
             >
                 <ModalHeader toggle={() => { this.toggle() }}>
-                    Detail invoice
+                    <FormattedMessage id='modal.detail-invoice-title' />
                 </ModalHeader>
                 <ModalBody>
                     <div className='modal-book-body'>
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Invoice ID</label>
+                            <label><FormattedMessage id='modal.invoiceId' /></label>
                             <div className='d-flex'>
                                 <input
                                     value={this.state.invoiceId}
@@ -176,7 +158,7 @@ class ModalOrder extends Component {
                             className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Date</label>
+                            <label><FormattedMessage id='modal.date' /></label>
                             <input
                                 type='text'
                                 value={this.state.date}
@@ -186,7 +168,7 @@ class ModalOrder extends Component {
                             className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Full Name</label>
+                            <label><FormattedMessage id='modal.name' /></label>
                             <input
                                 type='text'
                                 value={this.state.fullName}
@@ -195,7 +177,7 @@ class ModalOrder extends Component {
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Phone Number</label>
+                            <label><FormattedMessage id='modal.phone-number' /></label>
                             <div className='d-flex'>
                                 <input
                                     value={this.state.phoneNumber}
@@ -207,7 +189,7 @@ class ModalOrder extends Component {
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Email</label>
+                            <label><FormattedMessage id='modal.email' /></label>
                             <input
                                 type='text'
                                 value={this.state.email}
@@ -216,7 +198,7 @@ class ModalOrder extends Component {
                         <div className='input-container'
                             style={{ "width": "49%" }}
                         >
-                            <label>Address</label>
+                            <label><FormattedMessage id='modal.address' /></label>
                             <input
                                 type='text'
                                 value={this.state.address}
@@ -225,7 +207,25 @@ class ModalOrder extends Component {
                     </div>
                     <DataTable
                         className='mt-3s'
-                        columns={this.state.columns}
+                        columns={
+                            [{
+                                name: this.props.language === "en" ? "Book Title" : "Tên sách",
+                                selector: 'title',
+                                sortable: true,
+                            },
+                            {
+                                name: this.props.language === "en" ? "Quantity" : "Số lượng",
+                                selector: 'quantity',
+                            },
+                            {
+                                name: this.props.language === "en" ? "Net Amount" : "Giá sách",
+                                selector: "netAmount",
+                            },
+                            {
+                                name: this.props.language === "en" ? "Total Amount" : "Tổng tiền",
+                                selector: "totalAmount",
+                            }]
+                        }
                         data={this.state.dataTableBookSelect}
                         fixedHeader
                         fixedHeaderScrollHeight="330px"
@@ -235,19 +235,19 @@ class ModalOrder extends Component {
                         <div className='d-flex'
                             style={{ "align-items": "center", "justifyContent": "left" }}
                         >
-                            <label className='mr-2'>Total Amount: {this.state.totalPrice}</label>
+                            <label className='mr-2'>{this.props.language === "en" ? "Total Amount: " : "Tổng tiền: "} {this.state.totalPrice}</label>
                         </div>
                         <div className='d-flex'
                             style={{ "align-items": "center", "justifyContent": "left" }}
                         >
-                            <label className='mr-2'>Discount: {this.state.discountAmount}</label>
+                            <label className='mr-2'>{this.props.language === "en" ? "Discount: " : "Giảm giá: "} {this.state.discountAmount}</label>
                         </div>
                         {
                             !this.props.isModalPaid &&
                             <div className='d-flex'
                                 style={{ "align-items": "center", "justifyContent": "left" }}
                             >
-                                <label className='mr-2'>Debt: {this.state.remaining}</label>
+                                <label className='mr-2'>{this.props.language === "en" ? "Debt: " : "Nợ: "} {this.state.remaining}</label>
                             </div>
                         }
                     </div>
@@ -257,9 +257,9 @@ class ModalOrder extends Component {
                             className='input-container mt-3'
                             style={{ "width": "49%" }}
                         >
-                            <label>Paid amount</label>
+                            <label>{this.props.language === "en" ? "Paid amount" : "Số tiền trả"}</label>
                             <input
-                                placeholder='Enter paid amount'
+                                placeholder={this.props.language === "en" ? 'Enter paid amount' : "Nhập số tiền trả"}
                                 className='ml-2'
                                 type='text'
                                 value={this.state.customerPay}
@@ -275,12 +275,12 @@ class ModalOrder extends Component {
                                 style={{ "height": "40px", "width": "150px" }}
                                 className='px-5 border-0 bg-danger'
                                 onClick={() => { this.handleDept() }}
-                            >Debt</Button>
+                            ><FormattedMessage id='modal.debt' /></Button>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
                                 className='px-5 border-0 bg-primary'
                                 onClick={() => this.toggle()}
-                            >Cancel</Button>
+                            ><FormattedMessage id='modal.cancel' /></Button>
                         </>
                     }
                     {
@@ -304,11 +304,13 @@ const mapStateToProps = state => {
         listBooks: state.book.listBooks,
         listDiscounts: state.discount.listDiscounts,
         listDiscountsDetail: state.discount.listDiscountsDetail,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
         fetchAllCustomers: () => dispatch(actions.fetchAllCustomersStart()),
         createNewCustomer: (data) => dispatch(actions.createNewCutomer(data)),
         fetchAllBooks: () => dispatch(actions.fetchAllBooksStart()),
