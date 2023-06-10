@@ -31,20 +31,8 @@ class ModalEditUser extends Component {
             isAllowEdit: false,
         }
     }
-    base64ToBlob = (base64, mimeType) => {
-        var binaryString = window.atob(base64);
-        var bytes = new Uint8Array(binaryString.length);
-        for (var i = 0; i < binaryString.length; i++) {
-            bytes[i] = binaryString.charCodeAt(i);
-        }
-        return new Blob([bytes], { type: mimeType });
-    }
-    base64ToImageUrl = (base64) => {
-        var mimeType = 'application/octet-stream';
-        let url = URL.createObjectURL(this.base64ToBlob(base64, mimeType));
-        return url
-    }
-    componentDidMount() {
+
+    componentDidMount = async () => {
         let userInfor;
         this.props.listUsers.forEach(row => {
             if (row.id === this.props.userEditId) {
@@ -54,10 +42,8 @@ class ModalEditUser extends Component {
         });
         if (userInfor && !_.isEmpty(userInfor)) {
             let imageBase64 = "";
-            let objectUrl = undefined;
             if (userInfor.image) {
-                imageBase64 = userInfor.image
-                // objectUrl = this.base64ToImageUrl(imageBase64);
+                imageBase64 = new Buffer(userInfor.image, 'base64').toString('binary');
             }
             this.setState({
                 id: userInfor.id,
@@ -72,7 +58,7 @@ class ModalEditUser extends Component {
                 startWork: userInfor.startWork,
                 address: userInfor.address,
                 image: userInfor.image,
-                previewImgURL: objectUrl,
+                previewImgURL: imageBase64,
             })
         }
     }
@@ -126,7 +112,20 @@ class ModalEditUser extends Component {
         let isValid = this.checkValidateInput();
         if (isValid) {
             this.toggleEdit();
-            this.props.editAUser(this.state)
+            this.props.editAUser({
+                id: this.state.id,
+                name: this.state.name,
+                gender: this.state.gender,
+                role: this.state.role,
+                phonenumber: this.state.phonenumber,
+                email: this.state.email,
+                birthDay: this.state.birthDay,
+                username: this.state.username,
+                password: this.state.password,
+                startWork: this.state.startWork,
+                address: this.state.address,
+                image: this.state.previewImgURL,
+            })
         }
     }
     toggle = () => {
@@ -153,15 +152,10 @@ class ModalEditUser extends Component {
             this.setState({
                 previewImgURL: objectUrl,
                 image: base64
-            })
+            });
         }
-    }
-    openPreviewImage = () => {
-        if (!this.state.previewImgURL) return;
-        this.setState({
-            isOpen: true
-        })
-    }
+    };
+
     render() {
         return (
             <Modal
@@ -177,12 +171,11 @@ class ModalEditUser extends Component {
                             <div className='preview-img-container input-container'>
                                 <div className='preview-image'
                                     style={{ "backgroundImage": `url(${this.state.previewImgURL})`, "height": "100%" }}
-                                    onClick={() => { this.openPreviewImage() }}
                                 >
                                 </div>
                                 <input
                                     disabled={!this.state.isAllowEdit} id='previewImg' type='file' hidden
-                                    onChange={(event) => this.handleOnchangeImage(event)}
+                                    onChange={(event) => { this.handleOnchangeImage(event) }}
                                 />
                                 <label className='label-upload text-center' htmlFor='previewImg'>Tải ảnh <i className='fas fa-upload'></i></label>
                             </div>

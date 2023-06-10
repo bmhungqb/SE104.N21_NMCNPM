@@ -38,7 +38,6 @@ class ModalMyInfor extends Component {
             if (userInfor.image) {
                 imageBase64 = Buffer.from(userInfor.image, 'base64').toString('binary');
             }
-            console.log("hi, check userInfor: ", userInfor)
             this.setState({
                 id: userInfor.id,
                 name: userInfor.name,
@@ -56,6 +55,32 @@ class ModalMyInfor extends Component {
             })
         }
     }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.userInfor !== this.props.userInfor) {
+            let userInfor = this.props.userInfor
+            if (userInfor && !_.isEmpty(userInfor)) {
+                let imageBase64 = "";
+                if (userInfor.image) {
+                    imageBase64 = Buffer.from(userInfor.image, 'base64').toString('binary');
+                }
+                this.setState({
+                    id: userInfor.id,
+                    name: userInfor.name,
+                    gender: userInfor.gender,
+                    role: userInfor.role,
+                    phonenumber: userInfor.phonenumber,
+                    email: userInfor.email,
+                    birthDay: userInfor.birthDay,
+                    username: userInfor.username,
+                    password: userInfor.password,
+                    startWork: userInfor.startWork,
+                    address: userInfor.address,
+                    image: userInfor.image,
+                    previewImgURL: imageBase64
+                })
+            }
+        }
+    };
     handleCancelEdit = () => {
         let userInfor = this.props.userInfor;
         if (userInfor && !_.isEmpty(userInfor)) {
@@ -98,9 +123,21 @@ class ModalMyInfor extends Component {
     handleSaveUser = () => {
         let isValid = this.checkValidateInput();
         if (isValid) {
-            console.log("here is profile: ", this.state)
+            this.props.editAUser({
+                id: this.state.id,
+                name: this.state.name,
+                gender: this.state.gender,
+                role: this.state.role,
+                phonenumber: this.state.phonenumber,
+                email: this.state.email,
+                birthDay: this.state.birthDay,
+                username: this.state.username,
+                password: this.state.password,
+                startWork: this.state.startWork,
+                address: this.state.address,
+                image: this.state.previewImgURL,
+            })
             this.toggleEdit();
-            this.props.editAUser(this.state)
         }
     }
     toggle = () => {
@@ -311,7 +348,7 @@ const mapStateToProps = state => {
 
 const mapDispatchToProps = dispatch => {
     return {
-        editAUser: (data) => dispatch(actions.editAUser(data))
+        editAUser: (data) => dispatch(actions.editAUser(data)),
     };
 };
 

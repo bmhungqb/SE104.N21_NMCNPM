@@ -19,6 +19,12 @@ class DataDay extends Component {
             monthlyRevenue: undefined,
             monthlyNewCustomer: undefined,
             monthlyBookSoldQuantity: undefined,
+            percentageBookSoldQuantity: undefined,
+            percentageBookSoldQuantityStatus: undefined,
+            percentageNewCustomer: undefined,
+            percentageNewCustomerStatus: undefined,
+            percentageRevenue: undefined,
+            percentageRevenueStatus: undefined
         }
     }
     changeLanguage = (language) => {
@@ -33,11 +39,16 @@ class DataDay extends Component {
                 monthlyRevenue: this.props.currentMonthStatistic["monthlyRevenue"],
                 monthlyNewCustomer: this.props.currentMonthStatistic["monthlyNewCustomer"],
                 monthlyBookSoldQuantity: this.props.currentMonthStatistic["monthlyBookSoldQuantity"],
+                percentageBookSoldQuantity: this.props.currentMonthStatistic["percentageBookSoldQuantity"],
+                percentageBookSoldQuantityStatus: this.props.currentMonthStatistic["percentageBookSoldQuantityStatus"],
+                percentageNewCustomer: this.props.currentMonthStatistic["percentageNewCustomer"],
+                percentageNewCustomerStatus: this.props.currentMonthStatistic["percentageNewCustomerStatus"],
+                percentageRevenue: this.props.currentMonthStatistic["percentageRevenue"],
+                percentageRevenueStatus: this.props.currentMonthStatistic["percentageRevenueStatus"]
             })
         }
     }
     render() {
-        let language = this.props.language;
         return (
             <React.Fragment>
                 <div className='data-day-container'>
@@ -55,10 +66,10 @@ class DataDay extends Component {
                                     <p className='text-data'>{this.state.monthlyRevenue}</p>
                                     <span className='percent'>
                                         <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
-                                        <p className='text-percent'>12%</p>
+                                        <p className='text-percent'>{this.state.percentageRevenue}%</p>
                                     </span>
                                 </div>
-                                <p>Month's sold books</p>
+                                <p>Monthly revenue</p>
                             </div>
                             <div className='box-data data-purchase-book'>
                                 <div className='content-up'>
@@ -66,10 +77,10 @@ class DataDay extends Component {
                                     <p className='text-data'>{this.state.monthlyBookSoldQuantity}</p>
                                     <span className='percent'>
                                         <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
-                                        <p className='text-percent'>12%</p>
+                                        <p className='text-percent'>{this.state.percentageBookSoldQuantity}%</p>
                                     </span>
                                 </div>
-                                <p>Month's purchased books</p>
+                                <p>Month's sold books</p>
                             </div>
                             <div className='box-data data-customer'>
                                 <div className='content-up'>
@@ -77,7 +88,7 @@ class DataDay extends Component {
                                     <p className='text-data'>{this.state.monthlyNewCustomer}</p>
                                     <span className='percent'>
                                         <FontAwesomeIcon className='icon-right' icon={faArrowUpLong} />
-                                        <p className='text-percent'>12%</p>
+                                        <p className='text-percent'>{this.state.percentageNewCustomer}%</p>
                                     </span>
                                 </div>
                                 <p>Month's customers</p>

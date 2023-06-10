@@ -6,11 +6,13 @@ import "./ModalInventory.scss"
 import DataTable from 'react-data-table-component';
 import actionTypes from '../../../store/actions/actionTypes';
 import * as actions from '../../../store/actions/index'
+import { EmitFlags } from 'typescript';
 class ModalInventory extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
+            dateInventory: undefined,
             dataTableBookSelect: [],
             columns: [
                 {
@@ -38,10 +40,31 @@ class ModalInventory extends Component {
         }
     }
     componentDidMount() {
-        this.props.getBookReports(6)
+        this.props.getBookReports(this.props.dateInventory)
     }
     componentDidUpdate(prevProps, prevState, snapshot) {
         if (prevProps.dataBookReport !== this.props.dataBookReport) {
+            let data = []
+            this.props.dataBookReport.forEach(element => {
+                if (element) {
+                    data.push({
+                        bookId: element["bookId"],
+                        bookTitle: element["bookTitle"],
+                        beginningStock: element["beginningStock"],
+                        phatSinh: element["phatSinh"],
+                        endingStock: element["endingStock"]
+                    })
+                }
+            });
+            this.setState({
+                dataTableBookSelect: data
+            })
+        }
+        if (prevState.dateInventory !== this.props.dateInventory) {
+            this.setState({
+                dateInventory: this.props.dateInventory
+            })
+            this.props.getBookReports(this.props.dateInventory)
         }
     }
     toggle = () => {

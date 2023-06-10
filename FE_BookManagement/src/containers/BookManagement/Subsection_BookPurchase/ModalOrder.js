@@ -328,7 +328,7 @@ class ModalOrder extends Component {
                 bookId: item.bookId
             });
         });
-        let disId = 0;
+        let disId = null;
         if (this.state.isExistsDiscount && this.state.discountId) {
             disId = this.state.discountId
         }

@@ -23,6 +23,7 @@ const initialState = {
     currentMonthStatistic: [],
     allMonthStatistic: [],
     dataBookReport: [],
+    dataDebtReport: [],
 }
 
 const adminReducer = (state = initialState, action) => {

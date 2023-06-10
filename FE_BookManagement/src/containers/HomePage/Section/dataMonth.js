@@ -26,32 +26,24 @@ import {
 ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
 import { Line } from 'react-chartjs-2';
 import actionTypes from '../../../store/actions/actionTypes';
-import * as actions from '../../../store/actions/index'
+import * as actions from '../../../store/actions/index';
+import DatePicker from 'react-flatpickr';
 class DataMonth extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            date: new Date(),
             isOpenModalInventory: false,
             isOpenModalDebt: false,
             listBook: [],
             listCustomer: [],
-            listMoney: []
+            listMoney: [],
+            dateInventory: undefined,
+            dateDept: undefined
         };
-    }
-    handlebtnDebt = () => {
-        this.setState({
-            isOpenModalDebt: true
-        })
     }
     toggleDebtModal = () => {
         this.setState({
             isOpenModalDebt: !this.state.isOpenModalDebt,
-        })
-    }
-    handlebtnInventory = () => {
-        this.setState({
-            isOpenModalInventory: true
         })
     }
     toggleInventoryModal = () => {
@@ -81,21 +73,20 @@ class DataMonth extends Component {
                 listMoney: listMoney
             })
         }
-
     }
     render() {
-        const { date } = this.state;
-        let { language } = this.props.language;
         return (
             <React.Fragment>
                 <div className='data-month-container'>
                     <ModalInvetory
                         isOpen={this.state.isOpenModalInventory}
                         toggleFromParent={this.toggleInventoryModal}
+                        dateInventory={this.state.dateInventory}
                     />
                     <ModalDebt
                         isOpen={this.state.isOpenModalDebt}
                         toggleFromParent={this.toggleDebtModal}
+                        dateDept={this.state.dateDept}
                     />
                     <div className='content-left'>
                         <div className="chart-data">
@@ -159,20 +150,35 @@ class DataMonth extends Component {
                         <div className='box box-up'>
                             <div className='content-up'>
                                 <p>Inventory Report</p>
-                                <Flatpickr
-                                    data-disabled-time
-                                    value={date}
-                                    onChange={([date]) => {
-                                        this.setState({ date });
+                                <select
+                                    className="form-select w-25 brounded-0"
+                                    value={this.state.dateInventory}
+                                    onChange={(e) => {
+                                        this.setState({
+                                            dateInventory: e.target.value
+                                        })
                                     }}
-                                    options={{ maxDate: new Date() }}
-                                />
+                                    style={{ "cursor": "pointer" }}
+                                >
+                                    <option value={1}>January</option>
+                                    <option value={2}>February</option>
+                                    <option value={3}>March</option>
+                                    <option value={4}>April</option>
+                                    <option value={5}>May</option>
+                                    <option value={6}>June</option>
+                                    <option value={7}>July</option>
+                                    <option value={8}>August</option>
+                                    <option value={9}>September</option>
+                                    <option value={10}>October</option>
+                                    <option value={11}>November</option>
+                                    <option value={12}>December</option>
+                                </select>
                             </div>
                             <div className='content-down'>
                                 <button
                                     type="button"
                                     className="h-50 w-25 btn btn-lg btn-primary"
-                                    onClick={() => this.handlebtnInventory()}
+                                    onClick={() => this.toggleInventoryModal()}
                                 >
                                     <FontAwesomeIcon icon={faPlus} />
                                     Report
@@ -182,20 +188,35 @@ class DataMonth extends Component {
                         <div className='box box-down'>
                             <div className='content-up'>
                                 <p>Debt Report</p>
-                                <Flatpickr
-                                    data-disabled-time
-                                    value={date}
-                                    onChange={([date]) => {
-                                        this.setState({ date });
+                                <select
+                                    className="form-select w-25 brounded-0"
+                                    value={this.state.dateDept}
+                                    onChange={(e) => {
+                                        this.setState({
+                                            dateDept: e.target.value
+                                        })
                                     }}
-                                    options={{ maxDate: new Date() }}
-                                />
+                                    style={{ "cursor": "pointer" }}
+                                >
+                                    <option value={1}>January</option>
+                                    <option value={2}>February</option>
+                                    <option value={3}>March</option>
+                                    <option value={4}>April</option>
+                                    <option value={5}>May</option>
+                                    <option value={6}>June</option>
+                                    <option value={7}>July</option>
+                                    <option value={8}>August</option>
+                                    <option value={9}>September</option>
+                                    <option value={10}>October</option>
+                                    <option value={11}>November</option>
+                                    <option value={12}>December</option>
+                                </select>
                             </div>
                             <div className='content-down'>
                                 <button
                                     type="button"
                                     className="h-50 w-25 btn btn-primary btn-lg"
-                                    onClick={() => this.handlebtnDebt()}
+                                    onClick={() => this.toggleDebtModal()}
                                 >
                                     <FontAwesomeIcon icon={faPlus} />
                                     Report
@@ -222,7 +243,7 @@ const mapStateToProps = state => {
 const mapDispatchToProps = dispatch => {
     return {
         changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language)),
-        fetchAllMonthStatistics: () => dispatch(actions.fetchAllMonthStatistics())
+        fetchAllMonthStatistics: () => dispatch(actions.fetchAllMonthStatistics()),
     };
 };
 

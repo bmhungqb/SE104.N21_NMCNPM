@@ -2,27 +2,63 @@ import React, { Component } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
 import { Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
-import "./ModalDebt.scss"
-class ModalDebt extends Component {
-
+import "./ModalInventory.scss"
+import DataTable from 'react-data-table-component';
+import actionTypes from '../../../store/actions/actionTypes';
+import * as actions from '../../../store/actions/index'
+import { EmitFlags, couldStartTrivia } from 'typescript';
+class ModalInventory extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            email: '',
-            password: '',
-            firstName: '',
-            lastName: '',
-            address: ''
+            dateDept: undefined,
+            dataTableBookSelect: [],
+            columns: [
+                {
+                    name: "Customer ID",
+                    selector: 'customerId',
+                    sortable: true,
+                },
+                {
+                    name: "Begin Debt",
+                    selector: "beginningDept",
+                },
+                {
+                    name: "Debt",
+                    selector: "phatSinh",
+                },
+                {
+                    name: "End Debt",
+                    selector: "endingDept",
+                },
+            ],
         }
     }
     componentDidMount() {
-
     }
-
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevProps.dataDebtReport !== this.props.dataDebtReport) {
+            let data = []
+            this.props.dataDebtReport.forEach(element => {
+                if (element) {
+                    data.push({
+                        customerId: element["customerId"],
+                        beginningDept: element["beginningDept"],
+                        phatSinh: element["phatSinh"],
+                        endingDept: element["endingDept"]
+                    })
+                }
+            });
+            this.setState({
+                dataTableBookSelect: [...data]
+            })
+        }
+    }
     toggle = () => {
         this.props.toggleFromParent();
     }
     render() {
+        console.log("check upadte: ", this.props.dataDebtReport)
         return (
             <Modal
                 isOpen={this.props.isOpen}
@@ -30,73 +66,22 @@ class ModalDebt extends Component {
                 className={'modal-book-container'}
                 size='lg'
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Inventoru</ModalHeader>
+                <ModalHeader toggle={() => { this.toggle() }}>Debt Report</ModalHeader>
                 <ModalBody>
-                    <div className='modal-book-body'>
-                        <div className='input-container'>
-                            <label>Book ID</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Quantity</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Book Title</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Genre</label>
-                            <select className='form-select'>
-                                <option >Action and Adventure</option>
-                                <option>Classics</option>
-                                <option>Detective and Mystery</option>
-                                <option>Fantasy</option>
-                                <option>Historical Fiction</option>
-                                <option>Horror</option>
-                            </select>
-                        </div>
-                        <div className='input-container'>
-                            <label>Author</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Publisher</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container '>
-                            <label>Selling Price</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container'>
-                            <label>Cost Price</label>
-                            <input
-                                type='text'
-                            />
-                        </div>
-                        <div className='input-container max-width-input'>
-                            <label>Description</label>
-                            <div class="form-outline">
-                                <textarea class="form-control" id="textAreaExample2" rows="5"></textarea>
-                            </div>
-                        </div>
-                    </div>
+                    <DataTable
+                        columns={this.state.columns}
+                        data={this.state.dataTableBookSelect}
+                        fixedHeader
+                        fixedHeaderScrollHeight="330px"
+                    />
                 </ModalBody>
                 <ModalFooter>
-                    <Button className='px-5 border-0 bg-danger' >Clear</Button>
-                    <Button className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Save</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-danger' onClick={() => { this.handleDownload() }}>Download</Button>
+                    <Button
+                        style={{ "height": "40px", "width": "150px" }}
+                        className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>Cancel</Button>
                 </ModalFooter>
             </Modal >
         )
@@ -106,6 +91,7 @@ class ModalDebt extends Component {
 
 const mapStateToProps = state => {
     return {
+        dataRentReport: state.statistic.dataRentReport
     };
 };
 
@@ -114,4 +100,4 @@ const mapDispatchToProps = dispatch => {
     };
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ModalDebt);
+export default connect(mapStateToProps, mapDispatchToProps)(ModalInventory);

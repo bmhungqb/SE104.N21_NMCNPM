@@ -31,6 +31,9 @@ class LoginSection extends Component {
                 })
             }
             if (data && data.errCode === 0) {
+                this.setState({
+                    errMessage: ""
+                })
                 this.props.userLoginSuccess(data.user)
             }
         }
@@ -46,12 +49,14 @@ class LoginSection extends Component {
     }
     handleOnchangeUsername = (event) => {
         this.setState({
-            username: event.target.value
+            username: event.target.value,
+            errMessage: ""
         })
     }
     handleOnchangePassword = (event) => {
         this.setState({
-            password: event.target.value
+            password: event.target.value,
+            errMessage: ""
         })
     }
     handleKeyDown = (event) => {
@@ -116,10 +121,11 @@ class LoginSection extends Component {
                                         <input type="checkbox" className='form-check-input' />
                                         <label className="form-check-label ml-2">Remember me</label>
                                     </div>
-                                    <p className='font-weight-bold'>Forgot password?</p>
-                                </div>
-                                <div className='show-error'>
-                                    {this.state.errMessage}
+                                    <div className='show-error'>
+                                        {this.state.errMessage != "" &&
+                                            <span style={{ "color": "red" }}>{this.state.errMessage}</span>
+                                        }
+                                    </div>
                                 </div>
                                 <button
                                     type='button'

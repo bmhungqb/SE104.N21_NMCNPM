@@ -8,12 +8,12 @@ const getAllMonthStatisticService = () => {
 const getBookReportsService = (month) => {
     return axios.get(`./api/get-all-bookReports?month=${month}`)
 }
-const getDeptReportsService = () => {
-    return axios.get(`./api/get-all-deptReports`)
+const getDebtReportsService = (month) => {
+    return axios.get(`./api/get-all-deptReports?month=${month}`)
 }
 export {
     getMonthStatisticService,
     getAllMonthStatisticService,
     getBookReportsService,
-    getDeptReportsService
+    getDebtReportsService
 }

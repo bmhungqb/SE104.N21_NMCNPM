@@ -6,24 +6,28 @@ import { FormattedMessage } from 'react-intl';
 import "./sideBar.scss"
 import { Link } from 'react-router-dom/cjs/react-router-dom';
 import { NavLink } from 'react-router-dom';
-import { faEllipsisVertical, faRightFromBracket, faCircleUser } from '@fortawesome/free-solid-svg-icons';
+import { faEllipsisVertical, faRightFromBracket, faCircleUser, faShoppingCart, faRetweet } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { USER_ROLE } from '../../utils/constant';
 import ModalMyInfor from './Infor/ModalMyInfor';
-import { faHome, faBook, faUserCircle, faBoxesStacked, faTags, faBan, faUserAlt } from '@fortawesome/free-solid-svg-icons';
+import { faHome, faBook, faUserCircle, faBoxesStacked, faTags, faBan, faUserAlt, faCartShopping } from '@fortawesome/free-solid-svg-icons';
 class SideBar extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            role: "MANAGER",
+            role: "",
             // isOpenProfile: false
         }
     }
     componentDidMount() {
-        let { userInfo } = this.props;
-        if (userInfo && !_.isEmpty(userInfo)) {
+        this.setState({
+            role: this.props.userInfor.role,
+        })
+    }
+    componentDidUpdate(prevProps, prevState, snapshot) {
+        if (prevState.role !== this.state.role) {
             this.setState({
-                role: userInfo.roleId,
+                role: this.props.userInfor.role,
             })
         }
     }
@@ -86,7 +90,7 @@ class SideBar extends Component {
                             </div>
                         </div>
                     </div>
-                    {true &&
+                    {this.state.role === USER_ROLE.MANAGER &&
                         <div className="list-group list-group-flush">
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to='/home'>
                                 <FontAwesomeIcon
@@ -100,8 +104,20 @@ class SideBar extends Component {
                                     icon={faBook} />
                                 <p>Book Management</p>
                             </NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">Book Purchase</NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">Book Rental</NavLink>
+                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">
+                                <FontAwesomeIcon
+                                    font-size={'20px'}
+                                    icon={faCartShopping}
+                                />
+                                <p>Book Purchase</p>
+                            </NavLink>
+                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">
+                                <FontAwesomeIcon
+                                    font-size={'20px'}
+                                    icon={faRetweet}
+                                />
+                                <p>Book Rental</p>
+                            </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
@@ -148,31 +164,25 @@ class SideBar extends Component {
                                     icon={faBook} />
                                 <p>Book Management</p>
                             </NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">Book Purchase</NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">Book Rental</NavLink>
+                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-purchase">
+                                <FontAwesomeIcon
+                                    font-size={'20px'}
+                                    icon={faCartShopping}
+                                />
+                                <p>Book Purchase</p>
+                            </NavLink>
+                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/book-rental">
+                                <FontAwesomeIcon
+                                    font-size={'20px'}
+                                    icon={faRetweet}
+                                />
+                                <p>Book Rental</p>
+                            </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">
                                 <FontAwesomeIcon
                                     font-size={'20px'}
                                     icon={faUserCircle} />
                                 <p>Customer Management</p>
-                            </NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/supplier-management">
-                                <FontAwesomeIcon
-                                    font-size={'20px'}
-                                    icon={faBoxesStacked} />
-                                <p>Supplier Management</p>
-                            </NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/user-management">
-                                <FontAwesomeIcon
-                                    font-size={'20px'}
-                                    icon={faUserAlt} />
-                                <p>User Management</p>
-                            </NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/discount-management">
-                                <FontAwesomeIcon
-                                    font-size={'20px'}
-                                    icon={faTags} />
-                                <p>Discount code</p>
                             </NavLink>
                         </div>
                     }
@@ -183,12 +193,6 @@ class SideBar extends Component {
                                     font-size={'20px'}
                                     icon={faHome} />
                                 <p>Home</p>
-                            </NavLink>
-                            <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/customer-management">
-                                <FontAwesomeIcon
-                                    font-size={'20px'}
-                                    icon={faUserCircle} />
-                                <p>Customer Management</p>
                             </NavLink>
                             <NavLink className="d-flex align-items-center bg-transparent list-group-item list-group-item-action list-group-item-light p-3" to="/user-management">
                                 <FontAwesomeIcon

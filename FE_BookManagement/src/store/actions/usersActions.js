@@ -66,15 +66,15 @@ export const editAUser = (data) => {
         try {
             let res = await editUserService(data);
             if (res && res.errCode === 0) {
-                toast.success("Update the customer succeed !")
+                toast.success("Update the user succeed !")
                 dispatch(editUserSuccess());
                 dispatch(fetchAllUsersStart());
             } else {
-                toast.error("Update the customer error !")
+                toast.error("Update the user error !")
                 dispatch(editUserFailed());
             }
         } catch (e) {
-            toast.error("Update the customer error !")
+            toast.error("Update the user error !")
             dispatch(editUserFailed());
         }
     }

@@ -4,18 +4,18 @@ import {
     getMonthStatisticService,
     getAllMonthStatisticService,
     getBookReportsService,
-    getDeptReportsService
+    getDebtReportsService
 } from '../../services/statisticService';
 export const fetchMonthStatistic = () => {
     return async (dispatch, getState) => {
         try {
             let res = await getMonthStatisticService();
-            dispatch(fetchMonthStatisticSuccess(res.monthlyStatistic));
-            // if (res && res.errCode === 0) {
-            // } else {
-            //     toast.error("Fetch all rents error")
-            //     dispatch(fetchMonthStatisticFailed());
-            // }
+            if (res && res.errCode === 0) {
+                dispatch(fetchMonthStatisticSuccess(res.monthlyStatistic));
+            } else {
+                toast.error("Fetch all rents error")
+                dispatch(fetchMonthStatisticFailed());
+            }
         } catch (e) {
             dispatch(fetchMonthStatisticFailed());
         }
@@ -72,9 +72,34 @@ export const getBookReports = (month) => {
 
 export const fetchBookReportStatisticSuccess = (data) => ({
     type: actionTypes.FETCH_BOOK_REPORT_SUCCESS,
-    dataBookReport: data
+    bookReport: data
 })
 
 export const fetchBookReportStatisticFailed = () => ({
     type: actionTypes.FETCH_BOOK_REPORT_FAILED
+})
+
+export const getDebtReports = (month) => {
+    return async (dispatch, getState) => {
+        try {
+            let res = await getDebtReportsService(month);
+            if (res && res.errCode === 0) {
+                toast.success("fetch all debt report succeed!")
+                dispatch(fetchDebtReportStatisticSuccess(res.currentDatas));
+            } else {
+                dispatch(fetchDebtReportStatisticFailed());
+            }
+        } catch (e) {
+            dispatch(fetchDebtReportStatisticFailed());
+        }
+    }
+}
+
+export const fetchDebtReportStatisticSuccess = (data) => ({
+    type: actionTypes.FETCH_DEBT_REPORT_SUCCESS,
+    debtReport: data
+})
+
+export const fetchDebtReportStatisticFailed = () => ({
+    type: actionTypes.FETCH_DEBT_REPORT_FAILED
 })

@@ -33,7 +33,7 @@ export const YesNoObj = {
 }
 
 export const USER_ROLE = {
-    MANAGER: 'MANAGER',
-    SUPPORTER: 'SUPPORTER',
-    EMPLOYEE: 'EMPLOYEE',
+    MANAGER: 'Manager',
+    SUPPORTER: 'Supporter',
+    EMPLOYEE: 'Employee',
 }

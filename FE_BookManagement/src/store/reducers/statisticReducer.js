@@ -1,8 +1,10 @@
+import { STOP_PROP_TAG } from 'react-data-table-component';
 import actionTypes from '../actions/actionTypes';
 const initialState = {
     currentMonthStatistic: [],
     allMonthStatistic: [],
-    dataBookReport: []
+    dataBookReport: [],
+    dataDebtReport: [],
 }
 
 const statisticReducer = (state = initialState, action) => {
@@ -28,9 +30,25 @@ const statisticReducer = (state = initialState, action) => {
                 ...state
             }
         case actionTypes.FETCH_BOOK_REPORT_SUCCESS:
-            state.dataBookReport = action.dataBookReport
+            state.dataBookReport = action.bookReport
+            return {
+                ...state
+            }
         case actionTypes.FETCH_BOOK_REPORT_FAILED:
             state.dataBookReport = []
+            return {
+                ...state
+            }
+        case actionTypes.FETCH_DEBT_REPORT_SUCCESS:
+            state.dataDebtReport = action.debtReport
+            return {
+                ...state
+            }
+        case actionTypes.FETCH_DEBT_REPORT_FAILED:
+            state.dataDebtReport = []
+            return {
+                ...state
+            }
         default:
             return state
     }
