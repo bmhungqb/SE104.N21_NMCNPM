@@ -35,9 +35,9 @@ class ModalRegulation extends Component {
     }
     inputSchema = Yup.object().shape({
         name: Yup.string().required("Required!"),
-        minimumInput: Yup.number().required("Required!"),
-        minimumStock: Yup.number().required("Required!"),
-        maximumDept: Yup.number().required("Required!"),
+        minimumInput: Yup.number().oneOf([0, 1], "0: None,1: Active").required("Required!"),
+        minimumStock: Yup.number().oneOf([0, 1], "0: None,1: Active").required("Required!"),
+        maximumDept: Yup.number().oneOf([0, 1], "0: None,1: Active").required("Required!"),
     })
     render() {
         return (
@@ -59,13 +59,13 @@ class ModalRegulation extends Component {
                         className={'modal-regulation-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Add new regulation</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='regulation.add-new-regulation' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-regulation-body'>
                                 <div className='input-container'
                                     style={{ "width": "100%" }}
                                 >
-                                    <label>Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         type='text'
                                         value={values.name}
@@ -89,7 +89,7 @@ class ModalRegulation extends Component {
                                 <div className='input-container'
                                     style={{ "width": "42%" }}
                                 >
-                                    <label>Minimum Input</label>
+                                    <label><FormattedMessage id='regulation.min-input' /></label>
                                     <input
                                         type='text'
                                         value={values.minimumInput}
@@ -113,7 +113,7 @@ class ModalRegulation extends Component {
                                 <div className='input-container'
                                     style={{ "width": "42%" }}
                                 >
-                                    <label>Minimum Stock</label>
+                                    <label><FormattedMessage id='regulation.min-stock' /></label>
                                     <input
                                         type='text'
                                         value={values.minimumStock}
@@ -137,7 +137,7 @@ class ModalRegulation extends Component {
                                 <div className='input-container'
                                     style={{ "width": "42%" }}
                                 >
-                                    <label>Maximum Dept</label>
+                                    <label><FormattedMessage id='regulation.max-debt' /></label>
                                     <input
                                         type='text'
                                         value={values.maximumDept}
@@ -163,12 +163,16 @@ class ModalRegulation extends Component {
                         <ModalFooter>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
-                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>
+                                <FormattedMessage id='modal.cancel' />
+                            </Button>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
                                 className='px-5 border-0 bg-primary'
                                 onClick={handleSubmit}
-                            >Add</Button>
+                            >
+                                <FormattedMessage id='modal.add' />
+                            </Button>
                         </ModalFooter>
                     </Modal >
                 )
@@ -181,12 +185,14 @@ class ModalRegulation extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        createNewRegulation: (data) => dispatch(actions.createNewRegulation(data))
+        createNewRegulation: (data) => dispatch(actions.createNewRegulation(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

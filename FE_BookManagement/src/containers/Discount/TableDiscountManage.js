@@ -14,60 +14,6 @@ class TableDiscountManage extends Component {
         super(props);
         this.state = {
             dataTableDiscount: [],
-            columns: [{
-                name: "Discount ID",
-                selector: 'discountId',
-                sortable: true,
-            },
-            {
-                name: "Name",
-                selector: 'name',
-            },
-            {
-                name: "Start",
-                selector: "start",
-            },
-            {
-                name: "End",
-                selector: "end",
-            },
-            {
-                name: "State",
-                selector: "state",
-            },
-            {
-                name: "Actions",
-                cell:
-                    (row) =>
-                        <div
-                            className='d-flex justify-content-between w-75'>
-
-                            < button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleEditDiscount(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-primary'
-                                    icon={faPenToSquare}
-                                />
-                            </button >
-                            <button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleDeleteDiscount(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-danger'
-                                    icon={faTrash}
-                                />
-                            </button>
-                        </div>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
             dataTableBook: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
@@ -93,13 +39,15 @@ class TableDiscountManage extends Component {
         if (prevProps.listDiscounts !== this.props.listDiscounts) {
             let arr = []
             this.props.listDiscounts.map((item, index) => {
+                let start = new Date(Date.parse(item.start)).toLocaleDateString();
+                let end = new Date(Date.parse(item.end)).toLocaleDateString();
                 arr.push({
                     "discountId": item.discountId,
                     "name": item.name,
                     "state": item.state,
-                    "start": item.start,
-                    "end": item.end,
-                    "percentage": item.end,
+                    "start": start,
+                    "end": end,
+                    "percentage": item.percentage,
                 })
             })
             this.setState({
@@ -110,13 +58,15 @@ class TableDiscountManage extends Component {
             if (this.props.optionSearch[0] === "") {
                 let arr = []
                 this.props.listDiscounts.map((item, index) => {
+                    let start = new Date(Date.parse(item.start)).toLocaleDateString();
+                    let end = new Date(Date.parse(item.end)).toLocaleDateString();
                     arr.push({
                         "discountId": item.discountId,
                         "name": item.name,
                         "state": item.state,
-                        "start": item.start,
-                        "end": item.end,
-                        "percentage": item.end,
+                        "start": start,
+                        "end": end,
+                        "percentage": item.percentage,
                     })
                 })
                 this.setState({
@@ -129,13 +79,15 @@ class TableDiscountManage extends Component {
                 let listDiscountFilter = this.props.listDiscounts.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
                 let arr = []
                 listDiscountFilter.map((item, index) => {
+                    let start = new Date(Date.parse(item.start)).toLocaleDateString();
+                    let end = new Date(Date.parse(item.end)).toLocaleDateString();
                     arr.push({
                         "discountId": item.discountId,
                         "name": item.name,
                         "state": item.state,
-                        "start": item.start,
-                        "end": item.end,
-                        "percentage": item.end,
+                        "start": start,
+                        "end": end,
+                        "percentage": item.percentage,
                     })
                 })
                 this.setState({
@@ -150,7 +102,72 @@ class TableDiscountManage extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={
+                        [{
+                            name: this.props.language === "en" ? "Discount ID" : "Mã giảm giá",
+                            selector: 'discountId',
+                            sortable: true,
+                        },
+                        {
+                            name: this.props.language === "en" ? "Name" : "Tên mã giảm giá",
+                            selector: 'name',
+                        },
+                        {
+                            name: this.props.language === "en" ? "Start" : "Ngày bắt đầu",
+                            selector: "start",
+                        },
+                        {
+                            name: this.props.language === "en" ? "End" : "Ngày hết hạn",
+                            selector: "end",
+                        },
+                        {
+                            name: this.props.language === "en" ? "State" : "Trạng thái",
+                            selector: "state",
+                            cell:
+                                (row) =>
+                                    < div
+                                        style={row.state === "Active" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "100px", "background": "green" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "100px", "background": "red" }
+                                        }
+                                    >
+                                        {row.state === "Active" ? this.props.language === "en" ? "Active" : "Còn hiệu lực" : this.props.language === "en" ? "End" : "Hết hạn"}
+                                    </div >
+                        },
+                        {
+                            name: this.props.language === "en" ? "Actions" : "Chức năng",
+                            cell:
+                                (row) =>
+                                    <div
+                                        className='d-flex justify-content-between w-75'>
+
+                                        < button
+                                            className='border-0 bg-transparent'
+                                            onClick={() => { this.handleEditDiscount(row) }}
+                                            data-tag="allowRowEvents"
+                                        >
+                                            <FontAwesomeIcon
+                                                className='icon-right text-primary'
+                                                icon={faPenToSquare}
+                                            />
+                                        </button >
+                                        <button
+                                            className='border-0 bg-transparent'
+                                            onClick={() => { this.handleDeleteDiscount(row) }}
+                                            data-tag="allowRowEvents"
+                                        >
+                                            <FontAwesomeIcon
+                                                className='icon-right text-danger'
+                                                icon={faTrash}
+                                            />
+                                        </button>
+                                    </div>,
+                            ignoreRowClick: true,
+                            allowOverflow: true,
+                            button: true,
+                        },
+                        ]
+                    }
                     data={this.state.dataTableDiscount}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -166,13 +183,15 @@ class TableDiscountManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        listDiscounts: state.discount.listDiscounts
+        listDiscounts: state.discount.listDiscounts,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllDiscounts: () => dispatch(actions.fetchAllDiscountsStart())
+        fetchAllDiscounts: () => dispatch(actions.fetchAllDiscountsStart()),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

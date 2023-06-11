@@ -75,10 +75,10 @@ class ModalEditRegulation extends Component {
         this.toggleEdit()
     }
     inputSchema = Yup.object().shape({
-        name: Yup.string().required("Required!"),
-        minimumInput: Yup.number().required("Required!"),
-        minimumStock: Yup.number().required("Required!"),
-        maximumDept: Yup.number().required("Required!"),
+        name: Yup.string(),
+        minimumInput: Yup.number().oneOf([0, 1], "0: None,1: Active"),
+        minimumStock: Yup.number().oneOf([0, 1], "0: None,1: Active"),
+        maximumDept: Yup.number().oneOf([0, 1], "0: None,1: Active"),
     })
     handleChange = (e, values) => {
         this.setState({
@@ -106,13 +106,13 @@ class ModalEditRegulation extends Component {
                         className={'modal-regulation-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Edit discount information</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.title-edit-regulation' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-regulation-body'>
                                 <div className='input-container'
                                     style={{ "width": "100%" }}
                                 >
-                                    <label>Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -138,7 +138,7 @@ class ModalEditRegulation extends Component {
                                 <div className='input-container'
                                     style={{ "width": "42%" }}
                                 >
-                                    <label>Minimum Input</label>
+                                    <label><FormattedMessage id='regulation.min-input' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -165,7 +165,7 @@ class ModalEditRegulation extends Component {
                                 <div className='input-container'
                                     style={{ "width": "42%" }}
                                 >
-                                    <label>Minimum Stock</label>
+                                    <label><FormattedMessage id='regulation.min-stock' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -191,7 +191,7 @@ class ModalEditRegulation extends Component {
                                 <div className='input-container'
                                     style={{ "width": "42%" }}
                                 >
-                                    <label>Maximum Dept</label>
+                                    <label><FormattedMessage id='regulation.max-debt' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -221,23 +221,23 @@ class ModalEditRegulation extends Component {
                                 style={{ "height": "40px", "width": "150px" }}
                                 className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
                                 onClick={() => { this.toggleEdit() }}
-                            >Edit</Button>
+                            ><FormattedMessage id='modal.edit' /></Button>
                             {
                                 this.state.isAllowEdit
                                 &&
                                 <Button
                                     style={{ "height": "40px", "width": "150px" }}
                                     className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                                >Cancel</Button>
+                                ><FormattedMessage id='modal.cancel' /></Button>
                             }
                             {
                                 this.state.isAllowEdit &&
                                 <Button
-                                    style={{ "height": "40px", "width": "150px" }}
+                                    style={{ "height": "40px", "width": "170px" }}
                                     className='px-5 border-0 bg-primary'
                                     type='submit'
                                     onClick={handleSubmit}
-                                >Save</Button>
+                                ><FormattedMessage id='modal.save' /></Button>
                             }
                         </ModalFooter>
                     </Modal >
@@ -252,12 +252,14 @@ class ModalEditRegulation extends Component {
 const mapStateToProps = state => {
     return {
         listRegulations: state.regulation.listRegulations,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        editARegulation: (data) => dispatch(actions.editARegulation(data))
+        editARegulation: (data) => dispatch(actions.editARegulation(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

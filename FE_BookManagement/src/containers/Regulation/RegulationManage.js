@@ -12,6 +12,7 @@ import ModalDeleteRegulation from './ModalDeleteRegulation';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash, faPlus } from '@fortawesome/free-solid-svg-icons';
+import { FormattedMessage } from 'react-intl';
 class RegulationManage extends Component {
     constructor(props) {
         super(props)
@@ -22,7 +23,7 @@ class RegulationManage extends Component {
             isOpenModalEditRegulation: false,
             isOpenModalDeleteRegulation: false,
             inputSearch: "",
-            selectFilter: "id"
+            selectFilter: "regulationId"
         }
     }
     handleAddNewRegulation = () => {
@@ -92,7 +93,7 @@ class RegulationManage extends Component {
                     <Header />
                     <div className='user-manage-container'>
                         <div className='user-manage-header'>
-                            <p className='title-header'>Regulations</p>
+                            <p className='title-header'><FormattedMessage id='regulation.regulation' /></p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='user-manage-content'>
@@ -100,20 +101,19 @@ class RegulationManage extends Component {
                                 <div class="input-group form-outline w-50">
                                     <input
                                         style={{ "height": "46px" }}
-                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        placeholder={this.props.language === "en" ? "Please enter a search query..." : "Nhập để tìm kiếm..."}
                                         type="text" className="form-control w-75"
                                         onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
                                     />
                                     <div className="input-group-append">
                                         <select
-                                            className="form-select w-100 brounded-0"
+                                            className="form-select w-100 rounded-0"
                                             value={this.state.selectFilter}
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"id"}>ID</option>
-                                            <option value={"name"}>Name</option>
-                                            <option value={"state"}>State</option>
+                                            <option value={"regulationId"}>{this.props.language === "en" ? "Regulation ID" : "Mã quy định"}</option>
+                                            <option value={"name"}>{this.props.language === "en" ? "Name" : "Tên quy định"}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -123,7 +123,8 @@ class RegulationManage extends Component {
                                         onClick={() => this.handleAddNewRegulation()}
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
-                                        Add Regulation</button>
+                                        <FormattedMessage id='regulation.add-new-regulation' />
+                                    </button>
                                 </div>
                             </div>
                             <div className='datatable'>
@@ -147,12 +148,14 @@ class RegulationManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

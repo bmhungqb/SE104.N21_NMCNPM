@@ -78,12 +78,12 @@ class ModalEditDiscount extends Component {
         this.toggleEdit()
     }
     inputSchema = Yup.object().shape({
-        name: Yup.string().required("Required!"),
-        state: Yup.string().required("Required!"),
-        customerRank: Yup.string().required("Required!"),
-        percentage: Yup.number().required("Required!"),
-        start: Yup.string().required("Required!"),
-        end: Yup.string().required("Required!"),
+        name: Yup.string(),
+        state: Yup.string(),
+        customerRank: Yup.string(),
+        percentage: Yup.number(),
+        start: Yup.string(),
+        end: Yup.string(),
     })
     handleChange = (e, values) => {
         this.setState({
@@ -94,14 +94,7 @@ class ModalEditDiscount extends Component {
     render() {
         return (
             <Formik
-                initialValues={{
-                    name: "",
-                    state: "",
-                    start: "",
-                    end: "",
-                    percentage: "",
-                    customerRank: "",
-                }}
+                initialValues={this.state}
                 validationSchema={this.inputSchema}
                 onSubmit={(values, { resetForm }) => this.handleAddNewDiscount(values, resetForm)}
                 innerRef={this.formikRef}
@@ -113,13 +106,13 @@ class ModalEditDiscount extends Component {
                         className={'modal-discount-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Edit discount information</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.title-edit-discount' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-discount-body'>
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -145,17 +138,18 @@ class ModalEditDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>State</label>
+                                    <label><FormattedMessage id='discount.state' /></label>
                                     <div className='select-genre'>
                                         <select
+                                            disabled={!this.state.isAllowEdit}
                                             className='form-select'
                                             value={this.state.state}
                                             onBlur={handleBlur}
                                             name='state'
                                             onChange={(e) => { this.handleChange(e, values) }}
                                         >
-                                            <option value={'Active'}>Active</option>
-                                            <option value={"End"}>End</option>
+                                            <option value={'Active'}>{this.props.language === "en" ? "Active" : "Còn hiệu lực"}</option>
+                                            <option value={"End"}>{this.props.language === "en" ? "End" : "Hết hiệu lực"}</option>
                                         </select>
                                         {this.state.isAllowEdit &&
                                             errors.state &&
@@ -175,8 +169,11 @@ class ModalEditDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Start</label>
+                                    <label>
+                                        <FormattedMessage id='discount.start' />
+                                    </label>
                                     <DatePicker
+                                        disabled={!this.state.isAllowEdit}
                                         value={this.state.start}
                                         name='start'
                                         onBlur={handleBlur}
@@ -204,8 +201,11 @@ class ModalEditDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>End</label>
+                                    <label>
+                                        <FormattedMessage id='discount.end' />
+                                    </label>
                                     <DatePicker
+                                        disabled={!this.state.isAllowEdit}
                                         value={this.state.end}
                                         name='end'
                                         onBlur={handleBlur}
@@ -233,8 +233,11 @@ class ModalEditDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Percentage</label>
+                                    <label>
+                                        <FormattedMessage id='discount.percentage' />
+                                    </label>
                                     <input
+                                        disabled={!this.state.isAllowEdit}
                                         type='text'
                                         value={this.state.percentage}
                                         name='percentage'
@@ -258,18 +261,21 @@ class ModalEditDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Customer Rank</label>
+                                    <label>
+                                        <FormattedMessage id='discount.customer-rank' />
+                                    </label>
                                     <div className='select-genre'>
                                         <select
+                                            disabled={!this.state.isAllowEdit}
                                             className='form-select'
                                             name='customerRank'
                                             value={this.state.customerRank}
                                             onBlur={handleBlur}
                                             onChange={(e) => { this.handleChange(e, values) }}
                                         >
-                                            <option value={'Normal'}>Normal</option>
-                                            <option value={"Vip"}>Vip</option>
-                                            <option value={"Gold"}>Gold</option>
+                                            <option value={"Gold"}>{this.props.language === "en" ? "Gold" : "Vàng"}</option>
+                                            <option value={'Silver'}>{this.props.language === "en" ? "Silver" : "Bạc"}</option>
+                                            <option value={"Bronze"}>{this.props.language === "en" ? "Bronze" : "Đồng"}</option>
                                         </select>
                                         {this.state.isAllowEdit &&
                                             errors.customerRank &&
@@ -293,22 +299,28 @@ class ModalEditDiscount extends Component {
                                 style={{ "height": "40px", "width": "150px" }}
                                 className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
                                 onClick={() => { this.toggleEdit() }}
-                            >Edit</Button>
+                            >
+                                <FormattedMessage id='modal.edit' />
+                            </Button>
                             {
                                 this.state.isAllowEdit
                                 &&
                                 <Button
                                     style={{ "height": "40px", "width": "150px" }}
                                     className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                                >Cancel</Button>
+                                >
+                                    <FormattedMessage id='modal.cancel' />
+                                </Button>
                             }
                             {
                                 this.state.isAllowEdit &&
                                 <Button
-                                    style={{ "height": "40px", "width": "150px" }}
+                                    style={{ "height": "40px", "width": "170px" }}
                                     className='px-5 border-0 bg-primary'
                                     onClick={() => this.handleSaveDiscount()}
-                                >Save</Button>
+                                >
+                                    <FormattedMessage id='modal.save' />
+                                </Button>
                             }
                         </ModalFooter>
                     </Modal >
@@ -323,12 +335,14 @@ class ModalEditDiscount extends Component {
 const mapStateToProps = state => {
     return {
         listDiscounts: state.discount.listDiscounts,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        editADiscount: (data) => dispatch(actions.editADiscount(data))
+        editADiscount: (data) => dispatch(actions.editADiscount(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

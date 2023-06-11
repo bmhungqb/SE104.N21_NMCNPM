@@ -11,15 +11,15 @@ export const createNewSupplier = (data) => {
         try {
             let res = await createNewSupplierService(data);
             if (res && res.errCode === 0) {
-                toast.success("Create a new supplier succeed !")
+                toast.success(res.errMessage)
                 dispatch(saveSupplierSuccess());
                 dispatch(fetchAllSuppliersStart());
             } else {
-                toast.error("Create a new supplier error !")
+                toast.error(res.errMessage)
                 dispatch(saveSupplierFailed());
             }
         } catch (e) {
-            toast.error("Create a new supplier error !")
+            toast.error("There was no response.")
             dispatch(saveSupplierFailed());
         }
     }
@@ -37,12 +37,10 @@ export const fetchAllSuppliersStart = () => {
         try {
             let res = await getAllSuppliers("ALL");
             if (res && res.errCode === 0) {
-                toast.success("Fetch all suppliers succeed")
                 dispatch(
                     fetchAllSuppliersSuccess(res.suppliers.reverse())
                 );
             } else {
-                toast.error("Fetch all suppliers error")
                 dispatch(fetchAllSuppliersFailed());
             }
         } catch (e) {
@@ -65,15 +63,15 @@ export const editASupplier = (data) => {
         try {
             let res = await editSupplierService(data);
             if (res && res.errCode === 0) {
-                toast.success("Update the supplier succeed !")
+                toast.success(err.errMessage)
                 dispatch(editSupplierSuccess());
                 dispatch(fetchAllSuppliersStart());
             } else {
-                toast.error("Update the supplier error !")
+                toast.error(err.errMessage)
                 dispatch(editSupplierFailed());
             }
         } catch (e) {
-            toast.error("Update the supplier error !")
+            toast.error("There was no response.")
             dispatch(editSupplierFailed());
         }
     }
@@ -92,15 +90,16 @@ export const deleteASupplier = (supplierId) => {
         try {
             let res = await deleteSupplierService(supplierId);
             if (res && res.errCode === 0) {
-                toast.success("Delete the supplier succeed !")
+                toast.success(err.errMessage)
                 dispatch(deleteSupplierSuccess());
                 dispatch(fetchAllSuppliersStart());
             } else {
-                toast.error("Delete the supplier error !")
+                toast.error(err.errMessage)
                 dispatch(deleteSupplierFailed());
             }
         } catch (e) {
-            toast.error("Delete the supplier error !")
+            // toast.error("There was no response.")
+            toast.error(e)
             dispatch(deleteSupplierFailed());
         }
     }

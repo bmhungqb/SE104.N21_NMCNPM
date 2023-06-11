@@ -12,15 +12,15 @@ export const createNewDiscount = (data) => {
         try {
             let res = await createNewDiscountService(data);
             if (res && res.errCode === 0) {
-                toast.success("Create a new discount succeed !")
+                toast.success(res.errMessage)
                 dispatch(saveDiscountSuccess());
                 dispatch(fetchAllDiscountsStart());
             } else {
-                toast.error("Create a new discount error !")
+                toast.success(res.errMessage)
                 dispatch(saveDiscountFailed());
             }
         } catch (e) {
-            toast.error("Create a new discount error !")
+            toast.error("There was no response.")
             dispatch(saveDiscountFailed());
         }
     }
@@ -38,12 +38,10 @@ export const fetchAllDiscountsStart = () => {
         try {
             let res = await getAllDiscounts("ALL");
             if (res && res.errCode === 0) {
-                toast.success("Fetch all discounts succeed")
                 dispatch(
                     fetchAllDiscountsSuccess(res.discounts.reverse())
                 );
             } else {
-                toast.error("Fetch all discounts error")
                 dispatch(fetchAllDiscountsFailed());
             }
         } catch (e) {
@@ -66,15 +64,15 @@ export const editADiscount = (data) => {
         try {
             let res = await editDiscountService(data);
             if (res && res.errCode === 0) {
-                toast.success("Update the discount succeed !")
+                toast.success(res.errMessage)
                 dispatch(editDiscountSuccess());
                 dispatch(fetchAllDiscountsStart());
             } else {
-                toast.error("Update the discount error !")
+                toast.error(res.errMessage)
                 dispatch(editDiscountFailed());
             }
         } catch (e) {
-            toast.error("Update the discount error !")
+            toast.error("There was no response.")
             dispatch(editDiscountFailed());
         }
     }
@@ -93,15 +91,15 @@ export const deleteADiscount = (discountId) => {
         try {
             let res = await deleteDiscountService(discountId);
             if (res && res.errCode === 0) {
-                toast.success("Delete the discount succeed !")
+                toast.success(res.errMessage)
                 dispatch(deleteDiscountSuccess());
                 dispatch(fetchAllDiscountsStart());
             } else {
-                toast.error("Delete the discount error !")
+                toast.success(res.errMessage)
                 dispatch(deleteDiscountFailed());
             }
         } catch (e) {
-            toast.error("Delete the discount error !")
+            toast.error("There was no response.")
             dispatch(deleteDiscountFailed());
         }
     }

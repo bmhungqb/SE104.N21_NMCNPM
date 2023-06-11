@@ -18,7 +18,12 @@ class ModalDiscount extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            errMessage: ""
+            errMessage: "",
+            name: "",
+            state: "Active",
+            start: undefined,
+            end: undefined,
+            customerRank: "Bronze"
         }
         this.formikRef = React.createRef();
     }
@@ -52,14 +57,7 @@ class ModalDiscount extends Component {
     render() {
         return (
             <Formik
-                initialValues={{
-                    name: "",
-                    state: "",
-                    start: "",
-                    end: "",
-                    percentage: "",
-                    customerRank: "",
-                }}
+                initialValues={this.state}
                 validationSchema={this.inputSchema}
                 onSubmit={(values, { resetForm }) => this.handleAddNewDiscount(values, resetForm)}
                 innerRef={this.formikRef}
@@ -71,13 +69,13 @@ class ModalDiscount extends Component {
                         className={'modal-discount-container'}
                         size='lg'
                     >
-                        <ModalHeader toggle={() => { this.toggle() }}>Add new discount</ModalHeader>
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='discount.add-new-discount' /></ModalHeader>
                         <ModalBody>
                             <div className='modal-discount-body'>
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Name</label>
+                                    <label><FormattedMessage id='modal.name' /></label>
                                     <input
                                         className='w-100'
                                         type='text'
@@ -102,7 +100,7 @@ class ModalDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>State</label>
+                                    <label><FormattedMessage id='discount.state' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -111,8 +109,8 @@ class ModalDiscount extends Component {
                                             name='state'
                                             onChange={handleChange}
                                         >
-                                            <option value={'Active'}>Active</option>
-                                            <option value={"End"}>End</option>
+                                            <option value={'Active'}>{this.props.language === "en" ? "Active" : "Còn hiệu lực"}</option>
+                                            <option value={"End"}>{this.props.language === "en" ? "End" : "Hết hiệu lực"}</option>
                                         </select>
                                         {errors.state &&
                                             touched.state &&
@@ -131,7 +129,7 @@ class ModalDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Start</label>
+                                    <label><FormattedMessage id='discount.start' /></label>
                                     <DatePicker
                                         value={values.start}
                                         name='start'
@@ -156,7 +154,7 @@ class ModalDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>End</label>
+                                    <label><FormattedMessage id='discount.end' /></label>
                                     <DatePicker
                                         value={values.end}
                                         name='end'
@@ -181,7 +179,7 @@ class ModalDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Percentage</label>
+                                    <label><FormattedMessage id='discount.percentage' /></label>
                                     <input
                                         type='text'
                                         value={values.percentage}
@@ -205,7 +203,7 @@ class ModalDiscount extends Component {
                                 <div className='input-container'
                                     style={{ "width": "43%" }}
                                 >
-                                    <label>Customer Rank</label>
+                                    <label><FormattedMessage id='discount.customer-rank' /></label>
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
@@ -214,9 +212,9 @@ class ModalDiscount extends Component {
                                             onBlur={handleBlur}
                                             onChange={handleChange}
                                         >
-                                            <option value={'Normal'}>Normal</option>
-                                            <option value={"Vip"}>Vip</option>
-                                            <option value={"Gold"}>Gold</option>
+                                            <option value={"Gold"}>{this.props.language === "en" ? "Gold" : "Vàng"}</option>
+                                            <option value={'Silver'}>{this.props.language === "en" ? "Silver" : "Bạc"}</option>
+                                            <option value={"Bronze"}>{this.props.language === "en" ? "Bronze" : "Đồng"}</option>
                                         </select>
                                         {errors.customerRank &&
                                             touched.customerRank &&
@@ -237,12 +235,12 @@ class ModalDiscount extends Component {
                         <ModalFooter className='mt-3'>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
-                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
+                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}><FormattedMessage id='modal.cancel' /></Button>
                             <Button
                                 style={{ "height": "40px", "width": "150px" }}
                                 className='px-5 border-0 bg-primary'
                                 onClick={handleSubmit}
-                            >Add</Button>
+                            ><FormattedMessage id='modal.add' /></Button>
                         </ModalFooter>
                     </Modal >
                 )
@@ -255,12 +253,14 @@ class ModalDiscount extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        createNewDiscount: (data) => dispatch(actions.createNewDiscount(data))
+        createNewDiscount: (data) => dispatch(actions.createNewDiscount(data)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

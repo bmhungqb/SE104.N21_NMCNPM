@@ -17,10 +17,8 @@ class ModalEditCustomer extends Component {
         this.state = {
             customerId: undefined,
             fullName: "",
-            firstName: "",
-            lastName: "",
             rank: "",
-            gender: "",
+            sex: "",
             phoneNumber: "",
             address: "",
             email: "",
@@ -31,13 +29,11 @@ class ModalEditCustomer extends Component {
     componentDidMount() {
         const customerInfor = this.props.listCustomers.find(row => row.customerId === this.props.customerEditId);
         if (customerInfor) {
-            const [lastName, firstName] = customerInfor.fullName.split(' ');
             this.setState({
                 customerId: customerInfor.customerId,
-                firstName,
-                lastName,
+                fullName: customerInfor.fullName,
                 rank: customerInfor.rank,
-                gender: customerInfor.gender,
+                sex: customerInfor.sex,
                 phoneNumber: customerInfor.phoneNumber,
                 address: customerInfor.address,
                 email: customerInfor.email,
@@ -47,12 +43,10 @@ class ModalEditCustomer extends Component {
     handleCancelEdit = () => {
         const customerInfor = this.props.listCustomers.find(row => row.customerId === this.props.customerEditId);
         if (customerInfor) {
-            const [lastName, firstName] = customerInfor.fullName.split(' ');
             this.setState({
-                firstName,
-                lastName,
+                fullName: customerInfor.fullName,
                 rank: customerInfor.rank,
-                gender: customerInfor.gender,
+                sex: customerInfor.sex,
                 phoneNumber: customerInfor.phoneNumber,
                 address: customerInfor.address,
                 email: customerInfor.email,
@@ -60,12 +54,12 @@ class ModalEditCustomer extends Component {
         }
         this.toggleEdit();
     }
-    handleSaveCustomer = (values) => {
+    handleSaveCustomer = () => {
         this.props.editACustomer({
             customerId: this.state.customerId,
-            fullName: `${this.state.lastName} ${this.state.firstName}`,
+            fullName: this.state.fullName,
             rank: this.state.rank,
-            gender: this.state.gender,
+            sex: this.state.sex,
             phoneNumber: this.state.phoneNumber,
             address: this.state.address,
             email: this.state.email,
@@ -82,22 +76,13 @@ class ModalEditCustomer extends Component {
     };
     // Define input validation
     inputSchema = Yup.object().shape({
-        phoneNumber: Yup.string()
-            .transform((value, originalValue) => {
-                // Remove all non-digit characters from the input
-                if (originalValue) {
-                    return originalValue.replace(/\D/g, "");
-                }
-                return value;
-            })
-            .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
-            .required("Required!"),
-        firstName: Yup.string().required("Required!"),
-        lastName: Yup.string().required("Required!"),
-        rank: Yup.string().required("Required!"),
-        gender: Yup.string().required("Required!"),
-        address: Yup.string().required("Required!"),
-        email: Yup.string().email().required("Required!"),
+        phoneNumber: Yup.number()
+            .typeError("Must be a number type"),
+        fullName: Yup.string(),
+        rank: Yup.string(),
+        sex: Yup.string(),
+        address: Yup.string(),
+        email: Yup.string().email('The email has an invalid format.'),
     })
     handleChange = (e, values) => {
         this.setState({
@@ -108,15 +93,7 @@ class ModalEditCustomer extends Component {
     render() {
         return (
             <Formik
-                initialValues={{
-                    firstName: this.state.firstName,
-                    lastName: this.state.lastName,
-                    rank: this.state.rank,
-                    gender: this.state.gender,
-                    phoneNumber: this.state.phoneNumber,
-                    address: this.state.address,
-                    email: this.state.email,
-                }}
+                initialValues={this.state}
                 validationSchema={this.inputSchema}
                 onSubmit={(values) => { this.handleSaveCustomer(values) }}
                 innerRef={this.formikRef}
@@ -147,55 +124,14 @@ class ModalEditCustomer extends Component {
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label><FormattedMessage id='modal.firstname' /></label>
+                                    <label><FormattedMessage id='modal.fullName' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
-                                        name='firstName'
-                                        value={this.state.firstName}
-                                        onBlur={handleBlur}
+                                        name='fullName'
+                                        value={this.state.fullName}
                                         onChange={(e) => { this.handleChange(e, values) }}
                                     />
-                                    {
-                                        errors.firstName &&
-                                        touched.firstName &&
-                                        <p
-                                            style={{
-                                                'position': 'absolute',
-                                                'margin-top': '60px',
-                                                'margin-left': '2px',
-                                                'color': 'red',
-                                                'font-style': 'italic',
-                                            }}
-                                        >{errors.firstName}</p>
-                                    }
-                                </div>
-                                <div
-                                    className='input-container'
-                                    style={{ "width": "48%" }}
-                                >
-                                    <label><FormattedMessage id='modal.lastname' /></label>
-                                    <input
-                                        disabled={!this.state.isAllowEdit}
-                                        type='text'
-                                        name='lastName'
-                                        value={this.state.lastName}
-                                        onBlur={handleBlur}
-                                        onChange={(e) => { this.handleChange(e, values) }}
-                                    />
-                                    {
-                                        errors.lastName &&
-                                        touched.lastName &&
-                                        <p
-                                            style={{
-                                                'position': 'absolute',
-                                                'margin-top': '60px',
-                                                'margin-left': '2px',
-                                                'color': 'red',
-                                                'font-style': 'italic',
-                                            }}
-                                        >{errors.lastName}</p>
-                                    }
                                 </div>
 
                                 <div className='input-container'
@@ -206,28 +142,14 @@ class ModalEditCustomer extends Component {
                                         <select
                                             disabled={!this.state.isAllowEdit}
                                             className='form-select'
-                                            value={this.state.gender}
-                                            name='gender'
-                                            onBlur={handleBlur}
+                                            value={this.state.sex}
+                                            name='sex'
                                             onChange={(e) => this.handleChange(e, values)}
                                         >
-                                            <option value={"Male"}>Male</option>
-                                            <option value={'Female'}>Female</option>
-                                            <option value={"Other"}>Other</option>
+                                            <option value={"Male"}>{this.props.language === "en" ? "Male" : "Nam"}</option>
+                                            <option value={'Female'}>{this.props.language === "en" ? "Female" : "Nữ"}</option>
+                                            <option value={"Other"}>{this.props.language === "en" ? "Other" : "Khác"}</option>
                                         </select>
-                                        {
-                                            errors.gender &&
-                                            touched.gender &&
-                                            <p
-                                                style={{
-                                                    'position': 'absolute',
-                                                    'margin-top': '-3px',
-                                                    'margin-left': '2px',
-                                                    'color': 'red',
-                                                    'font-style': 'italic',
-                                                }}
-                                            >{errors.gender}</p>
-                                        }
                                     </div>
                                 </div>
                                 <div className='input-container'
@@ -238,11 +160,12 @@ class ModalEditCustomer extends Component {
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
                                         value={this.state.phoneNumber}
-                                        name='phoneNumer'
+                                        name='phoneNumber'
                                         onBlur={handleBlur}
                                         onChange={(e) => this.handleChange(e, values)}
                                     />
                                     {
+                                        this.state.isAllowEdit &&
                                         errors.phoneNumber &&
                                         touched.phoneNumber &&
                                         <p
@@ -265,22 +188,8 @@ class ModalEditCustomer extends Component {
                                         type='text'
                                         value={this.state.address}
                                         name='address'
-                                        onBlur={handleBlur}
                                         onChange={(e) => this.handleChange(e, values)}
                                     />
-                                    {
-                                        errors.address &&
-                                        touched.address &&
-                                        <p
-                                            style={{
-                                                'position': 'absolute',
-                                                'margin-top': '60px',
-                                                'margin-left': '2px',
-                                                'color': 'red',
-                                                'font-style': 'italic',
-                                            }}
-                                        >{errors.address}</p>
-                                    }
                                 </div>
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
@@ -295,6 +204,7 @@ class ModalEditCustomer extends Component {
                                         onChange={(e) => this.handleChange(e, values)}
                                     />
                                     {
+                                        this.state.isAllowEdit &&
                                         errors.email &&
                                         touched.email &&
                                         <p
@@ -318,26 +228,12 @@ class ModalEditCustomer extends Component {
                                             className='form-select'
                                             value={this.state.rank}
                                             name='rank'
-                                            onBlur={handleBlur}
                                             onChange={(e) => this.handleChange(e, values)}
                                         >
-                                            <option value={"Normal"}>Normal</option>
-                                            <option value={'Vip'}>Vip</option>
-                                            <option value={"Gold"}>Gold</option>
+                                            <option value={"Gold"}>{this.props.language === "en" ? "Gold" : "Vàng"}</option>
+                                            <option value={'Silver'}>{this.props.language === "en" ? "Silver" : "Bạc"}</option>
+                                            <option value={"Bronze"}>{this.props.language === "en" ? "Bronze" : "Đồng"}</option>
                                         </select>
-                                        {
-                                            errors.rank &&
-                                            touched.rank &&
-                                            <p
-                                                style={{
-                                                    'position': 'absolute',
-                                                    'margin-top': '-3px',
-                                                    'margin-left': '2px',
-                                                    'color': 'red',
-                                                    'font-style': 'italic',
-                                                }}
-                                            >{errors.rank}</p>
-                                        }
                                     </div>
                                 </div>
                             </div>
@@ -362,7 +258,7 @@ class ModalEditCustomer extends Component {
                                     style={{ "height": "40px", "width": "170px" }}
                                     className='px-5 border-0 bg-primary'
                                     type='submit'
-                                    onClick={handleSubmit}
+                                    onClick={() => this.handleSaveCustomer()}
                                 ><FormattedMessage id='modal.save' /></Button>
                             }
                         </ModalFooter>

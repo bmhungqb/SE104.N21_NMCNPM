@@ -10,14 +10,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from 'react-flatpickr';
 import { data } from 'jquery';
 import * as actions from '../../store/actions/index'
+import { Formik, useFormik } from 'formik';
+import * as Yup from 'yup';
 class ModalUser extends Component {
     constructor(props) {
         super(props);
         this.state = {
             isOpen: false,
             name: "",
-            gender: "",
-            role: "",
+            gender: "Male",
+            role: "Employee",
             phonenumber: "",
             email: "",
             birthDay: "",
@@ -29,25 +31,7 @@ class ModalUser extends Component {
             previewImgURL: "",
             errMessage: ""
         }
-        this.listenToEmitter();
-    }
-    listenToEmitter() {
-        emitter.on('EVENT_CLEAR_MODAL_DATA', () => {
-            this.setState({
-                name: "",
-                gender: "",
-                role: "",
-                phonenumber: "",
-                email: "",
-                birthDay: "",
-                username: "",
-                password: "",
-                startWork: "",
-                address: "",
-                image: "",
-                previewImgURL: ""
-            })
-        })
+        this.formikRef = React.createRef();
     }
     handleOnchangeInput = (event, id) => {
         let copyState = { ...this.state }
@@ -56,53 +40,26 @@ class ModalUser extends Component {
             ...copyState
         })
     }
-    checkValidateInput = () => {
-        let isValid = true;
-        let arrInput = [
-            'name',
-            'gender',
-            'role',
-            'phonenumber',
-            'email',
-            'birthDay',
-            'username',
-            'password',
-            'startWork',
-            'address',
-        ];
-        for (let i = 0; i < arrInput.length; i++) {
-            if (!this.state[arrInput[i]]) {
-                isValid = false;
-                alert("Missing parameter " + arrInput[i]);
-                break;
-            }
-        }
-        return isValid
-    }
     handleAddNewUser = () => {
-        let isValid = this.checkValidateInput();
-        if (isValid) {
-            this.props.createNewUser(
-                {
-                    name: this.state.name,
-                    gender: this.state.gender,
-                    role: this.state.role,
-                    phonenumber: this.state.phonenumber,
-                    email: this.state.email,
-                    birthDay: this.state.birthDay,
-                    username: this.state.username,
-                    password: this.state.password,
-                    startWork: this.state.startWork,
-                    address: this.state.address,
-                    image: this.state.image,
-                }
-            )
-            emitter.emit('EVENT_CLEAR_MODAL_DATA');
-            this.toggle()
-        }
+        this.props.createNewUser(
+            {
+                name: this.state.name,
+                gender: this.state.gender,
+                role: this.state.role,
+                phonenumber: this.state.phonenumber,
+                email: this.state.email,
+                birthDay: this.state.birthDay,
+                username: this.state.username,
+                password: this.state.password,
+                startWork: this.state.startWork,
+                address: this.state.address,
+                image: this.state.image,
+            }
+        )
+        this.toggle()
+        resetForm();
     }
     componentDidMount() {
-
     }
 
     toggle = () => {
@@ -133,147 +90,237 @@ class ModalUser extends Component {
             ...copyState
         })
     }
+    handleChange = (e, values) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+        values[e.target.name] = e.target.value
+    }
+    inputSchema = Yup.object().shape({
+        name: Yup.string().required("Required!"),
+        gender: Yup.string(),
+        role: Yup.string().required("Required!"),
+        phonenumber: Yup.number()
+            .typeError("Must be a number type")
+            .required('Required!'),
+        email: Yup.string().email().required("Required!"),
+        birthDay: Yup.string(),
+        username: Yup.string().required("Required!"),
+        password: Yup.string().required("Required!"),
+        startWork: Yup.string(),
+        address: Yup.string(),
+    })
     render() {
         return (
-            <Modal
-                isOpen={this.props.isOpen}
-                toggle={() => { this.toggle() }}
-                className={'modal-user-container'}
-                size='lg'
+            <Formik
+                initialValues={this.state}
+                validationSchema={this.inputSchema}
+                innerRef={this.formikRef}
             >
-                <ModalHeader toggle={() => { this.toggle() }}>Add new User</ModalHeader>
-                <ModalBody>
-                    <div className='modal-user-body d-flex'>
-                        <div className='content-right ml-3' style={{ "width": "30%" }} >
-                            <div className='preview-img-container input-container'>
-                                <div className='preview-image'
-                                    style={{ backgroundImage: `url(${this.state.previewImgURL})`, "height": "100%" }}
-                                    onClick={() => { this.openPreviewImage() }}
-                                >
-                                </div>
-                                <input id='previewImg' type='file' hidden
-                                    onChange={(event) => this.handleOnchangeImage(event)}
-                                />
-                                <label className='label-upload text-center' htmlFor='previewImg'>Tải ảnh <i className='fas fa-upload'></i></label>
-                            </div>
-                            <div className='input-container'>
-                                <label>Day of birth</label>
-                                <DatePicker
-                                    onChange={(e) => this.handleOnchangeDatePicker(e, 'birthDay')}
-                                    value={this.state.birthDay}
-                                />
-                            </div>
-                            <div className='input-container'>
-                                <label>Start Work</label>
-                                <DatePicker
-                                    onChange={(e) => this.handleOnchangeDatePicker(e, 'startWork')}
-                                    value={this.state.startWork}
-                                />
-                            </div>
-                        </div>
-                        <div className='content-left' style={{ "width": "60%" }}>
-                            <div className='input-container'>
-                                <label>Name</label>
-                                <input
-                                    type='text'
-                                    value={this.state.name}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'name')}
-                                />
-                            </div>
-                            <div
-                                className='d-flex'
-                            >
-                                <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label>Gender</label>
-                                    <div className='select-genre'>
-                                        <select
-                                            className='form-select'
-                                            value={this.state.gender}
-                                            onChange={(e) => this.handleOnchangeInput(e, 'gender')}
+                {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+                    <Modal
+                        isOpen={this.props.isOpen}
+                        toggle={() => { this.toggle() }}
+                        className={'modal-user-container'}
+                        size='lg'
+                    >
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.add-user' /></ModalHeader>
+                        <ModalBody>
+                            <div className='modal-user-body d-flex'>
+                                <div className='content-right ml-3' style={{ "width": "30%" }} >
+                                    <div className='preview-img-container input-container'>
+                                        <div className='preview-image'
+                                            style={{ backgroundImage: `url(${this.state.previewImgURL})`, "height": "100%" }}
+                                            onClick={() => { this.openPreviewImage() }}
                                         >
-                                            <option value={'Male'}>Male</option>
-                                            <option value={"Female"}>Female</option>
-                                            <option value={"Other"}>Other</option>
-                                        </select>
+                                        </div>
+                                        <input id='previewImg' type='file' hidden
+                                            onChange={(event) => this.handleOnchangeImage(event)}
+                                        />
+                                        <label className='label-upload text-center' htmlFor='previewImg'><FormattedMessage id='modal.upload' /><i className='fas fa-upload ml-2'></i></label>
+                                    </div>
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.birthday' /></label>
+                                        <DatePicker
+                                            onChange={(e) => this.handleOnchangeDatePicker(e, 'birthDay')}
+                                            value={this.state.birthDay}
+                                        />
+                                    </div>
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.start-work' /></label>
+                                        <DatePicker
+                                            onChange={(e) => this.handleOnchangeDatePicker(e, 'startWork')}
+                                            value={this.state.startWork}
+                                        />
                                     </div>
                                 </div>
-                                <div className='input-container' style={{ "width": "48%" }}>
-                                    <label>Role</label>
-                                    <div className='select-genre'>
-                                        <select
-                                            className='form-select'
-                                            value={this.state.role}
-                                            onChange={(e) => this.handleOnchangeInput(e, 'role')}
-                                        >
-                                            <option value={'Manager'}>Manager</option>
-                                            <option value={"Employee"}>Employee</option>
-                                            <option value={"Supporter"}>Supporter</option>
-                                        </select>
+                                <div className='content-left' style={{ "width": "60%" }}>
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.name' /></label>
+                                        <input
+                                            type='text'
+                                            value={this.state.name}
+                                            onChange={(e) => this.handleOnchangeInput(e, 'name')}
+                                        />
                                     </div>
-                                </div>
-                            </div>
-                            <div className='d-flex'>
-                                <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label>Phone Number</label>
-                                    <input
-                                        type='text'
-                                        value={this.state.phonenumber}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'phonenumber')}
-                                    />
-                                </div>
-                                <div className='input-container' style={{ "width": "48%" }}>
-                                    <label>Email</label>
-                                    <input
-                                        type='text'
-                                        value={this.state.email}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'email')}
-                                    />
-                                </div>
-                            </div>
-                            <div className='d-flex'>
-                                <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label>User Name</label>
-                                    <input
-                                        type='text'
-                                        value={this.state.username}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'username')}
-                                    />
-                                </div>
-                                <div className='input-container' style={{ "width": "48%" }}>
-                                    <label>Password</label>
-                                    <input
-                                        type='text'
-                                        value={this.state.password}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'password')}
-                                    />
-                                </div>
-                            </div>
+                                    <div
+                                        className='d-flex'
+                                    >
+                                        <div className='input-container mr-4' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.gender' /></label>
+                                            <div className='select-genre'>
+                                                <select
+                                                    className='form-select'
+                                                    value={this.state.gender}
+                                                    onChange={(e) => this.handleOnchangeInput(e, 'gender')}
+                                                >
+                                                    <option value={'Male'}>{this.props.language === "en" ? "Male" : "Nam"}</option>
+                                                    <option value={"Female"}>{this.props.language === "en" ? "Female" : "Nữ"}</option>
+                                                    <option value={"Other"}>{this.props.language === "en" ? "Other" : "Khác"}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className='input-container' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.role' /></label>
+                                            <div className='select-genre'>
+                                                <select
+                                                    className='form-select'
+                                                    value={this.state.role}
+                                                    onChange={(e) => this.handleOnchangeInput(e, 'role')}
+                                                >
+                                                    <option value={'Manager'}>{this.props.language === "en" ? "Manager" : "Quản lý"}</option>
+                                                    <option value={"Employee"}>{this.props.language === "en" ? "Employee" : "Nhân viên"}</option>
+                                                    <option value={"Supporter"}>{this.props.language === "en" ? "Supporter" : "Hỗ trợ viên"}</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className='d-flex'>
+                                        <div className='input-container mr-4' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.phone-number' /></label>
+                                            <input
+                                                type='text'
+                                                value={this.state.phonenumber}
+                                                name='phonenumber'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {errors.phonenumber &&
+                                                touched.phonenumber &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.phonenumber}</p>
+                                            }
+                                        </div>
+                                        <div className='input-container' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.email' /></label>
+                                            <input
+                                                type='text'
+                                                value={this.state.email}
+                                                name='email'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {
+                                                errors.email &&
+                                                touched.email &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.email}
+                                                </p>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className='d-flex'>
+                                        <div className='input-container mr-4' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.username' /></label>
+                                            <input
+                                                type='text'
+                                                value={this.state.username}
+                                                name='username'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {
+                                                errors.username &&
+                                                touched.username &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.username}
+                                                </p>
+                                            }
+                                        </div>
+                                        <div className='input-container' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.password' /></label>
+                                            <input
+                                                type='text'
+                                                value={this.state.password}
+                                                name='password'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {
+                                                errors.password &&
+                                                touched.password &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.password}
+                                                </p>
+                                            }
+                                        </div>
+                                    </div>
 
-                            <div className='input-container'>
-                                <label>Address</label>
-                                <input
-                                    type='text'
-                                    value={this.state.address}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'address')}
-                                />
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.address' /></label>
+                                        <input
+                                            type='text'
+                                            value={this.state.address}
+                                            onChange={(e) => this.handleOnchangeInput(e, 'address')}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}>Cancel</Button>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-primary'
-                        onClick={() => this.handleAddNewUser()}
-                    >Add</Button>
-                </ModalFooter>
-            </Modal >
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                style={{ "height": "40px", "width": "150px" }}
+                                className='px-5 border-0 bg-danger' onClick={() => { this.toggle() }}><FormattedMessage id='modal.cancel' /></Button>
+                            <Button
+                                style={{ "height": "40px", "width": "150px" }}
+                                className='px-5 border-0 bg-primary'
+                                onClick={() => this.handleAddNewUser()}
+                            ><FormattedMessage id='modal.add' /></Button>
+                        </ModalFooter>
+                    </Modal >
+                )
+                }
+            </Formik>
         )
     }
-
 }
 
 const mapStateToProps = state => {

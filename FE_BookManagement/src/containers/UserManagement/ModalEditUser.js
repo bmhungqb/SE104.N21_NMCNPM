@@ -9,6 +9,8 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import DatePicker from 'react-flatpickr';
 import * as actions from '../../store/actions/index'
+import { Formik, useFormik } from 'formik';
+import * as Yup from 'yup';
 class ModalEditUser extends Component {
 
     constructor(props) {
@@ -85,48 +87,24 @@ class ModalEditUser extends Component {
             ...copyState
         })
     }
-    checkValidateInput = () => {
-        let isValid = true;
-        let arrInput = [
-            'name',
-            'gender',
-            'role',
-            'phonenumber',
-            'email',
-            'birthDay',
-            'username',
-            'password',
-            'startWork',
-            'address',
-        ];
-        for (let i = 0; i < arrInput.length; i++) {
-            if (!this.state[arrInput[i]]) {
-                isValid = false;
-                alert("Missing parameter " + arrInput[i]);
-                break;
-            }
-        }
-        return isValid
-    }
     handleSaveUser = () => {
-        let isValid = this.checkValidateInput();
-        if (isValid) {
-            this.toggleEdit();
-            this.props.editAUser({
-                id: this.state.id,
-                name: this.state.name,
-                gender: this.state.gender,
-                role: this.state.role,
-                phonenumber: this.state.phonenumber,
-                email: this.state.email,
-                birthDay: this.state.birthDay,
-                username: this.state.username,
-                password: this.state.password,
-                startWork: this.state.startWork,
-                address: this.state.address,
-                image: this.state.previewImgURL,
-            })
-        }
+        this.toggleEdit();
+        this.props.editAUser({
+            id: this.state.id,
+            name: this.state.name,
+            gender: this.state.gender,
+            role: this.state.role,
+            phonenumber: this.state.phonenumber,
+            email: this.state.email,
+            birthDay: this.state.birthDay,
+            username: this.state.username,
+            password: this.state.password,
+            startWork: this.state.startWork,
+            address: this.state.address,
+            image: this.state.previewImgURL,
+        })
+        this.toggle()
+        resetForm();
     }
     toggle = () => {
         this.props.toggleFromParent();
@@ -155,7 +133,20 @@ class ModalEditUser extends Component {
             });
         }
     };
-
+    handleChange = (e, values) => {
+        this.setState({
+            [e.target.name]: e.target.value
+        });
+        values[e.target.name] = e.target.value
+    }
+    inputSchema = Yup.object().shape({
+        phonenumber: Yup.number()
+            .typeError("Must be a number type")
+            .required('Required!'),
+        email: Yup.string().email().required("Required!"),
+        username: Yup.string().required("Required!"),
+        password: Yup.string().required("Required!"),
+    })
     render() {
         return (
             <Modal
@@ -242,7 +233,7 @@ class ModalEditUser extends Component {
                             </div>
                             <div className='d-flex'>
                                 <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label><FormattedMessage id='modalphone-number' /></label>
+                                    <label><FormattedMessage id='modal.phone-number' /></label>
                                     <input
                                         disabled={!this.state.isAllowEdit}
                                         type='text'
@@ -310,7 +301,7 @@ class ModalEditUser extends Component {
                     {
                         this.state.isAllowEdit &&
                         <Button
-                            style={{ "height": "40px", "width": "150px" }}
+                            style={{ "height": "40px", "width": "170px" }}
                             className='px-5 border-0 bg-primary'
                             onClick={() => this.handleSaveUser()}
                         ><FormattedMessage id='modal.save' /></Button>

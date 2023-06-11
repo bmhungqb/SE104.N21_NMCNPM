@@ -14,60 +14,6 @@ class TableRegulationManage extends Component {
         super(props);
         this.state = {
             dataTableRegulation: [],
-            columns: [{
-                name: "Regulation ID",
-                selector: 'regulationId',
-                sortable: true,
-            },
-            {
-                name: "Name",
-                selector: 'name',
-            },
-            {
-                name: "Minimum Input",
-                selector: "minimumInput",
-            },
-            {
-                name: "Minimum Stock",
-                selector: "minimumStock",
-            },
-            {
-                name: "Maximum Dept",
-                selector: "maximumDept",
-            },
-            {
-                name: "Actions",
-                cell:
-                    (row) =>
-                        <div
-                            className='d-flex justify-content-between w-75'>
-
-                            < button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleEditRegulation(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-primary'
-                                    icon={faPenToSquare}
-                                />
-                            </button >
-                            <button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleDeleteRegulation(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-danger'
-                                    icon={faTrash}
-                                />
-                            </button>
-                        </div>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
             dataTableBook: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
@@ -96,9 +42,9 @@ class TableRegulationManage extends Component {
                 arr.push({
                     "regulationId": item.regulationId,
                     "name": item.name,
-                    "minimumInput": item.minimumInput,
-                    "minimumStock": item.minimumStock,
-                    "maximumDept": item.maximumDept,
+                    "minimumInput": item.minimumInput === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
+                    "minimumStock": item.minimumStock === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
+                    "maximumDept": item.maximumDept === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
                 })
             })
             this.setState({
@@ -112,9 +58,9 @@ class TableRegulationManage extends Component {
                     arr.push({
                         "regulationId": item.regulationId,
                         "name": item.name,
-                        "minimumInput": item.minimumInput,
-                        "minimumStock": item.minimumStock,
-                        "maximumDept": item.maximumDept,
+                        "minimumInput": item.minimumInput === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
+                        "minimumStock": item.minimumStock === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
+                        "maximumDept": item.maximumDept === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
                     })
                 })
                 this.setState({
@@ -147,7 +93,91 @@ class TableRegulationManage extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={
+                        [{
+                            name: this.props.language === "en" ? "Regulation ID" : "Mã quy định",
+                            selector: 'regulationId',
+                            sortable: true,
+                        },
+                        {
+                            name: this.props.language === "en" ? "Name" : "Tên quy định",
+                            selector: 'name',
+                        },
+                        {
+                            name: this.props.language === "en" ? "Minimum Input" : "Lượng nhập tối thiểu",
+                            selector: "minimumInput",
+                            cell:
+                                (row) =>
+                                    < div
+                                        style={row.minimumInput === "Active" || row.minimumInput === "Bật" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "red" }
+                                        }
+                                    >
+                                        {row.minimumInput}
+                                    </div >
+                        },
+                        {
+                            name: this.props.language === "en" ? "Minimum Stock" : "Kho tồn tối thiểu",
+                            selector: "minimumStock",
+                            cell:
+                                (row) =>
+                                    < div
+                                        style={row.minimumStock === "Active" || row.minimumStock === "Bật" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "red" }
+                                        }
+                                    >
+                                        {row.minimumStock}
+                                    </div >
+                        },
+                        {
+                            name: this.props.language === "en" ? "Maximum Dept" : "Nợ tối đa",
+                            selector: "maximumDept",
+                            cell:
+                                (row) =>
+                                    < div
+                                        style={row.maximumDept === "Active" || row.maximumDept === "Bật" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "red" }
+                                        }
+                                    >
+                                        {row.maximumDept}
+                                    </div >
+                        },
+                        {
+                            name: this.props.language === "en" ? "Actions" : "Chức năng",
+                            cell:
+                                (row) =>
+                                    <div
+                                        className='d-flex justify-content-between w-75'>
+                                        < button
+                                            className='border-0 bg-transparent'
+                                            onClick={() => { this.handleEditRegulation(row) }}
+                                            data-tag="allowRowEvents"
+                                        >
+                                            <FontAwesomeIcon
+                                                className='icon-right text-primary'
+                                                icon={faPenToSquare}
+                                            />
+                                        </button >
+                                        <button
+                                            className='border-0 bg-transparent'
+                                            onClick={() => { this.handleDeleteRegulation(row) }}
+                                            data-tag="allowRowEvents"
+                                        >
+                                            <FontAwesomeIcon
+                                                className='icon-right text-danger'
+                                                icon={faTrash}
+                                            />
+                                        </button>
+                                    </div>,
+                            ignoreRowClick: true,
+                            allowOverflow: true,
+                            button: true,
+                        },
+                        ]
+                    }
                     data={this.state.dataTableRegulation}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -163,13 +193,15 @@ class TableRegulationManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        listRegulations: state.regulation.listRegulations
+        listRegulations: state.regulation.listRegulations,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllRegulations: () => dispatch(actions.fetchAllRegulationsStart())
+        fetchAllRegulations: () => dispatch(actions.fetchAllRegulationsStart()),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

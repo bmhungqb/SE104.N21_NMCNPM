@@ -45,11 +45,11 @@ class ModalEditSupplier extends Component {
     handleSaveSupplier = (values) => {
         this.props.editASupplier({
             id: this.state.id,
-            name: values.name,
-            phoneNumber: values.phoneNumber,
-            address: values.address,
-            email: values.email,
-        })
+            name: this.state.name,
+            phoneNumber: this.state.phoneNumber,
+            address: this.state.address,
+            email: this.state.email,
+        });
         this.toggleEdit();
     }
     toggle = () => {
@@ -61,13 +61,11 @@ class ModalEditSupplier extends Component {
         }));
     }
     inputSchema = Yup.object().shape({
-        name: Yup.string().required("Required!"),
-        address: Yup.string().required("Required!"),
-        email: Yup.string().email("Invalid email").required("Required!"),
-        phoneNumber: Yup.string()
-            .trim()
-            .matches(/^\d{10}$/, "Phone number must be 10 digits")
-            .required("Required!")
+        name: Yup.string(),
+        address: Yup.string(),
+        email: Yup.string().email('The email has an invalid format.'),
+        phoneNumber: Yup.number()
+            .typeError("Must be a number type"),
     });
     handleChange = (e, values) => {
         this.setState({
@@ -122,22 +120,9 @@ class ModalEditSupplier extends Component {
                                         type='text'
                                         style={{ "width": "90%" }}
                                         value={this.state.name}
-                                        onBlur={handleBlur}
                                         name='name'
                                         onChange={(e) => this.handleChange(e, values)}
                                     />
-                                    {this.state.isAllowEdit && errors.name &&
-                                        touched.name &&
-                                        <p
-                                            style={{
-                                                'position': 'absolute',
-                                                'margin-top': '60px',
-                                                'margin-left': '2px',
-                                                'color': 'red',
-                                                'font-style': 'italic',
-                                            }}
-                                        >{errors.name}</p>
-                                    }
                                 </div>
                                 <div
                                     className='input-container'
@@ -176,21 +161,8 @@ class ModalEditSupplier extends Component {
                                         type='text'
                                         value={this.state.address}
                                         name='address'
-                                        onBlur={handleBlur}
                                         onChange={(e) => this.handleChange(e, values)}
                                     />
-                                    {this.state.isAllowEdit && errors.address &&
-                                        touched.address &&
-                                        <p
-                                            style={{
-                                                'position': 'absolute',
-                                                'margin-top': '60px',
-                                                'margin-left': '2px',
-                                                'color': 'red',
-                                                'font-style': 'italic',
-                                            }}
-                                        >{errors.address}</p>
-                                    }
                                 </div>
                                 <div className='input-container'
                                     style={{ "width": "48%" }}

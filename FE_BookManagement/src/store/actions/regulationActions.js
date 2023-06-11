@@ -66,15 +66,15 @@ export const editARegulation = (data) => {
         try {
             let res = await editRegulationService(data);
             if (res && res.errCode === 0) {
-                toast.success("Update the regulation succeed !")
+                toast.success(res.errMessage)
                 dispatch(editRegulationSuccess());
                 dispatch(fetchAllRegulationsStart());
             } else {
-                toast.error("Update the regulation error !")
+                toast.success(res.errMessage)
                 dispatch(editRegulationFailed());
             }
         } catch (e) {
-            toast.error("Update the regulation error !")
+            toast.error("There was no response.")
             dispatch(editRegulationFailed());
         }
     }

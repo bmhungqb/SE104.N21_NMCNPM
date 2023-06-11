@@ -33,6 +33,7 @@
         "name": "Tên",
         "firstname": "Tên",
         "lastname": "Họ",
+        "fullName": "Họ và tên",
         "gender": "Giới tính",
         "role": "Vai trò",
         "phone-number": "Số điện thoại",
@@ -84,7 +85,13 @@
         "supplierId": "Mã nhà cung cấp",
         "title-delete-user": "Bạn có muốn xóa người dùng này không?",
         "title-edit-user": "Chỉnh sửa thông tin người dùng",
-        "userId": "Mã người dùng"
+        "userId": "Mã người dùng",
+        "add-user": "Thêm người dùng",
+        "users": "Người dùng",
+        "title-delete-discount": "Bạn có muốn xóa mã này không?",
+        "title-edit-discount": "Chỉnh sửa thông tin mã giảm giá",
+        "title-delete-regulation": "Bạn có muốn xóa quy định này không?",
+        "title-edit-regulation": "Chỉnh sửa quy định"
     },
     "book-management": {
         "book-management": "Quản lý sách",
@@ -102,5 +109,21 @@
     "supplier-management": {
         "supplier-management": "Quản lý nhà cung cấp",
         "add-new-supplier": "Thêm nhà cung cấp"
+    },
+    "discount": {
+        "discount": "Mã giảm giá",
+        "add-new-discount": "Thêm mã giảm giá",
+        "state": "Trạng thái",
+        "end": "Kết thúc",
+        "start": "Bắt đầu",
+        "percentage": "Phần trăm",
+        "customer-rank": "Loại khách hàng"
+    },
+    "regulation": {
+        "regulation": "Quy định",
+        "add-new-regulation": "Thêm quy định",
+        "min-input": "Lượng nhập tối thiểu",
+        "min-stock": "Tồn kho tối thiểu",
+        "max-debt": "Nợ tối đa"
     }
 }

@@ -8,6 +8,7 @@ import { icon } from '@fortawesome/fontawesome-svg-core/import.macro'
 import { faPenToSquare, faTrash } from '@fortawesome/free-solid-svg-icons';
 import actionTypes from '../../../store/actions/actionTypes';
 import * as actions from "../../../store/actions/index"
+import { createConstructSignature } from 'typescript';
 class TableBookRental extends Component {
 
     constructor(props) {

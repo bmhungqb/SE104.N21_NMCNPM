@@ -99,22 +99,22 @@ class CustomerManage extends Component {
                                 <div class="input-group form-outline w-50">
                                     <input
                                         style={{ "height": "46px" }}
-                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        placeholder={this.props.language === "en" ? "Please enter a search query..." : "Nhập để tìm kiếm..."}
                                         type="text" className="form-control w-75"
                                         onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
                                     />
                                     <div className="input-group-append">
                                         <select
-                                            className="form-select w-100 brounded-0"
+                                            className="form-select w-100 rounded-0"
                                             value={this.state.selectFilter}
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"customerId"}>ID</option>
-                                            <option value={"fullName"}>Full Name</option>
-                                            <option value={"phoneNumber"}>Phone Number</option>
-                                            <option value={"rank"}>State</option>
-                                            <option value={"address"}>Address</option>
+                                            <option value={"customerId"}>{this.props.language === "en" ? "Customer ID" : "Mã khách hàng"}</option>
+                                            <option value={"fullName"}>{this.props.language === "en" ? "Fullname" : "Tên khách hàng"}</option>
+                                            <option value={"phoneNumber"}>{this.props.language === "en" ? "Phone number" : "Số điện thoại"}</option>
+                                            <option value={"rank"}>{this.props.language === "en" ? "State" : "Trạng thái"}</option>
+                                            <option value={"address"}>{this.props.language === "en" ? "Address" : "Địa chỉ"}</option>
                                         </select>
                                     </div>
                                 </div>

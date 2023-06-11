@@ -6,6 +6,7 @@ import "slick-carousel/slick/slick-theme.css";
 import Header from '../Header/Header';
 import SideBar from '../SideBar/sideBar';
 import TableUserManage from './TableUserManage';
+import { FormattedMessage } from 'react-intl';
 import ModalUser from './ModalUser';
 import ModalEditUser from './ModalEditUser';
 import ModalDeleteUser from './ModalDeleteUser';
@@ -92,7 +93,7 @@ class UserManage extends Component {
                     <Header />
                     <div className='user-manage-container'>
                         <div className='user-manage-header'>
-                            <p className='title-header'>Users</p>
+                            <p className='title-header'><FormattedMessage id='modal.users' /></p>
                             <p className='infor-header'></p>
                         </div>
                         <div className='user-manage-content'>
@@ -100,20 +101,20 @@ class UserManage extends Component {
                                 <div class="input-group form-outline w-50">
                                     <input
                                         style={{ "height": "46px" }}
-                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        placeholder={this.props.language === "en" ? "Please enter a search query..." : "Nhập để tìm kiếm..."}
                                         type="text" className="form-control w-75"
                                         onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
                                     />
                                     <div className="input-group-append">
                                         <select
-                                            className="form-select w-100 brounded-0"
+                                            className="form-select w-100 rounded-0"
                                             value={this.state.selectFilter}
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"id"}>ID</option>
-                                            <option value={"name"}>Full Name</option>
-                                            <option value={"role"}>Role</option>
+                                            <option value={"id"}>{this.props.language === "en" ? "User ID" : "Mã người dùng"}</option>
+                                            <option value={"name"}>{this.props.language === "en" ? "Full Name" : "Tên"}</option>
+                                            <option value={"role"}>{this.props.language === "en" ? "Role" : "Vai trò"}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -123,7 +124,7 @@ class UserManage extends Component {
                                         onClick={() => this.handleAddNewUser()}
                                     >
                                         <FontAwesomeIcon icon={faPlus} className='mx-1' />
-                                        Add User</button>
+                                        <FormattedMessage id='modal.add-user' /></button>
                                 </div>
                             </div>
                             <div className='datatable'>
@@ -147,12 +148,14 @@ class UserManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        isLoggedIn: state.user.isLoggedIn
+        isLoggedIn: state.user.isLoggedIn,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

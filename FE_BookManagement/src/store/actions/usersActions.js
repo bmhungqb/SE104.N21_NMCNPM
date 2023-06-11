@@ -12,15 +12,15 @@ export const createNewUser = (data) => {
         try {
             let res = await createNewUserService(data);
             if (res && res.errCode === 0) {
-                toast.success("Create a new customer succeed !")
+                toast.success(res.errMessage)
                 dispatch(saveUserSuccess());
                 dispatch(fetchAllUsersStart());
             } else {
-                toast.error("Create a new customer error !")
+                toast.error(res.errMessage)
                 dispatch(saveUserFailed());
             }
         } catch (e) {
-            toast.error("Create a new customer error !")
+            toast.error("There was no response.")
             dispatch(saveUserFailed());
         }
     }
@@ -38,12 +38,10 @@ export const fetchAllUsersStart = () => {
         try {
             let res = await getAllUsers("ALL");
             if (res && res.errCode === 0) {
-                toast.success("Fetch all customers succeed")
                 dispatch(
                     fetchAllUsersSuccess(res.users.reverse())
                 );
             } else {
-                toast.error("Fetch all customers error")
                 dispatch(fetchAllUsersFailed());
             }
         } catch (e) {
@@ -66,15 +64,15 @@ export const editAUser = (data) => {
         try {
             let res = await editUserService(data);
             if (res && res.errCode === 0) {
-                toast.success("Update the user succeed !")
+                toast.success(res.errMessage)
                 dispatch(editUserSuccess());
                 dispatch(fetchAllUsersStart());
             } else {
-                toast.error("Update the user error !")
+                toast.success(res.errMessage)
                 dispatch(editUserFailed());
             }
         } catch (e) {
-            toast.error("Update the user error !")
+            toast.error("There was no response.")
             dispatch(editUserFailed());
         }
     }
@@ -93,15 +91,15 @@ export const deleteAUser = (userId) => {
         try {
             let res = await deleteUserService(userId);
             if (res && res.errCode === 0) {
-                toast.success("Delete the user succeed !")
+                toast.success(res.errMessage)
                 dispatch(deleteUserSuccess());
                 dispatch(fetchAllUsersStart());
             } else {
-                toast.error("Delete the user error !")
+                toast.success(res.errMessage)
                 dispatch(deleteUserFailed());
             }
         } catch (e) {
-            toast.error("Delete the user error !")
+            toast.error("There was no response.")
             dispatch(deleteUserFailed());
         }
     }

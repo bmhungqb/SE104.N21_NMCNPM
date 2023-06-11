@@ -15,10 +15,9 @@ class ModalCustomer extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstName: "",
-            lastName: "",
-            customerState: "",
-            gender: "",
+            fullName: "",
+            rank: "Gold",
+            gender: "Male",
             phoneNumber: "",
             address: "",
             email: "",
@@ -29,8 +28,8 @@ class ModalCustomer extends Component {
     handleAddNewCustomer = () => {
         this.props.createNewCustomer(
             {
-                fullName: `${this.state.firstName} ${this.state.lastName}`,
-                rank: this.state.customerState,
+                fullName: this.state.fullName,
+                rank: this.state.rank,
                 sex: this.state.gender,
                 phoneNumber: this.state.phoneNumber,
                 address: this.state.address,
@@ -49,19 +48,11 @@ class ModalCustomer extends Component {
         this.formikRef.current.resetForm();
     }
     inputSchema = Yup.object().shape({
-        phoneNumber: Yup.string()
-            .transform((value, originalValue) => {
-                // Remove all non-digit characters from the input
-                if (originalValue) {
-                    return originalValue.replace(/\D/g, "");
-                }
-                return value;
-            })
-            .matches(/^[0-9]{10}$/, "Phone number must be 10 digits")
-            .required("Required!"),
-        firstName: Yup.string().required("Required!"),
-        lastName: Yup.string().required("Required!"),
-        customerState: Yup.string().required("Required!"),
+        phoneNumber: Yup.number()
+            .typeError("Must be a number type")
+            .required('Required!'),
+        fullName: Yup.string().required("Required!"),
+        rank: Yup.string().required("Required!"),
         gender: Yup.string().required("Required!"),
         address: Yup.string().required("Required!"),
         email: Yup.string().email().required("Required!"),
@@ -94,42 +85,17 @@ class ModalCustomer extends Component {
                                     className='input-container'
                                     style={{ "width": "48%" }}
                                 >
-                                    <label><FormattedMessage id='modal.firstname' /></label>
+                                    <label><FormattedMessage id='modal.fullName' /></label>
                                     <input
                                         type='text'
-                                        value={this.state.firstName}
-                                        name='firstName'
-                                        onBlur={handleBlur}
-                                        onChange={(date) => this.handleChange(date, values)}
-                                    />
-                                    {errors.firstName &&
-                                        touched.firstName &&
-                                        <p
-                                            style={{
-                                                'position': 'absolute',
-                                                'margin-top': '60px',
-                                                'margin-left': '2px',
-                                                'color': 'red',
-                                                'font-style': 'italic',
-                                            }}
-                                        >{errors.firstName}</p>
-                                    }
-                                </div>
-                                <div
-                                    className='input-container'
-                                    style={{ "width": "48%" }}
-                                >
-                                    <label><FormattedMessage id='modal.lastname' /></label>
-                                    <input
-                                        type='text'
-                                        value={this.state.lastName}
-                                        name='lastName'
+                                        value={this.state.fullName}
+                                        name='fullName'
                                         onBlur={handleBlur}
                                         onChange={(e) => this.handleChange(e, values)}
                                     />
                                     {
-                                        errors.lastName &&
-                                        touched.lastName &&
+                                        errors.fullName &&
+                                        touched.fullName &&
                                         <p
                                             style={{
                                                 'position': 'absolute',
@@ -138,11 +104,10 @@ class ModalCustomer extends Component {
                                                 'color': 'red',
                                                 'font-style': 'italic',
                                             }}
-                                        >{errors.lastName}
+                                        >{errors.fullName}
                                         </p>
                                     }
                                 </div>
-
                                 <div className='input-container'
                                     style={{ "width": "48%" }}
                                 >
@@ -155,9 +120,9 @@ class ModalCustomer extends Component {
                                             onBlur={handleBlur}
                                             onChange={(e) => this.handleChange(e, values)}
                                         >
-                                            <option value={"Male"}>Male</option>
-                                            <option value={'Female'}>Female</option>
-                                            <option value={"Other"}>Other</option>
+                                            <option value={"Male"}>{this.props.language === "en" ? "Male" : "Nam"}</option>
+                                            <option value={'Female'}>{this.props.language === "en" ? "Female" : "Nữ"}</option>
+                                            <option value={"Other"}>{this.props.language === "en" ? "Other" : "Khác"}</option>
                                         </select>
                                     </div>
                                     {errors.gender &&
@@ -252,18 +217,18 @@ class ModalCustomer extends Component {
                                     <div className='select-genre'>
                                         <select
                                             className='form-select'
-                                            value={this.state.customerState}
-                                            name='customerState'
+                                            value={this.state.rank}
+                                            name='rank'
                                             onBlur={handleBlur}
                                             onChange={(e) => this.handleChange(e, values)}
                                         >
-                                            <option value={"Normal"}>Normal</option>
-                                            <option value={'Vip'}>Vip</option>
-                                            <option value={"Gold"}>Gold</option>
+                                            <option value={"Gold"}>{this.props.language === "en" ? "Gold" : "Vàng"}</option>
+                                            <option value={'Silver'}>{this.props.language === "en" ? "Silver" : "Bạc"}</option>
+                                            <option value={"Bronze"}>{this.props.language === "en" ? "Bronze" : "Đồng"}</option>
                                         </select>
                                     </div>
-                                    {errors.customerState &&
-                                        touched.customerState &&
+                                    {errors.rank &&
+                                        touched.rank &&
                                         <p
                                             style={{
                                                 'position': 'absolute',
@@ -272,7 +237,7 @@ class ModalCustomer extends Component {
                                                 'color': 'red',
                                                 'font-style': 'italic',
                                             }}
-                                        >{errors.customerState}</p>
+                                        >{errors.rank}</p>
                                     }
                                 </div>
                             </div>

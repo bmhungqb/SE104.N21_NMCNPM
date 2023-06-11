@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, useMemo } from 'react';
 import { FormattedMessage } from 'react-intl';
 import { LANGUAGES } from '../../../utils'
 import { changeLanguageApp } from '../../../store/actions/appActions';
@@ -9,6 +9,7 @@ import DataTable from 'react-data-table-component';
 import actionTypes from '../../../store/actions/actionTypes';
 import * as actions from '../../../store/actions/index'
 import { EmitFlags } from 'typescript';
+import { CSVLink, CSVDownload } from "react-csv";
 class ModalInventory extends Component {
 
     constructor(props) {
@@ -16,7 +17,6 @@ class ModalInventory extends Component {
         this.state = {
             dateInventory: undefined,
             dataTableBookSelect: [],
-
         }
     }
     componentDidMount() {
@@ -50,6 +50,10 @@ class ModalInventory extends Component {
     toggle = () => {
         this.props.toggleFromParent();
     }
+    handleDownload = () => {
+        <CSVLink data={this.state.dataTableBookSelect}>
+        </CSVLink>
+    };
     render() {
         return (
             <Modal
@@ -92,9 +96,13 @@ class ModalInventory extends Component {
                     />
                 </ModalBody>
                 <ModalFooter>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className='px-5 border-0 bg-danger' onClick={() => { this.handleDownload() }}>{<FormattedMessage id='homepage.download' />}</Button>
+                    <CSVLink data={this.state.dataTableBookSelect}>
+                        <Button
+                            style={{ "height": "40px", "width": "150px" }}
+                            className='px-5 border-0 bg-danger'
+                        >{<FormattedMessage id='homepage.download' />}
+                        </Button>
+                    </CSVLink>
                     <Button
                         style={{ "height": "40px", "width": "150px" }}
                         className='px-5 border-0 bg-primary' onClick={() => { this.toggle() }}>{<FormattedMessage id='homepage.cancel' />}</Button>

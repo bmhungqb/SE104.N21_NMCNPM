@@ -13,68 +13,6 @@ class TableUserManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            columns: [{
-                name: "User ID",
-                selector: 'id',
-                sortable: true,
-                sortFunction: this.caseInsensitiveSort,
-            },
-            {
-                name: "Full Name",
-                selector: 'name',
-            },
-            {
-                name: "Gender",
-                selector: "gender",
-            },
-            {
-                name: "Role",
-                selector: "role",
-                cell:
-                    (row) =>
-                        < div
-                            style={row.role === "Employee" ?
-                                { "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#87CEFA" } :
-                                row.role === "Manager" ? { "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#DC143C" } :
-                                    { "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#FFD700" }
-                            }
-                        >
-                            {row.role}
-                        </div >
-            },
-            {
-                name: "Actions",
-                cell:
-                    (row) =>
-                        <div
-                            className='d-flex justify-content-between w-75'>
-
-                            < button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleEditUser(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-primary'
-                                    icon={faPenToSquare}
-                                />
-                            </button >
-                            <button
-                                className='border-0 bg-transparent'
-                                onClick={() => { this.handleDeleteUser(row) }}
-                                data-tag="allowRowEvents"
-                            >
-                                <FontAwesomeIcon
-                                    className='icon-right text-danger'
-                                    icon={faTrash}
-                                />
-                            </button>
-                        </div>,
-                ignoreRowClick: true,
-                allowOverflow: true,
-                button: true,
-            },
-            ],
             dataTableUser: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
@@ -165,7 +103,70 @@ class TableUserManage extends Component {
         return (
             <Fragment>
                 <DataTable
-                    columns={this.state.columns}
+                    columns={
+                        [{
+                            name: this.props.language === "en" ? "User ID" : "Mã người dùng",
+                            selector: 'id',
+                            sortable: true,
+                            sortFunction: this.caseInsensitiveSort,
+                        },
+                        {
+                            name: this.props.language === "en" ? "Full Name" : "Tên",
+                            selector: 'name',
+                        },
+                        {
+                            name: this.props.language === "en" ? "Gender" : "Giới tính",
+                            selector: "gender",
+                        },
+                        {
+                            name: this.props.language === "en" ? "Role" : "Vai trò",
+                            selector: "role",
+                            cell:
+                                (row) =>
+                                    < div
+                                        style={row.role === "Employee" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#87CEFA" } :
+                                            row.role === "Manager" ? { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#DC143C" } :
+                                                { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "#FFD700" }
+                                        }
+                                    >
+                                        {this.props.language === "en" ? row.role : row.role === "Employee" ? "Nhân viên" : row.role === "Manager" ? "Quản lý" : "Hỗ trợ viên"}
+                                    </div >
+                        },
+                        {
+                            name: this.props.language === "en" ? "Actions" : "Chức năng",
+                            cell:
+                                (row) =>
+                                    <div
+                                        className='d-flex justify-content-between w-75'>
+
+                                        < button
+                                            className='border-0 bg-transparent'
+                                            onClick={() => { this.handleEditUser(row) }}
+                                            data-tag="allowRowEvents"
+                                        >
+                                            <FontAwesomeIcon
+                                                className='icon-right text-primary'
+                                                icon={faPenToSquare}
+                                            />
+                                        </button >
+                                        <button
+                                            className='border-0 bg-transparent'
+                                            onClick={() => { this.handleDeleteUser(row) }}
+                                            data-tag="allowRowEvents"
+                                        >
+                                            <FontAwesomeIcon
+                                                className='icon-right text-danger'
+                                                icon={faTrash}
+                                            />
+                                        </button>
+                                    </div>,
+                            ignoreRowClick: true,
+                            allowOverflow: true,
+                            button: true,
+                        },
+                        ]
+                    }
                     data={this.state.dataTableUser}
                     pagination
                     paginationComponentOptions={this.paginationComponentOptions}
@@ -181,13 +182,15 @@ class TableUserManage extends Component {
 
 const mapStateToProps = state => {
     return {
-        listUsers: state.users.listUsers
+        listUsers: state.users.listUsers,
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        fetchAllUsers: () => dispatch(actions.fetchAllUsersStart())
+        fetchAllUsers: () => dispatch(actions.fetchAllUsersStart()),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 

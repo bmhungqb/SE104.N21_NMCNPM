@@ -30,10 +30,14 @@ class ModalDeleteRegulation extends Component {
                 size='ms'
             >
                 <ModalHeader
-                >Do you want to delete this regulation?</ModalHeader>
+                ><FormattedMessage id='modal.title-delete-regulation' /></ModalHeader>
                 <ModalFooter>
-                    <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}>No</Button>
-                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteRegulation()}>Yes</Button>
+                    <Button className='px-5  border-0 bg-danger' onClick={() => { this.toggle() }}>
+                        <FormattedMessage id='modal.no' />
+                    </Button>
+                    <Button className='px-5  border-0 bg-primary' onClick={() => this.handleDeleteRegulation()}>
+                        <FormattedMessage id='modal.yes' />
+                    </Button>
                 </ModalFooter>
             </Modal >
         )
@@ -43,12 +47,14 @@ class ModalDeleteRegulation extends Component {
 
 const mapStateToProps = state => {
     return {
+        language: state.app.language,
     };
 };
 
 const mapDispatchToProps = dispatch => {
     return {
-        deleteARegulation: (regulationId) => dispatch(actions.deleteARegulation(regulationId))
+        deleteARegulation: (regulationId) => dispatch(actions.deleteARegulation(regulationId)),
+        changeLanguageAppRedux: (language) => dispatch(changeLanguageApp(language))
     };
 };
 
