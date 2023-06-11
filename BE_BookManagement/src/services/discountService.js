@@ -26,31 +26,27 @@ let getAllDiscounts = (discountId) => {
 let createNewDiscount = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // let check = await checkUserEmail(data.email)
-            if (false) {
-                resolve({
-                    errCode: 1,
-                    errMessage: "Your email already in used, plz try another email"
-                })
-            } else {
-                await db.Discount.create({
-                    discountId: data.discountId,
-                    state: data.state,
-                    name: data.name,
-                    start: data.start,
-                    end: data.end,
-                    percentage: data.percentage,
-                    state: data.state,
-                    customerRank: data.customerRank,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                })
-                resolve({
-                    errCode: 0,
-                    message: 'OK'
-                })
-            }
+            await db.Discount.create({
+                discountId: data.discountId,
+                state: data.state,
+                name: data.name,
+                start: data.start,
+                end: data.end,
+                percentage: data.percentage,
+                state: data.state,
+                customerRank: data.customerRank,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            })
+            resolve({
+                errCode: 0,
+                errMessage: "Create a new discount success.",
+            })
         } catch (e) {
+            resolve({
+                errCode: 1,
+                errMessage: "Creating a new discount has failed.",
+            })
             reject(e);
         }
     })
@@ -61,7 +57,7 @@ let updateDiscountData = (data) => {
         try {
             if (!data.discountId) {
                 resolve({
-                    errCode: 2,
+                    errCode: 1,
                     errMessage: "Missing required parameters"
                 })
             }
@@ -79,13 +75,13 @@ let updateDiscountData = (data) => {
                 await discount.save()
                 resolve({
                     errCode: 0,
-                    message: 'Update the book succeeds! '
+                    errMessage: 'Updating the discount success.'
                 });
             }
             else {
                 resolve({
                     errCode: 1,
-                    errMessage: "Book not found!"
+                    errMessage: "Discount not found!"
                 });
             }
         } catch (e) {
@@ -100,8 +96,8 @@ let deleteDiscount = (discountId) => {
         })
         if (!discount) {
             resolve({
-                errCode: 2,
-                errMessage: "The discount isn't exist"
+                errCode: 1,
+                errMessage: "The discount doesn't exist."
             })
         }
         await db.Discount.destroy({
@@ -109,7 +105,7 @@ let deleteDiscount = (discountId) => {
         })
         resolve({
             errCode: 0,
-            message: 'The book is deleted'
+            errMessage: 'The discount has been deleted.'
         })
     })
 }

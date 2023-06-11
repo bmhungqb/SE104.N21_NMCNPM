@@ -31,11 +31,14 @@ let UpdateRegulation = async (req, res) => {
     try {
         let data = req.body;
         let message = await regulationService.UpdateRegulation(data);
-        return res.status(200).json(message)
+        return res.status(200).json({
+            errCode: 0,
+            errMessage: "Regulation update succeeded."
+        })
     } catch (e) {
         return res.status(500).json({
-            errCode: 1,
-            errMessage: e.message
+            errCode: 0,
+            errMessage: "The regulation update has failed."
         });
     }
 }
@@ -47,7 +50,10 @@ let handleDeleteRegulation = async (req, res) => {
         })
     }
     let message = await regulationService.deleteRegulation(req.body.id);
-    return res.status(200).json(message);
+    return res.status(200).json({
+        errCode: 0,
+        errMessage: "The deletion of the regulation succeeded."
+    });
 }
 module.exports = {
     CreateRegulation: CreateRegulation,

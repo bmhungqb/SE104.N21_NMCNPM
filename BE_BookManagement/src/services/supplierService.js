@@ -26,13 +26,15 @@ let getAllSuppliers = (supplierId) => {
 let createNewSupplier = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // let check = await checkUserEmail(data.email)
-            if (false) {
+            if (!data.name || !data.phoneNumber
+                || !data.email || !data.address) {
                 resolve({
                     errCode: 1,
-                    errMessage: "Your email already in used, plz try another email"
+                    errMessage: "Missing required parameters."
                 })
-            } else {
+
+            }
+            else {
                 await db.Supplier.create({
                     name: data.name,
                     phoneNumber: data.phoneNumber,
@@ -43,10 +45,14 @@ let createNewSupplier = (data) => {
                 })
                 resolve({
                     errCode: 0,
-                    message: 'OK'
+                    errMessage: "Create a new supplier success.",
                 })
             }
         } catch (e) {
+            resolve({
+                errCode: 1,
+                errMessage: "Creating a new supplier has failed.",
+            })
             reject(e);
         }
     })
@@ -56,10 +62,9 @@ let updateSupplierData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
             if (!data.id || !data.name || !data.phoneNumber
-                || !data.email || !data.address
-            ) {
+                || !data.email || !data.address) {
                 resolve({
-                    errCode: 2,
+                    errCode: 1,
                     errMessage: "Missing required parameters"
                 })
             }
@@ -76,13 +81,13 @@ let updateSupplierData = (data) => {
                 await supplier.save()
                 resolve({
                     errCode: 0,
-                    message: 'Update the book succeeds! '
+                    errMessage: "Updating the supplier success.",
                 });
             }
             else {
                 resolve({
                     errCode: 1,
-                    errMessage: "Book not found!"
+                    errMessage: "Supplier not found!"
                 });
             }
         } catch (e) {
@@ -97,8 +102,8 @@ let deleteSupplier = (supplierId) => {
         })
         if (!supplier) {
             resolve({
-                errCode: 2,
-                errMessage: "The supplier isn't exist"
+                errCode: 1,
+                errMessage: "The supplier doesn't exist."
             })
         }
         await db.Supplier.destroy({
@@ -106,7 +111,7 @@ let deleteSupplier = (supplierId) => {
         })
         resolve({
             errCode: 0,
-            message: 'The book is deleted'
+            errMessage: 'The supplier has been deleted.'
         })
     })
 }

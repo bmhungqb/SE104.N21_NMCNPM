@@ -51,7 +51,16 @@ async function CalculateTotalPrice(id) {
     await invoice.save();
 }
 
-
+async function UpdateRankAndPurchaseValue(customerId) {
+    const invoices = await db.Invoice.FindAll({ where: { customerId: customerId } })
+    const customer = await db.Customer.FindOne({ where: { customerId: customerId } })
+    customer.totalPurchaseValue = 0
+    invoices.forEach(invoice => {
+        customer.totalPurchaseValue += invoice.customerPay
+    })
+    customer.rank = customer.totalPurchaseValue > 3000000 ? 'gold' : customer.totalPurchaseValue < 1000000 ? 'bronze' : 'sliver'
+    await customer.save()
+}
 
 
 async function UpdateBookStockAfterInvoiceAndCheckCustomer(datas) {
@@ -86,4 +95,5 @@ module.exports = {
     CalculateTotalPrice: CalculateTotalPrice,
     UpdateBookStockAfterInvoiceAndCheckCustomer: UpdateBookStockAfterInvoiceAndCheckCustomer,
     UpdatePhatSinhBook: UpdatePhatSinhBook,
+    UpdateRankAndPurchaseValue: UpdateRankAndPurchaseValue
 }

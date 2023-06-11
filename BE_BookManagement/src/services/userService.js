@@ -110,7 +110,7 @@ let createNewUser = (data) => {
             if (check) {
                 resolve({
                     errCode: 1,
-                    errMessage: "Your username already in used, plz try another username"
+                    errMessage: "Your username already in used, plz try another username."
                 })
             } else {
                 await db.User.create({
@@ -130,11 +130,15 @@ let createNewUser = (data) => {
                 })
                 resolve({
                     errCode: 0,
-                    message: 'OK'
+                    errMessage: 'Create a new user success.'
 
                 })
             }
         } catch (e) {
+            resolve({
+                errCode: 0,
+                errMessage: 'Create a new user failed.'
+            })
             reject(e);
         }
     })
@@ -170,7 +174,7 @@ let updateUserData = (data) => {
                 await user.save()
                 resolve({
                     errCode: 0,
-                    message: 'Update the user succeeds! '
+                    errMessage: 'Update the user succeeds! '
                 });
             }
             else {
@@ -191,8 +195,8 @@ let deleteUser = (userId) => {
         })
         if (!user) {
             resolve({
-                errCode: 2,
-                errMessage: "The user isn't exist"
+                errCode: 1,
+                errMessage: "The user doesn't exist"
             })
         }
         await db.User.destroy({
@@ -200,7 +204,7 @@ let deleteUser = (userId) => {
         })
         resolve({
             errCode: 0,
-            message: 'The book is deleted'
+            errMessage: 'Delete user success.'
         })
     })
 }

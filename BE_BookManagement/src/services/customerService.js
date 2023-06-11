@@ -26,13 +26,14 @@ let getAllCustomers = (customerId) => {
 let createNewCustomer = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            // let check = await checkUserEmail(data.email)
-            if (false) {
+            const existingCustomer = await db.Customer.findOne({ where: { phoneNumber: data.phoneNumber } })
+            if (existingCustomer) {
                 resolve({
                     errCode: 1,
-                    errMessage: "Your email already in used, plz try another email"
+                    errMessage: "This phone number already exists.",
                 })
-            } else {
+            }
+            else {
                 await db.Customer.create({
                     fullName: data.fullName,
                     address: data.address,
@@ -45,15 +46,19 @@ let createNewCustomer = (data) => {
                     createdAt: new Date(),
                     updatedAt: new Date()
                 })
-                const [result] = await db.sequelize.query('SELECT LAST_INSERT_ID() as customerId');
-                const customerId = result[0].customerId;
-                resolve({
-                    errCode: 0,
-                    message: "OK",
-                    newCustomerId: customerId
-                })
             }
+            const [result] = await db.sequelize.query('SELECT LAST_INSERT_ID() as customerId');
+            const customerId = result[0].customerId;
+            resolve({
+                errCode: 0,
+                errMessage: "Create a new customer success.",
+                newCustomerId: customerId
+            })
         } catch (e) {
+            resolve({
+                errCode: 1,
+                errMessage: "Creating a new customer has failed.",
+            })
             reject(e);
         }
     })
@@ -62,24 +67,22 @@ let createNewCustomer = (data) => {
 let updateCustomerData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id || !data.firstName || !data.lastName
-                || !data.customerState || !data.sex || !data.phoneNumber
+            if (!data.customerId || !data.phoneNumber
                 || !data.address || !data.email
-            ) {
+                || !data.sex || !data.fullName
+                || !data.rank) {
                 resolve({
-                    errCode: 2,
-                    errMessage: "Missing required parameters"
+                    errCode: 1,
+                    errMessage: "Missing required parameters."
                 })
             }
             let customer = await db.Customer.findOne({
-                where: { id: data.id },
+                where: { customerId: data.customerId },
                 raw: false
             })
             if (customer) {
-                customer.firstName = data.firstName;
-                customer.lastName = data.lastName;
-                customer.customerState = data.customerState;
-                customer.sex = data.sex;
+                customer.fullName = data.fullName;
+                customer.sex = data.rank;
                 customer.phoneNumber = data.phoneNumber;
                 customer.address = data.address;
                 customer.email = data.email;
@@ -87,13 +90,13 @@ let updateCustomerData = (data) => {
                 await customer.save()
                 resolve({
                     errCode: 0,
-                    message: 'Update the book succeeds! '
+                    errMessage: "Updating the customer success.",
                 });
             }
             else {
                 resolve({
                     errCode: 1,
-                    errMessage: "Book not found!"
+                    errMessage: "Customer not found!"
                 });
             }
         } catch (e) {
@@ -108,8 +111,8 @@ let deleteCustomer = (customerId) => {
         })
         if (!customer) {
             resolve({
-                errCode: 2,
-                errMessage: "The customer isn't exist"
+                errCode: 1,
+                errMessage: "The customer doesn't exist."
             })
         }
         await db.Customer.destroy({
@@ -117,7 +120,7 @@ let deleteCustomer = (customerId) => {
         })
         resolve({
             errCode: 0,
-            message: 'The book is deleted'
+            errMessage: 'The customer has been deleted.'
         })
     })
 }

@@ -96,6 +96,7 @@ async function PayInvoiceImmediately(req, res) {
             amountReceived: invoice.customerPay,
         })
         await invoice.save()
+        await invoiceServices.UpdateRankAndPurchaseValue(invoice.customerId)
         res.status(200).json({
             errCode: 0,
             message: 'successfully!'
@@ -138,6 +139,7 @@ async function PayInvoiceAfter(req, res) {
         }, { transaction: t })
         await invoice.save()
         await t.commit()
+        await invoiceServices.UpdateRankAndPurchaseValue(invoice.customerId)
         res.status(200).json({
             errCode: 0,
             message: 'successfully!'
@@ -174,6 +176,7 @@ async function DeptInvoice(req, res) {
         }
         await invoice.save()
         await t.commit();
+        await invoiceServices.UpdateRankAndPurchaseValue(invoice.customerId)
         res.status(200).json({
             errCode: 0,
             message: 'successfully!'
@@ -199,8 +202,8 @@ async function CreateInvoiceDetail(req, res) {
             invoiceDetailsArray,
             { transaction: t }
         )
-        await invoiceServices.CalculateTotalPrice(invoiceDetail[0].invoiceDetailId)
         await t.commit()
+        await invoiceServices.CalculateTotalPrice(invoiceDetail[0].invoiceDetailId)
         res.status(200).json({
             errCode: 0,
             invoiceDetail: invoiceDetail,
