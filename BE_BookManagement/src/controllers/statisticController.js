@@ -1,7 +1,7 @@
 import db, { sequelize } from "../models/index"
 
 
-async function GetMonthStaticstic(month){
+async function GetMonthStaticstic(month) {
     let monthlyRevenue = 0
     let monthlyNewCustomer = 0
     let monthlyBookSoldQuantity = 0
@@ -37,21 +37,21 @@ async function GetMonthStaticstic(month){
     return monthlyStatistic
 }
 
-async function GetYearStatistic(req,res){
-    try{
+async function GetYearStatistic(req, res) {
+    try {
         let yearStatistic = []
-        for (let i=0;i<12;i++){
-            yearStatistic[i] =await GetMonthStaticstic(i)
-            yearStatistic[i].month=i+1
+        for (let i = 0; i < 12; i++) {
+            yearStatistic[i] = await GetMonthStaticstic(i + 1)
+            yearStatistic[i].month = i
         }
-        res.status(200).json({ 
-            errCode : 0,
-            yearStatistic: yearStatistic 
+        res.status(200).json({
+            errCode: 0,
+            yearStatistic: yearStatistic
         })
-    } catch (e) {   
+    } catch (e) {
         res.status(400).json({
-            errCode :1,
-            errMess : e.message
+            errCode: 1,
+            errMess: e.message
         })
     }
 }
@@ -60,38 +60,37 @@ async function GetYearStatistic(req,res){
 async function GetCurrentMonthStatistic(req, res) {
     try {
         const month = (new Date()).getMonth()
-        let monthlyStatistic=await GetMonthStaticstic(month)
-        let prevMonthlyStatistic=await GetMonthStaticstic(month-1)
+        let monthlyStatistic = await GetMonthStaticstic(month + 1)
+        let prevMonthlyStatistic = await GetMonthStaticstic(month)
         // percentageRevenue
-        console.log(monthlyStatistic.monthlyRevenue,prevMonthlyStatistic.monthlyRevenue)
-        if (prevMonthlyStatistic.monthlyRevenue === 0 ){
-            monthlyStatistic.percentageRevenue = (monthlyStatistic.monthlyRevenue-prevMonthlyStatistic.monthlyRevenue)/1*100
-        }else {
-            monthlyStatistic.percentageRevenue = (monthlyStatistic.monthlyRevenue-prevMonthlyStatistic.monthlyRevenue)/prevMonthlyStatistic.monthlyRevenue*100
+        if (prevMonthlyStatistic.monthlyRevenue === 0) {
+            monthlyStatistic.percentageRevenue = (monthlyStatistic.monthlyRevenue - prevMonthlyStatistic.monthlyRevenue) / 100
+        } else {
+            monthlyStatistic.percentageRevenue = (monthlyStatistic.monthlyRevenue - prevMonthlyStatistic.monthlyRevenue) / prevMonthlyStatistic.monthlyRevenue
         }
-        monthlyStatistic.percentageRevenueStatus = monthlyStatistic.monthlyRevenue > prevMonthlyStatistic.monthlyRevenue ? 'ascend' : monthlyStatistic.monthlyRevenue < prevMonthlyStatistic.monthlyRevenue ? lower :'equal'
+        monthlyStatistic.percentageRevenueStatus = monthlyStatistic.monthlyRevenue > prevMonthlyStatistic.monthlyRevenue ? 'ascend' : monthlyStatistic.monthlyRevenue < prevMonthlyStatistic.monthlyRevenue ? lower : 'equal'
         // percentageNewCustomer
         if (prevMonthlyStatistic.monthlyNewCustomer === 0) {
-            monthlyStatistic.percentageNewCustomer = (monthlyStatistic.monthlyNewCustomer-prevMonthlyStatistic.monthlyNewCustomer)/1*100
+            monthlyStatistic.percentageNewCustomer = (monthlyStatistic.monthlyNewCustomer - prevMonthlyStatistic.monthlyNewCustomer) / 100
         } else {
-            monthlyStatistic.percentageNewCustomer = (monthlyStatistic.monthlyNewCustomer-prevMonthlyStatistic.monthlyNewCustomer)/prevMonthlyStatistic.monthlyNewCustomer*100
+            monthlyStatistic.percentageNewCustomer = (monthlyStatistic.monthlyNewCustomer - prevMonthlyStatistic.monthlyNewCustomer) / prevMonthlyStatistic.monthlyNewCustomer
         }
-        monthlyStatistic.percentageNewCustomerStatus = monthlyStatistic.monthlyNewCustomer > prevMonthlyStatistic.monthlyNewCustomer ? 'ascend' : monthlyStatistic.monthlyNewCustomer < prevMonthlyStatistic.monthlyNewCustomer ? lower :'equal'
+        monthlyStatistic.percentageNewCustomerStatus = monthlyStatistic.monthlyNewCustomer > prevMonthlyStatistic.monthlyNewCustomer ? 'ascend' : monthlyStatistic.monthlyNewCustomer < prevMonthlyStatistic.monthlyNewCustomer ? lower : 'equal'
         // percentageBookSoldQuantity
-        if (prevMonthlyStatistic.monthlyBookSoldQuantity===0){
-            monthlyStatistic.percentageBookSoldQuantity = (monthlyStatistic.monthlyBookSoldQuantity-prevMonthlyStatistic.monthlyBookSoldQuantity)/1*100
+        if (prevMonthlyStatistic.monthlyBookSoldQuantity === 0) {
+            monthlyStatistic.percentageBookSoldQuantity = (monthlyStatistic.monthlyBookSoldQuantity - prevMonthlyStatistic.monthlyBookSoldQuantity) / 100
         } else {
-            monthlyStatistic.percentageBookSoldQuantity = (monthlyStatistic.monthlyBookSoldQuantity-prevMonthlyStatistic.monthlyBookSoldQuantity)/prevMonthlyStatistic.monthlyBookSoldQuantity*100
+            monthlyStatistic.percentageBookSoldQuantity = (monthlyStatistic.monthlyBookSoldQuantity - prevMonthlyStatistic.monthlyBookSoldQuantity) / prevMonthlyStatistic.monthlyBookSoldQuantity
         }
-        monthlyStatistic.percentageBookSoldQuantityStatus = monthlyStatistic.monthlyBookSoldQuantity > prevMonthlyStatistic.monthlyBookSoldQuantity ? 'ascend' : monthlyStatistic.monthlyBookSoldQuantity < prevMonthlyStatistic.monthlyBookSoldQuantity ? lower :'equal'
-        res.status(200).json({ 
-            errCode : 0,
-            monthlyStatistic: monthlyStatistic 
+        monthlyStatistic.percentageBookSoldQuantityStatus = monthlyStatistic.monthlyBookSoldQuantity > prevMonthlyStatistic.monthlyBookSoldQuantity ? 'ascend' : monthlyStatistic.monthlyBookSoldQuantity < prevMonthlyStatistic.monthlyBookSoldQuantity ? lower : 'equal'
+        res.status(200).json({
+            errCode: 0,
+            monthlyStatistic: monthlyStatistic
         })
     } catch (e) {
         res.status(400).json({
-            errCode :1,
-            errMess : e.message
+            errCode: 1,
+            errMessage: e.message
         })
     }
 }
@@ -99,5 +98,5 @@ async function GetCurrentMonthStatistic(req, res) {
 
 module.exports = {
     GetCurrentMonthStatistic: GetCurrentMonthStatistic,
-    GetYearStatistic:GetYearStatistic,
+    GetYearStatistic: GetYearStatistic,
 }

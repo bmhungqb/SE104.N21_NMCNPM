@@ -23,45 +23,84 @@ let getAllBooks = (bookId) => {
         }
     })
 }
+// let createNewBook = async (data) => {
+//     const t = await db.sequelize.transaction();
+//     return new Promise(async (resolve, reject) => {
+//         try {
+//             const bookRegulation = await db.Regulation.findOne({
+//                 logging: false,
+//                 where: { regulationId: 1 }
+//             }
+//             )
+//             // Regulation 1
+//             if (bookRegulation && (data.stock < bookRegulation.minimumInput || data.stock > bookRegulation.minimumStock)) {
+//                 resolve({
+//                     errCode: 0,
+//                     errMessage: "You cannot exceed the number of regulations."
+//                 })
+//             } else {
+//                 const beginningStock = data.stock
+//                 await UpdateBeginningStock(data, t, beginningStock)
+//                 const book = await db.Book.create({
+//                     // bookId: data.bookId,
+//                     bookTitle: data.bookTitle,
+//                     genre: data.genre,
+//                     authorName: data.author,
+//                     costPrice: data.costPrice,
+//                     sellingPrice: data.costPrice * 105 / 100,
+//                     stock: data.stock,
+//                     createdAt: new Date(),
+//                     updatedAt: new Date()
+//                 }, { transaction: t })
+//                 await t.commit();
+//                 resolve({
+//                     errCode: 0,
+//                     errMessage: "Create a new book success.",
+//                     book: book
+//                 })
+//             }
+//         } catch (e) {
+//             await t.rollback()
+//             reject(e);
+//         }
+//     })
+// }
 let createNewBook = async (data) => {
     const t = await db.sequelize.transaction();
     return new Promise(async (resolve, reject) => {
         try {
-            // let check = await checkUserEmail(data.email)
             const bookRegulation = await db.Regulation.findOne({
                 logging: false,
                 where: { regulationId: 1 }
             }
             )
-            if (false) {
+            // Regulation 1
+            if (bookRegulation && (data.stock < bookRegulation.minimumInput || data.stock > bookRegulation.minimumStock)) {
                 resolve({
-                    errCode: 1,
-                    errMessage: "Your email already in used, plz try another email"
+                    errCode: 0,
+                    errMessage: `you cannot add less than ${bookRegulation.minimumInput} and add more than ${bookRegulation.minimumStock}  book`
                 })
             } else {
-                // Regulation 1
-                if (bookRegulation && (data.stock < bookRegulation.minimumInput || data.stock > bookRegulation.minimumStock)) {
-                    throw new Error("you cannot excess the number of regulation")
-                } else {
-                    const beginningStock = data.stock
-                    UpdateBeginningStock(data, t, beginningStock)
-                    const book = await db.Book.create({
-                        // bookId: data.bookId,
-                        bookTitle: data.bookTitle,
-                        genre: data.genre,
-                        authorName: data.author,
-                        costPrice: data.costPrice,
-                        sellingPrice: data.costPrice * 105 / 100,
-                        stock: data.stock,
-                        createdAt: new Date(),
-                        updatedAt: new Date()
-                    }, { transaction: t })
-                    await t.commit();
-                    resolve({
-                        errCode: 0,
-                        book: book
-                    })
-                }
+                const beginningStock = data.stock
+                const book = await db.Book.create({
+                    // bookId: data.bookId,
+                    bookTitle: data.bookTitle,
+                    genre: data.genre,
+                    authorName: data.author,
+                    costPrice: data.costPrice,
+                    sellingPrice: data.costPrice * 105 / 100,
+                    stock: data.stock,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }, { transaction: t })
+                await t.commit();
+                const bookId = await db.Book.findOne({ where: { bookTitle: data.bookTitle } }, { attributes: ['bookId'] })
+                await UpdateBeginningStock(bookId, beginningStock)
+                resolve({
+                    errCode: 0,
+                    errMessage: "Create a new book success.",
+                    book: book
+                })
             }
         } catch (e) {
             await t.rollback()
@@ -70,14 +109,15 @@ let createNewBook = async (data) => {
     })
 }
 
+
 let updateBookData = async (data) => {
     const t = await db.sequelize.transaction()
     return new Promise(async (resolve, reject) => {
         try {
-            const bookRegulation = db.Regulation.findOne({ where: { regulationId: 1 } })
+            const bookRegulation = await db.Regulation.findOne({ where: { regulationId: 1 } })
             if (!data.bookId) {
                 resolve({
-                    errCode: 2,
+                    errCode: 1,
                     errMessage: "Missing required parameters"
                 })
             }
@@ -88,10 +128,13 @@ let updateBookData = async (data) => {
             if (book) {
                 // regulation 1
                 if (bookRegulation && data.stock < bookRegulation.minimumInput && data.stock > bookRegulation.minimumStock) {
-                    throw Error("you cannot excess the number of book regulation ")
+                    resolve({
+                        errCode: 1,
+                        message: "you cannot excess the number of book regulation "
+                    });
                 } else {
                     const beginningStock = data.stock - book.stock
-                    UpdateBeginningStock(data, t, beginningStock)
+                    await UpdateBeginningStock(data, t, beginningStock)
                     book.bookTitle = data.bookTitle;
                     book.genre = data.genre;
                     book.authorName = data.author;
@@ -99,7 +142,7 @@ let updateBookData = async (data) => {
                     book.stock = data.stock;
                     book.updatedAt = new Date();
                     await book.save()
-                    t.commit()
+                    await t.commit()
                     resolve({
                         errCode: 0,
                         message: 'Update the book succeeds! '
@@ -113,7 +156,7 @@ let updateBookData = async (data) => {
                 });
             }
         } catch (e) {
-            t.rollback();
+            await t.rollback();
             reject(e)
         }
     })
@@ -125,7 +168,7 @@ let deleteBook = (bookId) => {
         })
         if (!book) {
             resolve({
-                errCode: 2,
+                errCode: 1,
                 errMessage: "The book isn't exist"
             })
         }
@@ -138,7 +181,17 @@ let deleteBook = (bookId) => {
         })
     })
 }
-async function UpdateBeginningStock(data, t, beginningStock) {
+// async function UpdateBeginningStock(data, t, beginningStock) {
+//     // console.log(beginningStock)
+//     const bookReport = await db.BookReport.create({
+//         bookId: data.bookId,
+//         date: data.createdAt,
+//         beginningStock: beginningStock,
+//         endingStock: 0,
+//         phatSinh: 0
+//     }, { transaction: t })
+// }
+async function UpdateBeginningStock(data, beginningStock) {
     // console.log(beginningStock)
     const bookReport = await db.BookReport.create({
         bookId: data.bookId,
@@ -146,10 +199,9 @@ async function UpdateBeginningStock(data, t, beginningStock) {
         beginningStock: beginningStock,
         endingStock: 0,
         phatSinh: 0
-    }, { transaction: t })
-    console.log(bookReport)
-}
+    })
 
+}
 module.exports = {
     createNewBook: createNewBook,
     getAllBooks: getAllBooks,

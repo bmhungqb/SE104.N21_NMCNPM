@@ -58,12 +58,9 @@ let updateRentData = async (data) => {
 }
 let deleteRentData = async (data) => {
     return new Promise(async (resolve, reject) => {
-        console.log(data.id)
         const rent = await db.Rent.findOne({ where: { id: data.id } })
         if (rent) {
-            console.log(rent)
             const destroy = await db.Rent.destroy({ where: { id: data.id } })
-            console.log("destroy ne ", destroy)
             resolve(destroy)
         } else {
             resolve(rent)

@@ -82,7 +82,8 @@ let updateCustomerData = (data) => {
             })
             if (customer) {
                 customer.fullName = data.fullName;
-                customer.sex = data.rank;
+                customer.sex = data.sex;
+                customer.rank = data.rank;
                 customer.phoneNumber = data.phoneNumber;
                 customer.address = data.address;
                 customer.email = data.email;

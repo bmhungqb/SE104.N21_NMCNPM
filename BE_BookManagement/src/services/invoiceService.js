@@ -74,7 +74,6 @@ async function UpdateBookStockAfterInvoiceAndCheckCustomer(datas) {
             throw new Error("you are excess regulation")
         }
         await book.save();
-        console.log('2')
     }
 }
 async function UpdatePhatSinhBook(data) {

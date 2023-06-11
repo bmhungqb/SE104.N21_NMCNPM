@@ -61,7 +61,7 @@ let handleUserLogin = (username, password) => {
                         userData.user = users
                     }
                     else {
-                        userData.errCode = 3;
+                        userData.errCode = 1;
                         userData.errMessage = "Wrong password!";
                     }
                 }
@@ -69,8 +69,9 @@ let handleUserLogin = (username, password) => {
                     userData.errCode = 1;
                     userData.errMessage = `Your username isn's exists in our system. Please try again!`;
                 }
-                resolve(userData);
             }
+            resolve(userData);
+
         }
         catch (e) {
             reject(e);
@@ -106,6 +107,12 @@ let getAllUsers = (userId) => {
 let createNewUser = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
+            if (!data.username || !data.password || !data.role) {
+                resolve({
+                    errCode: 1,
+                    errMessage: "Missing reuqired parameters."
+                })
+            }
             let check = await checkUsername(data.username)
             if (check) {
                 resolve({
@@ -148,7 +155,7 @@ let createNewUser = (data) => {
 let updateUserData = (data) => {
     return new Promise(async (resolve, reject) => {
         try {
-            if (!data.id) {
+            if (!data.id || !data.username || !data.password || !data.role) {
                 resolve({
                     errCode: 1,
                     errMessage: "Missing required parameters"

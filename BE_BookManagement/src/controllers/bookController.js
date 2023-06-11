@@ -20,7 +20,7 @@ let handleCreateNewBook = async (req, res) => {
     try {
         let message = await bookService.createNewBook(req.body);
         return res.status(200).json(message);
-    } catch(e) {
+    } catch (e) {
         return res.status(500).json({
             errCode: 1,
             errMessage: e.message
@@ -29,11 +29,11 @@ let handleCreateNewBook = async (req, res) => {
 }
 
 let handleEditBook = async (req, res) => {
-    try{
+    try {
         let data = req.body;
         let message = await bookService.updateBookData(data);
         return res.status(200).json(message)
-    } catch(e) {
+    } catch (e) {
         return res.status(500).json({
             errCode: 1,
             errMessage: e.message

@@ -182,11 +182,11 @@ async function DeptInvoice(req, res) {
             message: 'successfully!'
         });
     } catch (e) {
-        await t.rollback();
         res.status(400).json({
             errCode: 1,
             errMessage: e.message
         })
+        await t.rollback();
     }
 }
 
