@@ -442,7 +442,7 @@ class ModalEditBook extends Component {
                             {
                                 this.props.editAction === 'edit' && this.state.isAllowEdit &&
                                 <Button
-                                    style={{ "height": "40px", "width": "150px" }}
+                                    style={{ "height": "40px", "width": "170px" }}
                                     className='px-5 border-0 bg-primary'
                                     onClick={() => this.handleSaveBook('edit')}
                                 ><FormattedMessage id='modal.save' /></Button>

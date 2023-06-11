@@ -117,53 +117,6 @@ class ModalRental extends Component {
         })
         this.props.toggleFromParent();
     }
-    handleInsertBookSelect = () => {
-        if (!this.state.leaseDate || !this.state.dueDate) {
-            this.setState({
-                messageSelectBook: "Please fill date !"
-            })
-            return;
-        }
-        else {
-            this.setState({
-                messageSelectBook: ""
-            })
-        }
-        let bookSelected = this.state.selectedOption.label
-        let flag = false
-        if (!bookSelected) flag = true;
-        this.state.dataTableBookSelect.forEach(row => {
-            if (bookSelected === row.title) {
-                flag = true;
-            }
-        })
-        this.setState({
-            selectedOption: undefined,
-        })
-        if (!flag) {
-            let book;
-            this.props.listBooks.forEach(item => {
-                if (bookSelected === item.bookTitle) {
-                    book = item;
-                }
-            })
-            let copyDataTableBook = [...this.state.dataTableBookSelect];
-            copyDataTableBook.push(
-                {
-                    "bookId": book.bookId,
-                    'title': book.bookTitle,
-                    'quantity': 1,
-                    'netAmount': book.sellingPrice * this.state.rentDate * 1.5 / 100,
-                    'totalAmount': book.sellingPrice * this.state.rentDate * 1.5 / 100
-                }
-            )
-            let totalMoney = this.state.totalPrice + book.sellingPrice * this.state.rentDate * 1.5 / 100;
-            this.setState({
-                dataTableBookSelect: copyDataTableBook,
-                totalPrice: totalMoney
-            })
-        }
-    }
     render() {
         return (
             <Modal
@@ -231,14 +184,17 @@ class ModalRental extends Component {
                                 value={this.state.leaseDate}
                             />
                         </div>
-                        <div className='input-container' style={{ width: "49%" }}>
-                            <label><FormattedMessage id='modal.due-date' /></label>
-                            <DatePicker
+                        <div
+                            className='input-container'
+                            style={{ "width": "49%" }}
+                        >
+                            <label><FormattedMessage id='modal.day-rent' /></label>
+                            <input
                                 disabled={true}
-                                selected={this.state.dueDate}
+                                type='text'
+                                value={this.state.dayRent}
                             />
                         </div>
-
                     </div>
                     <DataTable
                         columns={[{

@@ -55,16 +55,46 @@ class TableBookRental extends Component {
         }
         if (prevProps.optionSearch != this.props.optionSearch) {
             if (this.props.optionSearch[0] === "") {
+                let arr = []
+                this.props.listRents.map((item) => {
+                    let date = new Date(Date.parse(item.createdAt)).toLocaleDateString();
+                    let dateReturn = new Date(Date.parse(item.dateReturn)).toLocaleDateString();
+                    let currentDate = new Date().toLocaleDateString();
+                    arr.push({
+                        "rentId": item.rentId,
+                        "customerId": item.customerId,
+                        "name": item.Customers[0].fullName,
+                        "totalAmount": item.rentPrice,
+                        "startDate": date,
+                        "dueDate": dateReturn,
+                        // "status": item.status ? "Paid" : "Debt"
+                        "status": new Date(dateReturn) < new Date(currentDate) ? "end" : "borrow"
+                    })
+                })
                 this.setState({
-                    dataTableInvoice: this.props.listRents,
-                    optionSearch: this.props.optionSearch
+                    dataTableInvoice: arr
                 })
             }
             else {
                 const arr = this.props.listRents.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
+                let arr1 = []
+                arr.map((item) => {
+                    let date = new Date(Date.parse(item.createdAt)).toLocaleDateString();
+                    let dateReturn = new Date(Date.parse(item.dateReturn)).toLocaleDateString();
+                    let currentDate = new Date().toLocaleDateString();
+                    arr1.push({
+                        "rentId": item.rentId,
+                        "customerId": item.customerId,
+                        "name": item.Customers[0].fullName,
+                        "totalAmount": item.rentPrice,
+                        "startDate": date,
+                        "dueDate": dateReturn,
+                        // "status": item.status ? "Paid" : "Debt"
+                        "status": new Date(dateReturn) < new Date(currentDate) ? "end" : "borrow"
+                    })
+                })
                 this.setState({
-                    dataTableInvoice: arr,
-                    optionSearch: this.props.optionSearch
+                    dataTableInvoice: [...arr1]
                 })
             }
         }

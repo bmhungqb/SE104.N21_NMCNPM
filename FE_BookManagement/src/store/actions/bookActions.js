@@ -12,15 +12,15 @@ export const createNewBook = (data) => {
         try {
             let res = await createNewBookService(data);
             if (res && res.errCode === 0) {
-                toast.success("Create a new book succeed !")
+                toast.success(res.errMessage)
                 dispatch(saveBookSuccess());
                 dispatch(fetchAllBooksStart());
             } else {
-                toast.error("Create a new book error !")
+                toast.success(res.errMessage)
                 dispatch(saveBookFailed());
             }
         } catch (e) {
-            toast.error("Create a new book error !")
+            toast.error("There was no response.")
             dispatch(saveBookFailed());
         }
     }
@@ -38,12 +38,10 @@ export const fetchAllBooksStart = () => {
         try {
             let res = await getAllBooks("ALL");
             if (res && res.errCode === 0) {
-                toast.success("Fetch all books succeed")
                 dispatch(
                     fetchAllBooksSuccess(res.books.reverse())
                 );
             } else {
-                toast.error("Fetch all books error")
                 dispatch(fetchAllBooksFailed());
             }
         } catch (e) {
@@ -66,15 +64,15 @@ export const editABook = (data) => {
         try {
             let res = await editBookService(data);
             if (res && res.errCode === 0) {
-                toast.success("Update the book succeed !")
+                toast.success(res.errMessage)
                 dispatch(editBookSuccess());
                 dispatch(fetchAllBooksStart());
             } else {
-                toast.error("Update the book error !")
+                toast.error(res.errMessage)
                 dispatch(editBookFailed());
             }
         } catch (e) {
-            toast.error("Update the book error !")
+            toast.error("There was no response.")
             dispatch(editBookFailed());
         }
     }
@@ -93,15 +91,15 @@ export const deleteABook = (bookId) => {
         try {
             let res = await deleteBookService(bookId);
             if (res && res.errCode === 0) {
-                toast.success("Delete the user succeed !")
+                toast.success("Detele the book success")
                 dispatch(deleteBookSuccess());
                 dispatch(fetchAllBooksStart());
             } else {
-                toast.error("Delete the user error !")
+                toast.error(res.errMessage)
                 dispatch(deleteBookFailed());
             }
         } catch (e) {
-            toast.error("Delete the user error !")
+            toast.error("There was no response.")
             dispatch(deleteBookFailed());
         }
     }

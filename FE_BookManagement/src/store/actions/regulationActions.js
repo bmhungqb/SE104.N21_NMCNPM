@@ -38,12 +38,10 @@ export const fetchAllRegulationsStart = () => {
         try {
             let res = await getAllRegulations("ALL");
             if (res && res.errCode === 0) {
-                // toast.success("Fetch all regulations succeed")
                 dispatch(
                     fetchAllRegulationsSuccess(res.regulations.reverse())
                 );
             } else {
-                toast.error("Fetch all regulations error")
                 dispatch(fetchAllRegulationsFailed());
             }
         } catch (e) {

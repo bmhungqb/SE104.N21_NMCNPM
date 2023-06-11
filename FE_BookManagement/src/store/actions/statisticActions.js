@@ -11,13 +11,12 @@ export const fetchMonthStatistic = () => {
         try {
             let res = await getMonthStatisticService();
             if (res && res.errCode === 0) {
-                dispatch(fetchMonthStatisticSuccess(res.monthlyStatistic));
+                await dispatch(fetchMonthStatisticSuccess(res.monthlyStatistic));
             } else {
-                toast.error("Fetch all rents error")
-                dispatch(fetchMonthStatisticFailed());
+                await dispatch(fetchMonthStatisticFailed());
             }
         } catch (e) {
-            dispatch(fetchMonthStatisticFailed());
+            await dispatch(fetchMonthStatisticFailed());
         }
     }
 }
@@ -36,12 +35,12 @@ export const fetchAllMonthStatistics = () => {
         try {
             let res = await getAllMonthStatisticService();
             if (res && res.errCode === 0) {
-                dispatch(fetchAllMonthStatisticSuccess(res.yearStatistic));
+                await dispatch(fetchAllMonthStatisticSuccess(res.yearStatistic));
             } else {
-                dispatch(fetchAllMonthStatisticFailed());
+                await dispatch(fetchAllMonthStatisticFailed());
             }
         } catch (e) {
-            dispatch(fetchMonthStatisticFailed());
+            await dispatch(fetchMonthStatisticFailed());
         }
     }
 }
@@ -60,12 +59,12 @@ export const getBookReports = (month) => {
         try {
             let res = await getBookReportsService(month);
             if (res && res.errCode === 0) {
-                dispatch(fetchBookReportStatisticSuccess(res.currentDatas));
+                await dispatch(fetchBookReportStatisticSuccess(res.currentDatas));
             } else {
-                dispatch(fetchBookReportStatisticFailed());
+                await dispatch(fetchBookReportStatisticFailed());
             }
         } catch (e) {
-            dispatch(fetchBookReportStatisticFailed());
+            await dispatch(fetchBookReportStatisticFailed());
         }
     }
 }
@@ -84,13 +83,13 @@ export const getDebtReports = (month) => {
         try {
             let res = await getDebtReportsService(month);
             if (res && res.errCode === 0) {
-                toast.success("fetch all debt report succeed!")
-                dispatch(fetchDebtReportStatisticSuccess(res.currentDatas));
+                console.log("month: ", month, res)
+                await dispatch(fetchDebtReportStatisticSuccess(res.currentDatas));
             } else {
-                dispatch(fetchDebtReportStatisticFailed());
+                await dispatch(fetchDebtReportStatisticFailed());
             }
         } catch (e) {
-            dispatch(fetchDebtReportStatisticFailed());
+            await dispatch(fetchDebtReportStatisticFailed());
         }
     }
 }

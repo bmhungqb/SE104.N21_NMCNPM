@@ -16,6 +16,8 @@ class BookRental extends Component {
             isOpenModalRent: false,
             isOpenModalViewRental: false,
             rentId: undefined,
+            selectFilter: "rentId",
+            inputSearch: "",
         }
     }
     getRentId = (rentId) => {
@@ -73,7 +75,7 @@ class BookRental extends Component {
                                 <div class="input-group form-outline w-50">
                                     <input
                                         style={{ "height": "46px" }}
-                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        placeholder={this.props.language === "en" ? "Please enter a search query..." : "Nhập để tìm kiếm..."}
                                         type="text"
                                         className="form-control w-75"
                                         onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
@@ -85,10 +87,7 @@ class BookRental extends Component {
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"id"}>ID</option>
-                                            <option value={"bookTitle"}>Title</option>
-                                            <option value={"authorName"}>Author</option>
-                                            <option value={"genre"}>Genre</option>
+                                            <option value={"retalId"}>{this.props.language === "en" ? "Rental ID" : "Mã thuê"}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -103,6 +102,7 @@ class BookRental extends Component {
                                 <TableBookRental
                                     toggleFromParent={this.toggleViewRentalModal}
                                     getRentId={(rentId) => this.getRentId(rentId)}
+                                    optionSearch={[this.state.inputSearch, this.state.selectFilter]}
                                 />
                             </div>
 

@@ -42,9 +42,9 @@ class TableRegulationManage extends Component {
                 arr.push({
                     "regulationId": item.regulationId,
                     "name": item.name,
-                    "minimumInput": item.minimumInput === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
-                    "minimumStock": item.minimumStock === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
-                    "maximumDept": item.maximumDept === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
+                    "minimumInput": item.minimumInput === 0 ? this.props.language === "en" ? "None" : "Không có" : item.regulationId === 4 ? this.props.language === "en" ? "Active" : "Bật" : item.minimumInput,
+                    "minimumStock": item.minimumStock === 0 ? this.props.language === "en" ? "None" : "Không có" : item.regulationId === 4 ? this.props.language === "en" ? "Active" : "Bật" : item.minimumStock,
+                    "maximumDept": item.maximumDept === 0 ? this.props.language === "en" ? "None" : "Không có" : item.regulationId === 4 ? this.props.language === "en" ? "Active" : "Bật" : item.maximumDept,
                 })
             })
             this.setState({
@@ -58,9 +58,9 @@ class TableRegulationManage extends Component {
                     arr.push({
                         "regulationId": item.regulationId,
                         "name": item.name,
-                        "minimumInput": item.minimumInput === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
-                        "minimumStock": item.minimumStock === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
-                        "maximumDept": item.maximumDept === 1 ? this.props.language === "en" ? "Active" : "Bật" : this.props.language === "en" ? "None" : "Không có",
+                        "minimumInput": item.minimumInput === 0 ? this.props.language === "en" ? "None" : "Không có" : item.regulationId === 4 ? this.props.language === "en" ? "Active" : "Bật" : item.minimumInput,
+                        "minimumStock": item.minimumStock === 0 ? this.props.language === "en" ? "None" : "Không có" : item.regulationId === 4 ? this.props.language === "en" ? "Active" : "Bật" : item.minimumStock,
+                        "maximumDept": item.maximumDept === 0 ? this.props.language === "en" ? "None" : "Không có" : item.regulationId === 4 ? this.props.language === "en" ? "Active" : "Bật" : item.maximumDept,
                     })
                 })
                 this.setState({
@@ -109,9 +109,9 @@ class TableRegulationManage extends Component {
                             cell:
                                 (row) =>
                                     < div
-                                        style={row.minimumInput === "Active" || row.minimumInput === "Bật" ?
-                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" } :
-                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "red" }
+                                        style={row.minimumInput === "None" || row.minimumInput === "Không có" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "black" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" }
                                         }
                                     >
                                         {row.minimumInput}
@@ -123,9 +123,9 @@ class TableRegulationManage extends Component {
                             cell:
                                 (row) =>
                                     < div
-                                        style={row.minimumStock === "Active" || row.minimumStock === "Bật" ?
-                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" } :
-                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "red" }
+                                        style={row.minimumStock === "None" || row.minimumStock === "Không có" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "black" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" }
                                         }
                                     >
                                         {row.minimumStock}
@@ -137,9 +137,9 @@ class TableRegulationManage extends Component {
                             cell:
                                 (row) =>
                                     < div
-                                        style={row.maximumDept === "Active" || row.maximumDept === "Bật" ?
-                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" } :
-                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "red" }
+                                        style={row.maximumDept === "None" || row.maximumDept === "Không có" ?
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "black" } :
+                                            { "color": "white", "border-radius": "4px", "alignItems": "center", "justifyContent": "center", "display": "flex", "height": "22px", "width": "70px", "background": "green" }
                                         }
                                     >
                                         {row.maximumDept}

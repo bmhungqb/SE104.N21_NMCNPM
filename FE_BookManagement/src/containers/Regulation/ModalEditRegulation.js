@@ -76,9 +76,9 @@ class ModalEditRegulation extends Component {
     }
     inputSchema = Yup.object().shape({
         name: Yup.string(),
-        minimumInput: Yup.number().oneOf([0, 1], "0: None,1: Active"),
-        minimumStock: Yup.number().oneOf([0, 1], "0: None,1: Active"),
-        maximumDept: Yup.number().oneOf([0, 1], "0: None,1: Active"),
+        minimumInput: Yup.number(),
+        minimumStock: Yup.number(),
+        maximumDept: Yup.number(),
     })
     handleChange = (e, values) => {
         this.setState({

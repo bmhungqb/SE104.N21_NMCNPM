@@ -69,7 +69,6 @@ class ModalOrder extends Component {
                 remaining: data.remaining
             })
             this.props.fetchAllInvoicesDetailStart(data.invoiceId).then((data) => {
-                console.log("data: ", data)
                 data.forEach((item, index) => {
                     let copyDataTableBook = [...this.state.dataTableBookSelect];
                     let totalA = parseInt(data[index].quantity) * parseInt(item.Books[0].sellingPrice)
@@ -83,7 +82,7 @@ class ModalOrder extends Component {
                         }
                     )
                     this.setState({
-                        dataTableBookSelect: copyDataTableBook,
+                        dataTableBookSelect: [...copyDataTableBook],
                     })
                 })
             })

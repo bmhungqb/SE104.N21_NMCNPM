@@ -61,7 +61,7 @@ class DataDay extends Component {
                     <div className='data-day-content'>
                         <div className='visualize-data'>
                             <div className='box-data data-sold-money'>
-                                <div className='content-up'>
+                                <div className='content-up revenue'>
                                     <FontAwesomeIcon className='icon-left' icon={faMoneyCheckDollar} size='lg' />
                                     <p className='text-data'>{this.state.monthlyRevenue}</p>
                                     <span className='percent'>

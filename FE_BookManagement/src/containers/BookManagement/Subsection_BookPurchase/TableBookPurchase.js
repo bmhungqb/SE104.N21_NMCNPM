@@ -13,6 +13,7 @@ class TableBookPurchase extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            optionSearch: [],
             dataTableInvoice: [],
             paginationComponentOptions: {
                 rowsPerPageText: 'Filas por página',
@@ -55,15 +56,38 @@ class TableBookPurchase extends Component {
         }
         if (prevProps.optionSearch != this.props.optionSearch) {
             if (this.props.optionSearch[0] === "") {
+                let arr = []
+                this.props.listInvoices.map((item, index) => {
+                    let date = new Date(Date.parse(item.createdAt)).toLocaleDateString();
+                    arr.push({
+                        "invoiceId": item.invoiceId,
+                        "customerId": item.customerId,
+                        "name": item.Customers[0].fullName,
+                        "totalAmount": item.totalPrice,
+                        "createAt": date,
+                        "status": item.status ? "Paid" : "Debt"
+                    })
+                })
                 this.setState({
-                    dataTableInvoice: this.props.listInvoices,
-                    optionSearch: this.props.optionSearch
+                    dataTableInvoice: arr
                 })
             }
             else {
                 const arr = this.props.listInvoices.filter(row => row[this.props.optionSearch[1]].toString().toLowerCase().includes(this.props.optionSearch[0].toLowerCase()))
+                let arr1 = []
+                arr.map((item, index) => {
+                    let date = new Date(Date.parse(item.createdAt)).toLocaleDateString();
+                    arr1.push({
+                        "invoiceId": item.invoiceId,
+                        "customerId": item.customerId,
+                        "name": item.Customers[0].fullName,
+                        "totalAmount": item.totalPrice,
+                        "createAt": date,
+                        "status": item.status ? "Paid" : "Debt"
+                    })
+                })
                 this.setState({
-                    dataTableInvoice: arr,
+                    dataTableInvoice: [...arr1],
                     optionSearch: this.props.optionSearch
                 })
             }

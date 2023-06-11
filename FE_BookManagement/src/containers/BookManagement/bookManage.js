@@ -118,22 +118,22 @@ class BookManage extends Component {
                                 <div class="input-group form-outline w-50">
                                     <input
                                         style={{ "height": "46px" }}
-                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        placeholder={this.props.language === "en" ? "Please enter a search query..." : "Nhập để tìm kiếm..."}
                                         type="text"
                                         className="form-control w-75"
                                         onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
                                     />
                                     <div className="input-group-append">
                                         <select
-                                            className="form-select w-100 brounded-0"
+                                            className="form-select w-100 rounded-0"
                                             value={this.state.selectFilter}
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"bookId"}>ID</option>
-                                            <option value={"bookTitle"}>Title</option>
-                                            <option value={"authorName"}>Author</option>
-                                            <option value={"genre"}>Genre</option>
+                                            <option value={"bookId"}>{this.props.language === "en" ? "Book ID" : "Mã sách"}</option>
+                                            <option value={"bookTitle"}>{this.props.language === "en" ? "Book title" : "Tên sách"}</option>
+                                            <option value={"authorName"}>{this.props.language === "en" ? "Author" : "Tên tác giả"}</option>
+                                            <option value={"genre"}>{this.props.language === "en" ? "Genre" : "Thể loại"}</option>
                                         </select>
                                     </div>
                                 </div>

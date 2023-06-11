@@ -42,11 +42,10 @@ class ModalSupplier extends Component {
     inputSchema = Yup.object().shape({
         name: Yup.string().required("Required!"),
         address: Yup.string().required("Required!"),
-        email: Yup.string().email("Invalid email").required("Required!"),
-        phoneNumber: Yup.string()
-            .trim()
-            .matches(/^\d{10}$/, "Phone number must be 10 digits")
-            .required("Required!")
+        email: Yup.string().email().required("Required!"),
+        phoneNumber: Yup.number()
+            .typeError("Must be a number type")
+            .required('Required!'),
     });
     render() {
         return (

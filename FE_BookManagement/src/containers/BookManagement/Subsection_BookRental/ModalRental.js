@@ -20,14 +20,13 @@ class ModalRental extends Component {
         this.state = {
             totalPrice: 0,
             isExistsCustomer: false,
-            leaseDate: new Date(),
+            leaseDate: undefined,
             dueDate: undefined,
             rentDate: undefined,
             messageSelectBook: "",
-            // Create a customer
             customerId: "",
-            customerState: "",
-            gender: "",
+            customerState: "Gold",
+            gender: "Male",
             phoneNumber: "",
             address: "",
             email: "",
@@ -170,7 +169,7 @@ class ModalRental extends Component {
         }
         else {
             this.setState({
-                messageSelectBook: ""
+                messageSelectBook: "",
             })
         }
         let bookSelected = this.state.selectedOption.label
@@ -182,7 +181,7 @@ class ModalRental extends Component {
             }
         })
         this.setState({
-            selectedOption: undefined,
+            selectedOption: "",
         })
         if (!flag) {
             let book;
@@ -191,6 +190,7 @@ class ModalRental extends Component {
                     book = item;
                 }
             })
+            console.log(book)
             let copyDataTableBook = [...this.state.dataTableBookSelect];
             copyDataTableBook.push(
                 {
@@ -246,7 +246,10 @@ class ModalRental extends Component {
         }
         this.toggle()
     }
-    handleChangeRentDay = () => {
+    handleChangeRentDay = (date, id) => {
+        this.setState(
+            { [id]: date },
+        );
         let leaseDate = new Date(this.state.leaseDate);
         leaseDate.setHours(0, 0, 0, 0);
         let dueDate = new Date(this.state.dueDate);
@@ -254,6 +257,7 @@ class ModalRental extends Component {
         this.setState({
             rentDate: Math.abs(dueDate.getTime() - leaseDate.getTime()) / (1000 * 60 * 60 * 24) + 1
         })
+        console.log("check rentDate: ", this.state.rentDate)
     }
     render() {
         return (
@@ -344,9 +348,9 @@ class ModalRental extends Component {
                                             value={this.state.gender}
                                             onChange={(e) => this.handleOnchangeInput(e, 'gender')}
                                         >
-                                            <option value={"Male"}>Male</option>
-                                            <option value={'Female'}>Female</option>
-                                            <option value={"Other"}>Other</option>
+                                            <option value={"Male"}>{this.props.language === "en" ? "Male" : "Nam"}</option>
+                                            <option value={'Female'}>{this.props.language === "en" ? "Female" : "Nữ"}</option>
+                                            <option value={"Other"}>{this.props.language === "en" ? "Other" : "Khác"}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -360,9 +364,9 @@ class ModalRental extends Component {
                                             value={this.state.customerState}
                                             onChange={(e) => this.handleOnchangeInput(e, 'customerState')}
                                         >
-                                            <option value={"Normal"}>Normal</option>
-                                            <option value={'Vip'}>Vip</option>
-                                            <option value={"Gold"}>Gold</option>
+                                            <option value={"Gold"}>{this.props.language === "en" ? "Gold" : "Vàng"}</option>
+                                            <option value={'Silver'}>{this.props.language === "en" ? "Silver" : "Bạc"}</option>
+                                            <option value={"Bronze"}>{this.props.language === "en" ? "Bronze" : "Đồng"}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -395,12 +399,7 @@ class ModalRental extends Component {
                             <DatePicker
                                 value={this.state.leaseDate}
                                 name='leaseDate'
-                                onChange={(date) => {
-                                    this.setState({
-                                        dueDate: date
-                                    },
-                                        this.handleChangeRentDay())
-                                }}
+                                onChange={(date) => { this.handleChangeRentDay(date, "leaseDate") }}
                             />
                         </div>
                         <div className='input-container' style={{ width: "49%" }}>
@@ -408,12 +407,7 @@ class ModalRental extends Component {
                             <DatePicker
                                 selected={this.state.dueDate}
                                 name='dueDate'
-                                onChange={(date) => {
-                                    this.setState({
-                                        dueDate: date
-                                    },
-                                        this.handleChangeRentDay());
-                                }}
+                                onChange={(date) => { this.handleChangeRentDay(date, "dueDate") }}
                             />
                         </div>
 

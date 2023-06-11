@@ -91,7 +91,8 @@
         "title-delete-discount": "Bạn có muốn xóa mã này không?",
         "title-edit-discount": "Chỉnh sửa thông tin mã giảm giá",
         "title-delete-regulation": "Bạn có muốn xóa quy định này không?",
-        "title-edit-regulation": "Chỉnh sửa quy định"
+        "title-edit-regulation": "Chỉnh sửa quy định",
+        "day-rent": "Số ngày mượn"
     },
     "book-management": {
         "book-management": "Quản lý sách",

@@ -72,6 +72,9 @@
                         font-size: 45px;
                         font-weight: 400;
                         margin-bottom: 0px !important;
+                        font-size: 45px;
+                        font-weight: 400;
+                        margin-bottom: 0px !important;
                     }
 
                     .percent {
@@ -92,8 +95,29 @@
                     text-align: center;
                     margin-top: 5px;
                     font-size: 18px;
+
                 }
             }
         }
     }
+}
+
+.revenue {
+    .text-data {
+        text-overflow: ellipsis !important;
+        white-space: nowrap;
+        overflow: hidden;
+        width: 30%;
+    }
+
+    .percent {
+        width: 25%;
+
+        .text-percent {
+            text-overflow: ellipsis !important;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+    }
+
 }

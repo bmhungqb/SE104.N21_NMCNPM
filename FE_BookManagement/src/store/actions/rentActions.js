@@ -24,11 +24,11 @@ export const CreateRentNotExistsCustomer = (dataCustomer, dataRent, dataBook) =>
                     ...dataRent,
                     customerId: res.newCustomerId
                 };
-                dispatch(CreateRentExistsCustomer(modifiedDataRent, dataBook))
+                await dispatch(CreateRentExistsCustomer(modifiedDataRent, dataBook))
             }
         }
         catch (e) {
-            dispatch(saveRentFailed());
+            await dispatch(saveRentFailed());
         }
     }
 }
@@ -47,15 +47,16 @@ export const CreateRentExistsCustomer = (dataRent, dataBook) => {
                     let resCreateRentDetail = await CreateRentDetailService(modifiedData);
                     return resCreateRentDetail;
                 });
+                await dispatch(fetchAllRents("ALL"))
                 await Promise.all(apiCalls);
                 toast.success("Create a new rent succeed!");
             } else {
                 toast.error("Create a new rent failed!");
-                dispatch(saveRentFailed());
+                await dispatch(saveRentFailed());
             }
         } catch (e) {
             toast.error("Create a new rent failed!");
-            dispatch(saveRentFailed());
+            await dispatch(saveRentFailed());
         }
     };
 };
@@ -73,13 +74,13 @@ export const CreateRentDetail = (dataRentDetail) => {
             let res = await CreateRentDetailService(dataRentDetail);
             if (res && res.errCode === 0) {
                 // toast.success("Create a new invoice detail succeed !")
-                dispatch(saveRentDetailSuccess());
+                await dispatch(saveRentDetailSuccess());
             } else {
                 // toast.error("Create a new invoice detail error !")
-                dispatch(saveRentDetailFailed());
+                await dispatch(saveRentDetailFailed());
             }
         } catch (e) {
-            dispatch(saveRentDetailFailed());
+            await dispatch(saveRentDetailFailed());
         }
     }
 }
@@ -99,16 +100,14 @@ export const fetchAllRents = (id) => {
                 if (id !== "ALL") {
                     return res.rents
                 }
-                toast.success("Fetch all rents succeed")
-                dispatch(
+                await dispatch(
                     fetchAllRentsSuccess(res.rents.reverse())
                 );
             } else {
-                toast.error("Fetch all rents error")
-                dispatch(fetchAllRentsFailed());
+                await dispatch(fetchAllRentsFailed());
             }
         } catch (e) {
-            dispatch(fetchAllRentsFailed());
+            await dispatch(fetchAllRentsFailed());
         }
     }
 }
@@ -130,16 +129,14 @@ export const fetchAllRentsDetail = (id) => {
                 if (id !== "ALL") {
                     return res.rentsDetail
                 }
-                toast.success("Fetch all rents detail succeed")
-                dispatch(
+                await dispatch(
                     fetchAllRentsDetailSuccess(res.rents.reverse())
                 );
             } else {
-                toast.error("Fetch all rents detail error")
-                dispatch(fetchAllRentsDetailFailed());
+                await dispatch(fetchAllRentsDetailFailed());
             }
         } catch (e) {
-            dispatch(fetchAllRentsDetailFailed());
+            await dispatch(fetchAllRentsDetailFailed());
         }
     }
 }

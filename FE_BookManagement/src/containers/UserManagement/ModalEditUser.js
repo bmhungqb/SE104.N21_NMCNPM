@@ -141,173 +141,243 @@ class ModalEditUser extends Component {
     }
     inputSchema = Yup.object().shape({
         phonenumber: Yup.number()
-            .typeError("Must be a number type")
-            .required('Required!'),
-        email: Yup.string().email().required("Required!"),
-        username: Yup.string().required("Required!"),
-        password: Yup.string().required("Required!"),
+            .typeError("Must be a number type"),
+        email: Yup.string().email(),
+        username: Yup.string(),
+        password: Yup.string(),
     })
     render() {
         return (
-            <Modal
-                isOpen={this.props.isOpen}
-                toggle={() => { this.toggle() }}
-                className={'modal-user-container'}
-                size='lg'
+            <Formik
+                initialValues={this.state}
+                validationSchema={this.inputSchema}
+                innerRef={this.formikRef}
             >
-                <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.title-edit-user' /></ModalHeader>
-                <ModalBody>
-                    <div className='modal-user-body d-flex'>
-                        <div className='content-right ml-3' style={{ "width": "30%" }} >
-                            <div className='preview-img-container input-container'>
-                                <div className='preview-image'
-                                    style={{ "backgroundImage": `url(${this.state.previewImgURL})`, "height": "100%" }}
-                                >
-                                </div>
-                                <input
-                                    disabled={!this.state.isAllowEdit} id='previewImg' type='file' hidden
-                                    onChange={(event) => { this.handleOnchangeImage(event) }}
-                                />
-                                <label className='label-upload text-center' htmlFor='previewImg'><FormattedMessage id='modal.upload' /><i className='fas fa-upload'></i></label>
-                            </div>
-                            <div className='input-container'>
-                                <label><FormattedMessage id='modal.birthday' /></label>
-                                <DatePicker
-                                    disabled={!this.state.isAllowEdit}
-                                    onChange={(e) => this.handleOnchangeDatePicker(e, 'birthDay')}
-                                    value={this.state.birthDay}
-                                />
-                            </div>
-                            <div className='input-container'>
-                                <label><FormattedMessage id='modal.start-work' /></label>
-                                <DatePicker
-                                    disabled={!this.state.isAllowEdit}
-                                    onChange={(e) => this.handleOnchangeDatePicker(e, 'startWork')}
-                                    value={this.state.startWork}
-                                />
-                            </div>
-                        </div>
-                        <div className='content-left' style={{ "width": "60%" }}>
-                            <div className='input-container'>
-                                <label><FormattedMessage id='modal.name' /></label>
-                                <input
-                                    disabled={!this.state.isAllowEdit}
-                                    type='text'
-                                    value={this.state.name}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'name')}
-                                />
-                            </div>
-                            <div
-                                className='d-flex'
-                            >
-                                <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label><FormattedMessage id='modal.gender' /></label>
-                                    <div className='select-genre'>
-                                        <select
-                                            disabled={!this.state.isAllowEdit}
-                                            className='form-select'
-                                            value={this.state.gender}
-                                            onChange={(e) => this.handleOnchangeInput(e, 'gender')}
+                {({ values, errors, touched, handleBlur, handleChange, handleSubmit }) => (
+                    <Modal
+                        isOpen={this.props.isOpen}
+                        toggle={() => { this.toggle() }}
+                        className={'modal-user-container'}
+                        size='lg'
+                    >
+                        <ModalHeader toggle={() => { this.toggle() }}><FormattedMessage id='modal.title-edit-user' /></ModalHeader>
+                        <ModalBody>
+                            <div className='modal-user-body d-flex'>
+                                <div className='content-right ml-3' style={{ "width": "30%" }} >
+                                    <div className='preview-img-container input-container'>
+                                        <div className='preview-image'
+                                            style={{ "backgroundImage": `url(${this.state.previewImgURL})`, "height": "100%" }}
                                         >
-                                            <option value={'Male'}>Male</option>
-                                            <option value={"Female"}>Female</option>
-                                            <option value={"Other"}>Other</option>
-                                        </select>
+                                        </div>
+                                        <input
+                                            disabled={!this.state.isAllowEdit} id='previewImg' type='file' hidden
+                                            onChange={(event) => { this.handleOnchangeImage(event) }}
+                                        />
+                                        <label className='label-upload text-center' htmlFor='previewImg'><FormattedMessage id='modal.upload' /><i className='fas fa-upload'></i></label>
+                                    </div>
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.birthday' /></label>
+                                        <DatePicker
+                                            disabled={!this.state.isAllowEdit}
+                                            onChange={(e) => this.handleOnchangeDatePicker(e, 'birthDay')}
+                                            value={this.state.birthDay}
+                                        />
+                                    </div>
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.start-work' /></label>
+                                        <DatePicker
+                                            disabled={!this.state.isAllowEdit}
+                                            onChange={(e) => this.handleOnchangeDatePicker(e, 'startWork')}
+                                            value={this.state.startWork}
+                                        />
                                     </div>
                                 </div>
-                                <div className='input-container' style={{ "width": "48%" }}>
-                                    <label><FormattedMessage id='modal.role' /></label>
-                                    <div className='select-genre'>
-                                        <select
+                                <div className='content-left' style={{ "width": "60%" }}>
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.name' /></label>
+                                        <input
                                             disabled={!this.state.isAllowEdit}
-                                            className='form-select'
-                                            value={this.state.role}
-                                            onChange={(e) => this.handleOnchangeInput(e, 'role')}
-                                        >
-                                            <option value={'Manager'}>Manager</option>
-                                            <option value={"Employee"}>Employee</option>
-                                            <option value={"Supporter"}>Supporter</option>
-                                        </select>
+                                            type='text'
+                                            value={this.state.name}
+                                            onChange={(e) => this.handleOnchangeInput(e, 'name')}
+                                        />
                                     </div>
-                                </div>
-                            </div>
-                            <div className='d-flex'>
-                                <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label><FormattedMessage id='modal.phone-number' /></label>
-                                    <input
-                                        disabled={!this.state.isAllowEdit}
-                                        type='text'
-                                        value={this.state.phonenumber}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'phonenumber')}
-                                    />
-                                </div>
-                                <div className='input-container' style={{ "width": "48%" }}>
-                                    <label><FormattedMessage id='modal.email' /></label>
-                                    <input
-                                        disabled={!this.state.isAllowEdit}
-                                        type='text'
-                                        value={this.state.email}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'email')}
-                                    />
-                                </div>
-                            </div>
-                            <div className='d-flex'>
-                                <div className='input-container mr-4' style={{ "width": "48%" }}>
-                                    <label><FormattedMessage id='modal.username' /></label>
-                                    <input
-                                        disabled={!this.state.isAllowEdit}
-                                        type='text'
-                                        value={this.state.username}
-                                        onChange={(e) => this.handleOnchangeInput(e, 'username')}
-                                    />
-                                </div>
-                                <div className='input-container' style={{ "width": "48%" }}>
-                                    <label><FormattedMessage id='modal.password' /></label>
-                                    <input
-                                        disabled={true}
-                                        type='password'
-                                        value={this.state.password}
-                                    // onChange={(e) => this.handleOnchangeInput(e, 'password')}
-                                    />
-                                </div>
-                            </div>
+                                    <div
+                                        className='d-flex'
+                                    >
+                                        <div className='input-container mr-4' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.gender' /></label>
+                                            <div className='select-genre'>
+                                                <select
+                                                    disabled={!this.state.isAllowEdit}
+                                                    className='form-select'
+                                                    value={this.state.gender}
+                                                    onChange={(e) => this.handleOnchangeInput(e, 'gender')}
+                                                >
+                                                    <option value={'Male'}>Male</option>
+                                                    <option value={"Female"}>Female</option>
+                                                    <option value={"Other"}>Other</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                        <div className='input-container' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.role' /></label>
+                                            <div className='select-genre'>
+                                                <select
+                                                    disabled={!this.state.isAllowEdit}
+                                                    className='form-select'
+                                                    value={this.state.role}
+                                                    onChange={(e) => this.handleOnchangeInput(e, 'role')}
+                                                >
+                                                    <option value={'Manager'}>Manager</option>
+                                                    <option value={"Employee"}>Employee</option>
+                                                    <option value={"Supporter"}>Supporter</option>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div className='d-flex'>
+                                        <div className='input-container mr-4' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.phone-number' /></label>
+                                            <input
+                                                disabled={!this.state.isAllowEdit}
+                                                type='text'
+                                                value={this.state.phonenumber}
+                                                name='phonenumber'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {errors.phonenumber &&
+                                                touched.phonenumber &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.phonenumber}</p>
+                                            }
+                                        </div>
+                                        <div className='input-container' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.email' /></label>
+                                            <input
+                                                disabled={!this.state.isAllowEdit}
+                                                type='text'
+                                                value={this.state.email}
+                                                name='email'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {
+                                                errors.email &&
+                                                touched.email &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.email}
+                                                </p>
+                                            }
+                                        </div>
+                                    </div>
+                                    <div className='d-flex'>
+                                        <div className='input-container mr-4' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.username' /></label>
+                                            <input
+                                                disabled={!this.state.isAllowEdit}
+                                                type='text'
+                                                value={this.state.username}
+                                                name='username'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {
+                                                errors.username &&
+                                                touched.username &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.username}
+                                                </p>
+                                            }
+                                        </div>
+                                        <div className='input-container' style={{ "width": "48%" }}>
+                                            <label><FormattedMessage id='modal.password' /></label>
+                                            <input
+                                                disabled={true}
+                                                type='password'
+                                                value={this.state.password}
+                                                name='password'
+                                                onBlur={handleBlur}
+                                                onChange={(e) => this.handleChange(e, values)}
+                                            />
+                                            {
+                                                errors.password &&
+                                                touched.password &&
+                                                <p
+                                                    style={{
+                                                        'position': 'absolute',
+                                                        'margin-top': '60px',
+                                                        'margin-left': '2px',
+                                                        'color': 'red',
+                                                        'font-style': 'italic',
+                                                    }}
+                                                >{errors.password}
+                                                </p>
+                                            }
+                                        </div>
+                                    </div>
 
-                            <div className='input-container'>
-                                <label><FormattedMessage id='modal.address' /></label>
-                                <input
-                                    disabled={!this.state.isAllowEdit}
-                                    type='text'
-                                    value={this.state.address}
-                                    onChange={(e) => this.handleOnchangeInput(e, 'address')}
-                                />
+                                    <div className='input-container'>
+                                        <label><FormattedMessage id='modal.address' /></label>
+                                        <input
+                                            disabled={!this.state.isAllowEdit}
+                                            type='text'
+                                            value={this.state.address}
+                                            onChange={(e) => this.handleOnchangeInput(e, 'address')}
+                                        />
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
-                </ModalBody>
-                <ModalFooter>
-                    <Button
-                        style={{ "height": "40px", "width": "150px" }}
-                        className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
-                        onClick={() => { this.toggleEdit() }}
-                    ><FormattedMessage id='modal.edit' /></Button>
-                    {
-                        this.state.isAllowEdit
-                        &&
-                        <Button
-                            style={{ "height": "40px", "width": "150px" }}
-                            className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
-                        ><FormattedMessage id='modal.cancel' /></Button>
-                    }
-                    {
-                        this.state.isAllowEdit &&
-                        <Button
-                            style={{ "height": "40px", "width": "170px" }}
-                            className='px-5 border-0 bg-primary'
-                            onClick={() => this.handleSaveUser()}
-                        ><FormattedMessage id='modal.save' /></Button>
-                    }
-                </ModalFooter>
-            </Modal >
+                        </ModalBody>
+                        <ModalFooter>
+                            <Button
+                                style={{ "height": "40px", "width": "150px" }}
+                                className={this.state.isAllowEdit ? 'px-5 border-0 bg-success d-none' : 'px-5 border-0 bg-success'}
+                                onClick={() => { this.toggleEdit() }}
+                            ><FormattedMessage id='modal.edit' /></Button>
+                            {
+                                this.state.isAllowEdit
+                                &&
+                                <Button
+                                    style={{ "height": "40px", "width": "150px" }}
+                                    className='px-5 border-0 bg-danger' onClick={() => { this.handleCancelEdit() }}
+                                ><FormattedMessage id='modal.cancel' /></Button>
+                            }
+                            {
+                                this.state.isAllowEdit &&
+                                <Button
+                                    style={{ "height": "40px", "width": "170px" }}
+                                    className='px-5 border-0 bg-primary'
+                                    onClick={() => this.handleSaveUser()}
+                                ><FormattedMessage id='modal.save' /></Button>
+                            }
+                        </ModalFooter>
+                    </Modal >
+                )
+                }
+            </Formik>
         )
     }
 

@@ -14,7 +14,6 @@ class TableBookManage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-
             optionSearch: [],
             dataTableBook: [],
             dataFull: [],

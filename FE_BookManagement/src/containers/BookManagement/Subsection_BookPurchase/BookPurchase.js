@@ -18,6 +18,8 @@ class BookPurchase extends Component {
             isOpenModalDeleteBook: false,
             isModalPaid: false,
             invoiceId: undefined,
+            selectFilter: "invoiceId",
+            inputSearch: "",
         }
     }
     getInvoiceId = (invoiceId) => {
@@ -91,7 +93,7 @@ class BookPurchase extends Component {
                                 <div class="input-group form-outline w-50">
                                     <input
                                         style={{ "height": "46px" }}
-                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        placeholder={this.props.language === "en" ? "Please enter a search query..." : "Nhập để tìm kiếm..."}
                                         type="text"
                                         className="form-control w-75"
                                         onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
@@ -103,10 +105,7 @@ class BookPurchase extends Component {
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"id"}>ID</option>
-                                            <option value={"bookTitle"}>Title</option>
-                                            <option value={"authorName"}>Author</option>
-                                            <option value={"genre"}>Genre</option>
+                                            <option value={"invoiceId"}>{this.props.language === "en" ? "Book ID" : "Mã đơn hàng"}</option>
                                         </select>
                                     </div>
                                 </div>
@@ -122,6 +121,7 @@ class BookPurchase extends Component {
                                     toggleFromParent={this.toggleViewOrderModal}
                                     toggleBookDeleteModal={this.toggleBookDeleteModal}
                                     getInvoiceId={(invoiceId) => this.getInvoiceId(invoiceId)}
+                                    optionSearch={[this.state.inputSearch, this.state.selectFilter]}
                                 />
                             </div>
 

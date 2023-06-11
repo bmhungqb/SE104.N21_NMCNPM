@@ -147,15 +147,19 @@ class ModalBook extends Component {
                                             onChange={handleChange}
                                             onBlur={handleBlur}
                                         >
-                                            <option value={'Action and Adventure'}>Action and Adventure</option>
-                                            <option value={"Classics"}>Classics</option>
-                                            <option value={"Detective and Mystery"}>Detective and Mystery</option>
-                                            <option value={"Fantasy"}>Fantasy</option>
+                                            <option value={this.props.language === "en" ? "Literature" : "Văn học"}>{this.props.language === "en" ? "Literature" : "Văn học"}</option>
+                                            <option value={this.props.language === "en" ? "Mystery" : "Trinh thám"}>{this.props.language === "en" ? "Mystery" : "Trinh thám"}</option>
+                                            <option value={this.props.language === "en" ? "Science Fiction" : "Khoa học viễn tưởng"}>{this.props.language === "en" ? "Science Fiction" : "Khoa học viễn tưởng"}</option>
+                                            <option value={this.props.language === "en" ? "Historical Fiction" : "Tiểu thuyết lịch sử"}>{this.props.language === "en" ? "Historical Fiction" : "Tiểu thuyết lịch sử"}</option>
+                                            <option value={this.props.language === "en" ? "Biography " : "Tiểu sử"}>{this.props.language === "en" ? "Biography " : "Tiểu sử"}</option>
+                                            <option value={this.props.language === "en" ? "Self-help" : "Phát triển bản thân"}>{this.props.language === "en" ? "Self-help" : "Phát triển bản thân"}</option>
+                                            <option value={this.props.language === "en" ? "Philosophy " : "Triết học"}>{this.props.language === "en" ? "Philosophy " : "Triết học"}</option>
+                                            <option value={this.props.language === "en" ? "Cookbook " : "Sách nấu ăn"}>{this.props.language === "en" ? "Cookbook " : "Sách nấu ăn"}</option>
                                         </select>
                                         {
                                             this.state.isOpenInputGenre &&
                                             <input
-                                                placeholder='Add new genre..'
+                                                placeholder={this.props.language === "en" ? "Add new genre..." : "Nhập thể loại mới.."}
                                                 className=''
                                                 style={{ width: "49%" }}
                                                 value={values.genre}

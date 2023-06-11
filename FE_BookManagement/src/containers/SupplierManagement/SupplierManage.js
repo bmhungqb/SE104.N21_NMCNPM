@@ -101,7 +101,7 @@ class SupplierManage extends Component {
                                 <div class="input-group form-outline w-50">
                                     <input
                                         style={{ "height": "46px" }}
-                                        placeholder={'Enter search by ' + this.state.selectFilter}
+                                        placeholder={this.props.language === "en" ? "Please enter a search query..." : "Nhập để tìm kiếm..."}
                                         type="text" className="form-control w-75"
                                         onChange={(e) => this.handleOnchangeInputFilter(e, 'inputSearch')}
                                     />
@@ -112,10 +112,8 @@ class SupplierManage extends Component {
                                             onChange={(e) => this.handleOnchangeInputFilter(e, 'selectFilter')}
                                             style={{ "cursor": "pointer" }}
                                         >
-                                            <option value={"id"}>ID</option>
-                                            <option value={"name"}>Name</option>
-                                            <option value={"phoneNumber"}>Phone Number</option>
-                                            <option value={"email"}>Email</option>
+                                            <option value={"supplierId"}>{this.props.language === "en" ? "Supplier ID" : "Mã nhà cung cấp"}</option>
+                                            <option value={"name"}>{this.props.language === "en" ? "Name" : "Tên nhà cung cấp"}</option>
                                         </select>
                                     </div>
                                 </div>

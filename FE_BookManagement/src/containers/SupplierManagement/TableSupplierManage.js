@@ -32,20 +32,6 @@ class TableSupplierManage extends Component {
         this.props.getSupplierDelete(row.id)
         this.props.toggleSupplierDeleteModal();
     }
-    caseInsensitiveSort = (rowA, rowB) => {
-        var a = rowA.title.toLowerCase();
-        var b = rowB.title.toLowerCase();
-
-        if (a > b) {
-            return 1;
-        }
-
-        if (b > a) {
-            return -1;
-        }
-
-        return 0;
-    };
     componentDidMount() {
         this.props.fetchAllSuppliers()
     }
@@ -113,7 +99,6 @@ class TableSupplierManage extends Component {
                                 name: this.props.language === "en" ? "Supplier ID" : "Mã nhà cung cấp",
                                 selector: 'id',
                                 sortable: true,
-                                sortFunction: this.caseInsensitiveSort,
                             },
                             {
                                 name: this.props.language === "en" ? "Name" : "Tên nhà cung cấp",
