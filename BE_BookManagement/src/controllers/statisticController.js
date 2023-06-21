@@ -59,28 +59,28 @@ async function GetYearStatistic(req, res) {
 
 async function GetCurrentMonthStatistic(req, res) {
     try {
-        const month = (new Date()).getMonth()
-        let monthlyStatistic = await GetMonthStaticstic(month + 1)
-        let prevMonthlyStatistic = await GetMonthStaticstic(month)
+        const month = (new Date()).getMonth() + 1
+        let monthlyStatistic = await GetMonthStaticstic(month)
+        let prevMonthlyStatistic = await GetMonthStaticstic(month - 1)
         // percentageRevenue
         if (prevMonthlyStatistic.monthlyRevenue === 0) {
-            monthlyStatistic.percentageRevenue = (monthlyStatistic.monthlyRevenue - prevMonthlyStatistic.monthlyRevenue) / 100
+            monthlyStatistic.percentageRevenue = (monthlyStatistic.monthlyRevenue - prevMonthlyStatistic.monthlyRevenue)
         } else {
-            monthlyStatistic.percentageRevenue = (monthlyStatistic.monthlyRevenue - prevMonthlyStatistic.monthlyRevenue) / prevMonthlyStatistic.monthlyRevenue
+            monthlyStatistic.percentageRevenue = ((monthlyStatistic.monthlyRevenue - prevMonthlyStatistic.monthlyRevenue) / prevMonthlyStatistic.monthlyRevenue) * 100
         }
         monthlyStatistic.percentageRevenueStatus = monthlyStatistic.monthlyRevenue > prevMonthlyStatistic.monthlyRevenue ? 'ascend' : monthlyStatistic.monthlyRevenue < prevMonthlyStatistic.monthlyRevenue ? lower : 'equal'
         // percentageNewCustomer
         if (prevMonthlyStatistic.monthlyNewCustomer === 0) {
-            monthlyStatistic.percentageNewCustomer = (monthlyStatistic.monthlyNewCustomer - prevMonthlyStatistic.monthlyNewCustomer) / 100
+            monthlyStatistic.percentageNewCustomer = (monthlyStatistic.monthlyNewCustomer - prevMonthlyStatistic.monthlyNewCustomer)
         } else {
-            monthlyStatistic.percentageNewCustomer = (monthlyStatistic.monthlyNewCustomer - prevMonthlyStatistic.monthlyNewCustomer) / prevMonthlyStatistic.monthlyNewCustomer
+            monthlyStatistic.percentageNewCustomer = ((monthlyStatistic.monthlyNewCustomer - prevMonthlyStatistic.monthlyNewCustomer) / prevMonthlyStatistic.monthlyNewCustomer)
         }
         monthlyStatistic.percentageNewCustomerStatus = monthlyStatistic.monthlyNewCustomer > prevMonthlyStatistic.monthlyNewCustomer ? 'ascend' : monthlyStatistic.monthlyNewCustomer < prevMonthlyStatistic.monthlyNewCustomer ? lower : 'equal'
         // percentageBookSoldQuantity
         if (prevMonthlyStatistic.monthlyBookSoldQuantity === 0) {
-            monthlyStatistic.percentageBookSoldQuantity = (monthlyStatistic.monthlyBookSoldQuantity - prevMonthlyStatistic.monthlyBookSoldQuantity) / 100
+            monthlyStatistic.percentageBookSoldQuantity = (monthlyStatistic.monthlyBookSoldQuantity - prevMonthlyStatistic.monthlyBookSoldQuantity)
         } else {
-            monthlyStatistic.percentageBookSoldQuantity = (monthlyStatistic.monthlyBookSoldQuantity - prevMonthlyStatistic.monthlyBookSoldQuantity) / prevMonthlyStatistic.monthlyBookSoldQuantity
+            monthlyStatistic.percentageBookSoldQuantity = ((monthlyStatistic.monthlyBookSoldQuantity - prevMonthlyStatistic.monthlyBookSoldQuantity) / prevMonthlyStatistic.monthlyBookSoldQuantity) * 100
         }
         monthlyStatistic.percentageBookSoldQuantityStatus = monthlyStatistic.monthlyBookSoldQuantity > prevMonthlyStatistic.monthlyBookSoldQuantity ? 'ascend' : monthlyStatistic.monthlyBookSoldQuantity < prevMonthlyStatistic.monthlyBookSoldQuantity ? lower : 'equal'
         res.status(200).json({
